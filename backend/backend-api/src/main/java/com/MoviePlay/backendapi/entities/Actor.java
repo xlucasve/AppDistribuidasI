@@ -1,9 +1,6 @@
 package com.MoviePlay.backendapi.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +17,18 @@ import java.util.List;
 @NoArgsConstructor
 public class Actor {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     private Long actorId;
     private String name;
     private Integer age;
     private LocalDate dateOfBirth;
     private String portraitImageLink;
+    @ManyToMany()
+    @JoinTable(
+            name = "user_favorites",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
+    )
+    private List<Movie> favorites = new ArrayList<>();
 }
