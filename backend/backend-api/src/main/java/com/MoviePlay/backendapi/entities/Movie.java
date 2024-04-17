@@ -1,0 +1,44 @@
+package com.MoviePlay.backendapi.entities;
+
+import com.MoviePlay.backendapi.entities.enums.Genre;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long movieId;
+    private String title;
+    private String subtitle;
+    private String synopsis;
+    private List<Genre> genres = new ArrayList<>();
+    private String trailerLink;
+    private String posterImageLink;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Image> galleryImagesLink = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "movie_cast",
+            joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
+    )
+    private List<Actor> cast = new ArrayList<>();
+    private Integer hourLength;
+    private Integer minuteLength;
+    private LocalDate releaseDate;
+}
