@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  movieplay-backend_app:
+    container_name: movieplay-backend_app
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PROD_DB_HOST=movieplay-db
+      - PROD_DB_PORT=5432
+      - PROD_DB_NAME=postgres
+      - PROD_DB_USERNAME=postgres
+      - PROD_DB_PASSWORD=postgres
+    depends_on:
+      - movieplay-db
+    restart: unless-stopped
+  movieplay-db:
+    container_name: movieplay-db
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - data-postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+  movieplay-pg_admin:
+    container_name: movieplay-pg_admin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "80:80"
+    depends_on:
+      - movieplay-db
+    restart: unless-stopped
+volumes:
+  data-postgres:
+
