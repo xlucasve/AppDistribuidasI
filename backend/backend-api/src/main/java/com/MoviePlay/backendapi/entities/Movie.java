@@ -30,15 +30,16 @@ public class Movie {
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<Image> galleryImagesLink = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.EAGER)
+    private Integer hourLength;
+    private Integer minuteLength;
+    private LocalDate releaseDate;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_cast",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
     private List<Actor> cast = new ArrayList<>();
-    private Integer hourLength;
-    private Integer minuteLength;
-    private LocalDate releaseDate;
+    @ManyToMany(mappedBy = "favoriteMovies")
+    private List<User> favorites = new ArrayList<>();
 }

@@ -18,13 +18,18 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long userId;
     private String email;
     private String realName;
     private String nickname;
     private String profilePictureLink;
     private Boolean active;
 
-    @OneToMany
-    private List<Movie> favorites = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_favorites",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
+    )
+    private List<Movie> favoriteMovies = new ArrayList<>();
 }

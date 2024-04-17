@@ -24,11 +24,6 @@ public class Actor {
     private Integer age;
     private LocalDate dateOfBirth;
     private String portraitImageLink;
-    @ManyToMany()
-    @JoinTable(
-            name = "user_favorites",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
-    )
-    private List<Movie> favorites = new ArrayList<>();
+    @ManyToMany(mappedBy = "cast")
+    private List<Movie> moviesAppeared = new ArrayList<>();
 }
