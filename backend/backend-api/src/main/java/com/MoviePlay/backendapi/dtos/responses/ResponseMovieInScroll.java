@@ -4,7 +4,6 @@ public record ResponseMovieInScroll(
         Long movieId,
         String title,
         String posterImageLink,
-        Double rating,
-        Integer ratingCount
+        Double rating
 ) {
 }
