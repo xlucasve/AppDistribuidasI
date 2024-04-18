@@ -1,9 +1,8 @@
 package com.MoviePlay.backendapi.controllers;
 
 import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
-import com.MoviePlay.backendapi.dtos.responses.ResponseMovie;
+import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseMovie> getMovieById(@PathVariable Long movieId){
+    public ResponseEntity<ResponseMovieInScroll> getMovieById(@PathVariable Long movieId){
         return null;
     }
 
