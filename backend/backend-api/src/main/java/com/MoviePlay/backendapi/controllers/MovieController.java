@@ -22,6 +22,7 @@ public class MovieController {
             "The response object contains a list for movies that are to be shown in the big mode, and a list of movies to be shown in sidescrolls.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movies data", content = {
                     @Content (
                     mediaType = "application/json",
@@ -36,9 +37,14 @@ public class MovieController {
         return null;
     }
 
+
+
+
     @Operation(summary = "Get a movie by id", description = "Retrieve all the data of a movie obtained by id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
+            @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movie data", content = {
                     @Content (
                             mediaType = "application/json",
@@ -53,9 +59,13 @@ public class MovieController {
         return null;
     }
 
+
+
+
     @Operation(summary = "Search movie by search parameter", description = "Retrieve movies with a name or actor name similar to search input")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movies data", content = {
                     @Content (
                             mediaType = "application/json",
@@ -70,9 +80,13 @@ public class MovieController {
         return null;
     }
 
+
+
+
     @Operation(summary = "Create a new movie", description = "Create a new movie to be stored in the database. Only to be used by admins")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully created movie"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error creating movie", content = {
                     @Content (
                             mediaType = "application/json",
@@ -87,9 +101,14 @@ public class MovieController {
         return null;
     }
 
+
+
+
     @Operation(summary = "Add actor to movie cast", description = "Add an actor to the cast of the movie. The actor is passed by its id. The actor has to exists in the database previously.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully added actor to movie cast"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
+            @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist"),
             @ApiResponse(responseCode = "404", description = "Actor with the passed actorId does not exist"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error adding actor to movie cast", content = {
                     @Content (
@@ -105,9 +124,14 @@ public class MovieController {
         return null;
     }
 
+
+
+
     @Operation(summary = "Remove actor from movie cast", description = "Remove an actor to the cast of the movie. The actor is passed by its id. The actor has to exists in the database previously.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully removed actor from movie cast"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
+            @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist"),
             @ApiResponse(responseCode = "404", description = "Actor with the passed actorId does not exist"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error removing actor to movie cast", content = {
                     @Content (
@@ -123,9 +147,13 @@ public class MovieController {
         return null;
     }
 
+
+    
+
     @Operation(summary = "Delete movie from database", description = "Delete a movie from the database. Only to be used by admins")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully deleted movie"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error removing movie from database", content = {
                     @Content (
