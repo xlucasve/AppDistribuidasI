@@ -1,5 +1,6 @@
 package com.MoviePlay.backendapi.controllers;
 
+import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,11 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId){
+        return null;
+    }
+
+    @GetMapping("/{userId}/favorite")
+    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId){
         return null;
     }
 }
