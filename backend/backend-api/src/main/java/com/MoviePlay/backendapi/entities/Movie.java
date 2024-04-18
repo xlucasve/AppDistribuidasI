@@ -27,6 +27,7 @@ public class Movie {
     private List<Genre> genres = new ArrayList<>();
     private String trailerLink;
     private String posterImageLink;
+    private Double rating;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<Image> galleryImagesLink = new ArrayList<>();
