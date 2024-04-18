@@ -10,18 +10,18 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/user")
 public class UserController {
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserData(@PathVariable Long userId){
         return null;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUserEmail(){
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserResponse> updateUserEmail(@PathVariable Long userId){
         return null;
     }
 
     @PutMapping("/{userId}/image")
-    public ResponseEntity<UserResponse> updateUserProfilePicture(MultipartFile imageFile){
+    public ResponseEntity<UserResponse> updateUserProfilePicture(@PathVariable Long userId, MultipartFile imageFile){
         return null;
     }
 

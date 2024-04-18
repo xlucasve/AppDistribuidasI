@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "actors")
 public class Actor {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
