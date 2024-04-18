@@ -119,7 +119,7 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Add actor to movie cast", description = "Add an actor to the cast of the movie. The actor is passed by its id. The actor has to exists in the database previously.")
+    @Operation(summary = "Add actor to movie cast", description = "Add an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully added actor to movie cast"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -156,7 +156,7 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Remove actor from movie cast", description = "Remove an actor to the cast of the movie. The actor is passed by its id. The actor has to exists in the database previously.")
+    @Operation(summary = "Remove actor from movie cast", description = "Remove an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully removed actor from movie cast"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
