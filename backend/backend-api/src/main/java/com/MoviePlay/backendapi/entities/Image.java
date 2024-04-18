@@ -17,4 +17,5 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imageId;
     private String link;
+    private String type;
 }

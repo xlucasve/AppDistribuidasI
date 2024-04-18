@@ -161,7 +161,6 @@ public class UserController {
 
 
 
-
     @Operation(summary = "Delete user", description = "Delete a user and all its data")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully deleted user"),

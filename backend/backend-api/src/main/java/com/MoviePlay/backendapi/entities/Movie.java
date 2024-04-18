@@ -42,6 +42,6 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
     private List<Actor> cast = new ArrayList<>();
-    @ManyToMany(mappedBy = "favoriteMovies")
+    @ManyToMany(mappedBy = "favoriteMovies", fetch = FetchType.LAZY)
     private List<User> favorites = new ArrayList<>();
 }
