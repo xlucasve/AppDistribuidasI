@@ -2,6 +2,7 @@ package com.MoviePlay.backendapi.controllers;
 
 import com.MoviePlay.backendapi.dtos.requests.RequestCreateMovie;
 import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
+import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.exceptions.ApiException;
@@ -10,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +37,25 @@ public class MovieController {
     })
     @GetMapping("/")
     public ResponseEntity<ResponseHomeData> getHomeData(){
+        return null;
+    }
+
+
+    @Operation(summary = "Get just released movies", description = "Retrieve a page of movies that just released for the homepage")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movies data", content = {
+                    @Content (
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ApiException.class
+                            )
+                    )}
+            )
+    })
+    @GetMapping("/new")
+    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(@ParameterObject Pageable pageable){
         return null;
     }
 
@@ -69,7 +91,7 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Search movie by search parameter", description = "Retrieve movies with a name or actor name similar to search input")
+    @Operation(summary = "Search movie by search parameter", description = "Retrieve a page of movies with a name or actor name similar to search input")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -83,7 +105,7 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<Movie> getMoviesBySearchParam(@RequestParam String input){
+    public ResponseEntity<Movie> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable){
         return null;
     }
 
