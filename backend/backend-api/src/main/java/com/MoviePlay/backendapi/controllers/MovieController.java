@@ -105,7 +105,7 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<Movie> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable){
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable){
         return null;
     }
 
