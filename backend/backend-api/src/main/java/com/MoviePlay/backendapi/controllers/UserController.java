@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Operation(summary = "Get user data", description = "Retrieves the data from the user")
@@ -87,7 +87,7 @@ public class UserController {
                     )}
             )
     })
-    @PutMapping("/{userId}/image")
+    @PutMapping("/{userId}/images")
     public ResponseEntity<UserResponse> updateUserProfilePicture(@PathVariable Long userId, MultipartFile imageFile){
         return null;
     }
@@ -119,7 +119,7 @@ public class UserController {
                     )}
             )
     })
-    @PostMapping("/{userId}/movie/{movieId}")
+    @PostMapping("/{userId}/movies/{movieId}")
     public ResponseEntity<UserResponse> addMovieToFavorites(@PathVariable Long userId, @PathVariable Long movieId){
         return null;
     }
@@ -154,7 +154,7 @@ public class UserController {
                     )}
             )
     })
-    @DeleteMapping("/{userId}/movie/{movieId}")
+    @DeleteMapping("/{userId}/movies/{movieId}")
     public ResponseEntity<UserResponse> deleteMovieFromFavorites(@PathVariable Long userId, @PathVariable Long movieId){
         return null;
     }
@@ -209,7 +209,7 @@ public class UserController {
                     )}
             )
     })
-    @GetMapping("/{userId}/favorite")
+    @GetMapping("/{userId}/favorites")
     public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId){
         return null;
     }

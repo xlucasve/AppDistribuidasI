@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/movie")
+@RequestMapping("/api/v1/movies")
 public class MovieController {
 
 
@@ -170,7 +170,7 @@ public class MovieController {
                     )}
             )
     })
-    @PutMapping("/{movieId}/actor/{actorId}")
+    @PutMapping("/{movieId}/actors/{actorId}")
     public ResponseEntity<Movie> addActorToMovie(@PathVariable Long movieId, @PathVariable Long actorId){
         return null;
     }
@@ -207,7 +207,7 @@ public class MovieController {
                     )}
             )
     })
-    @DeleteMapping("/{movieId}/actor/{actorId}")
+    @DeleteMapping("/{movieId}/actors/{actorId}")
     public ResponseEntity<Movie> removeActorFromMovie(@PathVariable Long movieId, @PathVariable Long actorId){
         return null;
     }
