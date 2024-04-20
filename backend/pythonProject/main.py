@@ -47,11 +47,11 @@ if create:
 
 if not create:
   ##Remove unnecesary data
-  keys_to_remove = ["aspect_ratio", "iso_639_1", "spoken_languages", "revenue", "popularity", "crew", "cast_id", "order", "known_for_department", "adult", "credits" "revenue", "status", "tagline", "character","belongs_to_collection", "budget", "id", "homepage", "origin_country", "imdb_id", "original_language", "production_companies", "production_countries"]
-  keys_backdrops = ["aspect_ratio", "iso_639_1","vote_average", "vote_count", "width", "height", ]
+  keys_to_remove = ["original_name",  "department", "gender",  "video", "credit_id","logos", "posters","aspect_ratio", "iso_639_1", "spoken_languages", "revenue", "popularity", "crew", "cast_id", "order", "known_for_department", "adult", "credits" "revenue", "status", "tagline", "character","belongs_to_collection", "budget", "id", "homepage", "origin_country", "imdb_id", "original_language", "production_companies", "production_countries"]
+  keys_backdrops = ["aspect_ratio", "iso_639_1","vote_average", "vote_count", "width", "height"]
   removed_count = 0
 
-  with open("respuesta.json", "r") as file:
+  with open("respuesta.json", "r", encoding='utf8') as file:
     data = json.load(file)
 
 
@@ -61,8 +61,11 @@ if not create:
       if key in movie:
         del movie[key]
         removed_count += 1
-        print(removed_count)
+    poster_path ="https://image.tmdb.org/t/p/original" +  movie.get("poster_path")
+    movie["poster_path"] = poster_path
 
+    backdrop_path = "https://image.tmdb.org/t/p/original" + movie.get("backdrop_path")
+    movie["backdrop_path"] = backdrop_path
     ##Remove extra data from crew and cast
     for keys, values in movie.items():
       if keys == "credits":
@@ -70,13 +73,27 @@ if not create:
         for director in crew[:]:
           if director.get("job") != "Director":
             crew.remove(director)
+          for key in keys_to_remove:
+            if key in director:
+              del director[key]
+          if director.get("profile_path") is not None:
+            full_crew_path = "https://image.tmdb.org/t/p/original" + director.get("profile_path")
+            director["profile_path"] = full_crew_path
+          else:
+            no_cast_path = "https://wallpapercave.com/wp/wp9566480.png"
+            director["profile_path"] = no_cast_path
         cast = values.get("cast")
         for i in range (0, len(cast)):
           diction = cast[i]
           for key in keys_to_remove:
             if key in diction:
               del diction[key]
-              removed_count += 1
+          if diction.get("profile_path") is not None:
+            cast_path = "https://image.tmdb.org/t/p/original" + diction.get("profile_path")
+            diction["profile_path"] = cast_path
+          else:
+            no_cast_path = "https://wallpapercave.com/wp/wp9566480.png"
+            diction["profile_path"] = no_cast_path
     ##REMOVE EXTRA DATA FROM IMAGES
     backdrops = movie.get("backdrops")
     for value in backdrops:
@@ -89,6 +106,7 @@ if not create:
 
 
 
+
   # saving the updated JSON data back to the file
   with open('output.json', 'w') as file:
-    json.dump(data, file, indent=2)
+    json.dump(data, file, indent=2, ensure_ascii=False)
