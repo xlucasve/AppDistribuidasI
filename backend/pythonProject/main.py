@@ -1,15 +1,15 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-
-
+load_dotenv()
 
 startingPoint = 1
 endingPoint = startingPoint + 5
-finalItem = endingPoint - 2
 count = 0
 create = False
-
+first = True
 
 if create:
 
@@ -22,7 +22,7 @@ if create:
 
     payload = {}
     headers = {
-      'Authorization': 'Bearer API KEYYYYYY'
+      'Authorization': os.getenv('API_KEY')
     }
     movieData = requests.request("GET", url, headers=headers, data=payload)
     movieImages = requests.request("GET", imageUrl, headers=headers, data=payload)
@@ -34,12 +34,13 @@ if create:
 
     #ADD new movie to the response.json
     if movieData.status_code == 200:
+      if not first:
+        f.write(",")
       movieObject = movieJson + "," + movieImagesJson
       f.write(movieObject)
-      if movieNumber != finalItem:
-        count += 1
-        print(count)
-        f.write(",")
+      count += 1
+      print(count)
+      first = False
 
   f.write("]}")
   f.close()
@@ -61,11 +62,19 @@ if not create:
       if key in movie:
         del movie[key]
         removed_count += 1
-    poster_path ="https://image.tmdb.org/t/p/original" +  movie.get("poster_path")
-    movie["poster_path"] = poster_path
+    if movie["poster_path"] is not None:
+      poster_path ="https://image.tmdb.org/t/p/original" +  movie.get("poster_path")
+      movie["poster_path"] = poster_path
+    else:
+      poster_path = "None"
+      movie["poster_path"] = poster_path
 
-    backdrop_path = "https://image.tmdb.org/t/p/original" + movie.get("backdrop_path")
-    movie["backdrop_path"] = backdrop_path
+    if movie.get("backdrop_path") is not None:
+      backdrop_path = "https://image.tmdb.org/t/p/original" + movie.get("backdrop_path")
+      movie["backdrop_path"] = backdrop_path
+    else:
+      backdrop_path = "None"
+      movie["backdrop_path"] = backdrop_path
     ##Remove extra data from crew and cast
     for keys, values in movie.items():
       if keys == "credits":
