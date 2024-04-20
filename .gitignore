@@ -14,6 +14,7 @@ local.properties
 .loadpath
 .recommenders
 
+
 # External tool builders
 .externalToolBuilders/
 
@@ -697,6 +698,10 @@ obj/
 # Crashlytics plugin (for Android Studio and IntelliJ)
 
 ### AndroidStudio Patch ###
+
+#Python Data Reader Project
+output.json
+respuesta.json
 
 !/gradle/wrapper/gradle-wrapper.jar
 
