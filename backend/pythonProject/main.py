@@ -67,34 +67,22 @@ if not create:
     for keys, values in movie.items():
       if keys == "credits":
         crew = values.get("crew")
-        print("TYPE CREW")
-        print(crew)
         for director in crew[:]:
-          print("TYPE DIRECTOR")
-          print(type(director))
-          print(director.get("job"))
           if director.get("job") != "Director":
-            print("NOT EQUAL")
             crew.remove(director)
         cast = values.get("cast")
         for i in range (0, len(cast)):
-          print("AYUDA")
           diction = cast[i]
           for key in keys_to_remove:
             if key in diction:
               del diction[key]
               removed_count += 1
-              print("NEW REMOVED:" + removed_count.__str__())
     ##REMOVE EXTRA DATA FROM IMAGES
     backdrops = movie.get("backdrops")
-    print("BACKDROPS")
-    print(type(backdrops))
     for value in backdrops:
       for key in keys_backdrops:
         if key in value:
           del value[key]
-          print("ELIMINADO MASTER")
-
       full_path ="https://image.tmdb.org/t/p/original" + value.get("file_path")
       value["file_path"] = full_path
 
