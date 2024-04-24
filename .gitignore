@@ -701,7 +701,7 @@ obj/
 
 #Python Data Reader Project
 output.json
-respuesta.json
+response.json
 
 !/gradle/wrapper/gradle-wrapper.jar
 
