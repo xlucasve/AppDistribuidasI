@@ -161,30 +161,7 @@ public class UserController {
 
 
 
-    @Operation(summary = "Delete user", description = "Delete a user and all its data")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successfully deleted user"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
-            @ApiResponse(responseCode = "404", description = "User with the passed userId does not exist", content = {
-                    @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(
-                                    implementation = ApiException.class
-                            )
-                    )}),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error deleting user", content = {
-                    @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(
-                                    implementation = ApiException.class
-                            )
-                    )}
-            )
-    })
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId){
-        return null;
-    }
+
 
 
 

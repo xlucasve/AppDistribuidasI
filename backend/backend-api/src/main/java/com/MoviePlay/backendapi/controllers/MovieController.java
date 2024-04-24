@@ -5,6 +5,7 @@ import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
+import com.MoviePlay.backendapi.entities.enums.OrderSearchBy;
 import com.MoviePlay.backendapi.exceptions.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -91,7 +92,8 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Search movie by search parameter", description = "Retrieve a page of movies with a name or actor name similar to search input")
+    @Operation(summary = "Search movie by search parameter", description = "Retrieve a page of movies with a title or actor name similar to search input. " +
+            "Can be ordered by ReleaseDate or Rating, and Ascending or Descending order")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -105,14 +107,14 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable){
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy){
         return null;
     }
 
 
 
 
-    @Operation(summary = "Create a new movie", description = "Create a new movie to be stored in the database. Only to be used by admins")
+    @Operation(summary = "Create a new movie", description = "Create a new movie to be stored in the database. Intended only for administrator purposes.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully created movie"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -141,7 +143,8 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Add actor to movie cast", description = "Add an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database.")
+    @Operation(summary = "Add actor to movie cast", description = "Add an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database." +
+            "Intended only for administrator purposes.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully added actor to movie cast"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -178,7 +181,7 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Remove actor from movie cast", description = "Remove an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database.")
+    @Operation(summary = "Remove actor from movie cast", description = "Remove an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database. Intended only for administrator purposes.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully removed actor from movie cast"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -215,7 +218,7 @@ public class MovieController {
 
 
 
-    @Operation(summary = "Delete movie from database", description = "Delete a movie from the database. Only to be used by admins")
+    @Operation(summary = "Delete movie from database", description = "Delete a movie from the database. Intended only for administrator purposes.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully deleted movie"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),

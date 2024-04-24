@@ -22,7 +22,7 @@ public class ActorController {
 
     private final ActorService actorService;
 
-    @Operation(summary = "Create Actor", description = "Create an actor and store it in the database")
+    @Operation(summary = "Create Actor", description = "Create an actor and store it in the database. Intended only for administrator purposes.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully created actor"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -49,7 +49,7 @@ public class ActorController {
 
 
 
-    @Operation(summary = "Delete Actor", description = "Delete an actor from the database")
+    @Operation(summary = "Delete Actor", description = "Delete an actor from the database. Intended only for administrator purposes.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully deleted actor"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
