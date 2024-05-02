@@ -1,6 +1,7 @@
 package com.MoviePlay.backendapi.dtos.responses;
 
-import com.MoviePlay.backendapi.entities.enums.Genre;
+
+import com.MoviePlay.backendapi.entities.Genre;
 
 import java.util.List;
 

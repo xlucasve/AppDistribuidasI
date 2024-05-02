@@ -2,7 +2,7 @@ package com.MoviePlay.backendapi.dtos.responses;
 
 import com.MoviePlay.backendapi.entities.Actor;
 import com.MoviePlay.backendapi.entities.Image;
-import com.MoviePlay.backendapi.entities.enums.Genre;
+import com.MoviePlay.backendapi.entities.Genre;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

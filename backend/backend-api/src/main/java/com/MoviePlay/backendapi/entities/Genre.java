@@ -14,12 +14,12 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "images")
-public class Image {
+@Table(name = "genres")
+public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long imageId;
-    private String link;
+    private Long genreId;
+    private String name;
 
     @Override
     public final boolean equals(Object o) {
@@ -28,8 +28,8 @@ public class Image {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Image image = (Image) o;
-        return getImageId() != null && Objects.equals(getImageId(), image.getImageId());
+        Genre genre = (Genre) o;
+        return getGenreId() != null && Objects.equals(getGenreId(), genre.getGenreId());
     }
 
     @Override
