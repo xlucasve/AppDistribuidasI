@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 startingPoint = 1
-endingPoint = startingPoint + 150
+endingPoint = startingPoint + 10
 count = 0
 first = True
 

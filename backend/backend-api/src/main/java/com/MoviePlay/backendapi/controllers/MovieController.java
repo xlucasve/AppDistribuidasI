@@ -1,5 +1,6 @@
 package com.MoviePlay.backendapi.controllers;
 
+import com.MoviePlay.backendapi.dtos.requests.RequestAddRating;
 import com.MoviePlay.backendapi.dtos.requests.RequestCreateMovie;
 import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
@@ -243,4 +244,37 @@ public class MovieController {
     public ResponseEntity<String> deleteMovie(@PathVariable Long movieId){
         return null;
     }
+
+
+    @Operation(summary = "Rate Movie", description = "Adds a new rating to the movie.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully added movie rating"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
+            @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist ",
+                    content = {
+                            @Content (
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = ApiException.class
+                                    )
+                            )}),
+            @ApiResponse(responseCode = "404", description = "User with the passed movieId does not exist ",
+                    content = {
+                            @Content (
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = ApiException.class
+                                    )
+                            )}),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error adding rating to movie", content = {
+                    @Content (
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ApiException.class
+                            )
+                    )}
+            )
+    })
+    @PostMapping("/{movieId}/rate/{userId}")
+    public ResponseEntity<Movie> addRating(@PathVariable Long movieId, @PathVariable Long userId, @RequestBody RequestAddRating rating){return null;}
 }
