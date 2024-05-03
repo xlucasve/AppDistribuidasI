@@ -27,7 +27,7 @@ public class Actor {
     private Integer age;
     private LocalDate dateOfBirth;
     private String portraitImageLink;
-    @ManyToMany(mappedBy = "cast")
+    @ManyToMany(mappedBy = "actors")
     private List<Movie> moviesAppeared = new ArrayList<>();
 
     @Override

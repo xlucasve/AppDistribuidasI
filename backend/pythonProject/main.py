@@ -9,14 +9,14 @@ startingPoint = 299536
 endingPoint = startingPoint + 1
 count = 0
 first = True
-justCreate = True
+justCreate = False
 
 print("OBTENIENDO DATOS CRUDOS DE PELICULA\n")
 print("Peliculas obtenidas:")
 if not justCreate:
   ##Creacion de archivo para guardar json de respuesta
   f = open("response.json", "a")
-  f.write('{"movies": [')
+  f.write('[')
   for movieNumber in range (startingPoint, endingPoint):
 
     url = "https://api.themoviedb.org/3/movie/"+ movieNumber.__str__() +"?language=en-US&append_to_response=credits"
@@ -60,7 +60,7 @@ if not justCreate:
       print(count)
       first = False
 
-  f.write("]}")
+  f.write("]")
   f.close()
 
   print("CANTIDAD DE PELICULAS OBTENIDAS:", count)
@@ -82,7 +82,7 @@ with open("response.json", "r", encoding='utf8') as file:
 
 
 # checking if the key exists before removing
-for movie in data["movies"]:
+for movie in data:
   for key in keys_to_remove:
     if key in movie:
       del movie[key]

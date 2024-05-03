@@ -24,8 +24,12 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long movieId;
     private String title;
-    @Column(length=3000)
+
+
+    @Column(length=1000)
     private String synopsis;
+
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_genres",
@@ -37,20 +41,37 @@ public class Movie {
     private String posterImageLink;
     private Double rating;
     private Integer voteCount;
+
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Image> galleryImagesLink = new ArrayList<>();
+
+
     private Integer hourLength;
     private Integer minuteLength;
     private LocalDate releaseDate;
+
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_cast",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
-    private List<Actor> cast = new ArrayList<>();
+    private List<Actor> actors = new ArrayList<>();
+
+
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "movie_directors",
+            joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
+    )
+    private List<Actor> directors = new ArrayList<>();
+
     @ManyToMany(mappedBy = "favoriteMovies", fetch = FetchType.LAZY)
-    private List<User> favorites = new ArrayList<>();
+    private List<User> favoritedBy = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
