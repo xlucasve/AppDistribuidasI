@@ -7,7 +7,6 @@ import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.repositories.ActorRepository;
 import com.MoviePlay.backendapi.repositories.GenreRepository;
 import com.MoviePlay.backendapi.repositories.MovieRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,30 +14,41 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PopulationService {
 
     private final MovieRepository movieRepository;
     private final ActorRepository actorRepository;
     private final GenreRepository genreRepository;
 
-    public String populateDB(List<Movie> data){
-        for (Movie movie: data){
-            movie = fixMovieRepeatedGenres(movie);
-            movie = fixMovieRepeatedActors(movie);
-            movie = fixMovieRepeatedDirectors(movie);
+    public PopulationService(MovieRepository movieRepository, ActorRepository actorRepository, GenreRepository genreRepository) {
+        this.movieRepository = movieRepository;
+        this.actorRepository = actorRepository;
+        this.genreRepository = genreRepository;
+    }
+
+    public String populateDB(List<Movie> data) {
+        for (Movie movie : data) {
+            movie = avoidMovieRepeatedData(movie);
             movieRepository.save(movie);
         }
         return "Worked";
     }
 
-    private Movie fixMovieRepeatedGenres(Movie movie){
+
+    private Movie avoidMovieRepeatedData(Movie movie){
+        movie = avoidMovieRepeatedGenres(movie);
+        movie = avoidMovieRepeatedActors(movie);
+        movie = avoidMovieRepeatedDirectors(movie);
+        return movie;
+    }
+
+    private Movie avoidMovieRepeatedGenres(Movie movie) {
         List<Genre> movieNewGenreList = new ArrayList<>();
-        for (Genre genre : movie.getGenres()){
+        for (Genre genre : movie.getGenres()) {
             Optional<Genre> foundGenre = genreRepository.findByName(genre.getName());
-            if (foundGenre.isPresent()){
+            if (foundGenre.isPresent()) {
                 movieNewGenreList.add(foundGenre.get());
-            }else{
+            } else {
                 Genre savedGenre = genreRepository.save(genre);
                 movieNewGenreList.add(savedGenre);
             }
@@ -47,13 +57,13 @@ public class PopulationService {
         return movie;
     }
 
-    private Movie fixMovieRepeatedActors(Movie movie){
+    private Movie avoidMovieRepeatedActors(Movie movie) {
         List<Actor> movieNewActorsList = new ArrayList<>();
-        for (Actor actor : movie.getActors()){
+        for (Actor actor : movie.getActors()) {
             Optional<Actor> foundActor = actorRepository.findByName(actor.getName());
-            if (foundActor.isPresent()){
+            if (foundActor.isPresent()) {
                 movieNewActorsList.add(foundActor.get());
-            }else{
+            } else {
                 Actor savedActor = actorRepository.save(actor);
                 movieNewActorsList.add(savedActor);
             }
@@ -62,13 +72,13 @@ public class PopulationService {
         return movie;
     }
 
-    private Movie fixMovieRepeatedDirectors(Movie movie){
+    private Movie avoidMovieRepeatedDirectors(Movie movie) {
         List<Actor> movieNewDirectorsList = new ArrayList<>();
-        for (Actor actor : movie.getDirectors()){
+        for (Actor actor : movie.getDirectors()) {
             Optional<Actor> foundActor = actorRepository.findByName(actor.getName());
-            if (foundActor.isPresent()){
+            if (foundActor.isPresent()) {
                 movieNewDirectorsList.add(foundActor.get());
-            }else{
+            } else {
                 Actor savedActor = actorRepository.save(actor);
                 movieNewDirectorsList.add(savedActor);
             }

@@ -37,7 +37,7 @@ public class UserController {
             )
     })
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUserData(@PathVariable Long userId){
+    public ResponseEntity<UserResponse> getUserData(@PathVariable Long userId) {
         return null;
     }
 
@@ -62,7 +62,7 @@ public class UserController {
             )
     })
     @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId){
+    public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId) {
         return null;
     }
 
@@ -88,7 +88,7 @@ public class UserController {
             )
     })
     @PutMapping("/{userId}/images")
-    public ResponseEntity<UserResponse> updateUserProfilePicture(@PathVariable Long userId, MultipartFile imageFile){
+    public ResponseEntity<UserResponse> updateUserProfilePicture(@PathVariable Long userId, MultipartFile imageFile) {
         return null;
     }
 
@@ -120,11 +120,9 @@ public class UserController {
             )
     })
     @PostMapping("/{userId}/movies/{movieId}")
-    public ResponseEntity<UserResponse> addMovieToFavorites(@PathVariable Long userId, @PathVariable Long movieId){
+    public ResponseEntity<UserResponse> addMovieToFavorites(@PathVariable Long userId, @PathVariable Long movieId) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Remove movie from favorites", description = "Remove a movie from a user favorites list")
@@ -155,15 +153,9 @@ public class UserController {
             )
     })
     @DeleteMapping("/{userId}/movies/{movieId}")
-    public ResponseEntity<UserResponse> deleteMovieFromFavorites(@PathVariable Long userId, @PathVariable Long movieId){
+    public ResponseEntity<UserResponse> deleteMovieFromFavorites(@PathVariable Long userId, @PathVariable Long movieId) {
         return null;
     }
-
-
-
-
-
-
 
 
     @Operation(summary = "Get favorite movies from user", description = "Retrieve the list of favorite movies from the user")
@@ -187,7 +179,7 @@ public class UserController {
             )
     })
     @GetMapping("/{userId}/favorites")
-    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId){
+    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId) {
         return null;
     }
 }

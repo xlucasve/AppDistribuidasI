@@ -8,6 +8,7 @@ import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.enums.OrderSearchBy;
 import com.MoviePlay.backendapi.exceptions.ApiException;
+import com.MoviePlay.backendapi.services.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,9 +19,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/movies")
 public class MovieController {
+
+    private final MovieService movieService;
+
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
 
     @Operation(summary = "Get movies for homepage", description = "Retrieve a list of movies that are to be shown is the homepage. " +
@@ -29,17 +38,17 @@ public class MovieController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movies data", content = {
-                    @Content (
-                    mediaType = "application/json",
+                    @Content(
+                            mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
                             )
-    )}
+                    )}
             )
     })
     @GetMapping("/")
-    public ResponseEntity<ResponseHomeData> getHomeData(){
-        return null;
+    public ResponseEntity<List<Movie>> getHomeData() {
+        return movieService.getHomeData();
     }
 
 
@@ -48,7 +57,7 @@ public class MovieController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movies data", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -57,11 +66,9 @@ public class MovieController {
             )
     })
     @GetMapping("/new")
-    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(@ParameterObject Pageable pageable){
+    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(@ParameterObject Pageable pageable) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Get a movie by id", description = "Retrieve all the data of a movie obtained by id")
@@ -70,14 +77,14 @@ public class MovieController {
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
                                     )
                             )}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movie data", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -86,11 +93,9 @@ public class MovieController {
             )
     })
     @GetMapping("/{movieId}")
-    public ResponseEntity<ResponseMovieInScroll> getMovieById(@PathVariable Long movieId){
+    public ResponseEntity<ResponseMovieInScroll> getMovieById(@PathVariable Long movieId) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Search movie by search parameter", description = "Retrieve a page of movies with a title or actor name similar to search input. " +
@@ -99,7 +104,7 @@ public class MovieController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved movies data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error obtaining movies data", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -108,11 +113,9 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy){
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Create a new movie", description = "Create a new movie to be stored in the database. Intended only for administrator purposes.")
@@ -121,14 +124,14 @@ public class MovieController {
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "400", description = "Invalid body input",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
                                     )
                             )}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error creating movie", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -137,11 +140,9 @@ public class MovieController {
             )
     })
     @PostMapping("/")
-    public ResponseEntity<Movie> createMovie(@RequestBody RequestCreateMovie movieData){
+    public ResponseEntity<Movie> createMovie(@RequestBody RequestCreateMovie movieData) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Add actor to movie cast", description = "Add an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database." +
@@ -151,14 +152,14 @@ public class MovieController {
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
                                     )
                             )}),
-            @ApiResponse(responseCode = "404", description = "Actor with the passed actorId does not exist",content = {
-                    @Content (
+            @ApiResponse(responseCode = "404", description = "Actor with the passed actorId does not exist", content = {
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -166,7 +167,7 @@ public class MovieController {
                     )}
             ),
             @ApiResponse(responseCode = "500", description = "Internal Server Error adding actor to movie cast", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -175,11 +176,9 @@ public class MovieController {
             )
     })
     @PutMapping("/{movieId}/actors/{actorId}")
-    public ResponseEntity<Movie> addActorToMovie(@PathVariable Long movieId, @PathVariable Long actorId){
+    public ResponseEntity<Movie> addActorToMovie(@PathVariable Long movieId, @PathVariable Long actorId) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Remove actor from movie cast", description = "Remove an actor to the cast of the movie. The actor is passed by its id. The actor has to previously exist in the database. Intended only for administrator purposes.")
@@ -188,7 +187,7 @@ public class MovieController {
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
@@ -196,14 +195,14 @@ public class MovieController {
                             )}),
             @ApiResponse(responseCode = "404", description = "Actor with the passed actorId does not exist",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
                                     )
                             )}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error removing actor to movie cast", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -212,11 +211,9 @@ public class MovieController {
             )
     })
     @DeleteMapping("/{movieId}/actors/{actorId}")
-    public ResponseEntity<Movie> removeActorFromMovie(@PathVariable Long movieId, @PathVariable Long actorId){
+    public ResponseEntity<Movie> removeActorFromMovie(@PathVariable Long movieId, @PathVariable Long actorId) {
         return null;
     }
-
-
 
 
     @Operation(summary = "Delete movie from database", description = "Delete a movie from the database. Intended only for administrator purposes.")
@@ -225,14 +222,14 @@ public class MovieController {
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
                                     )
                             )}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error removing movie from database", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -241,7 +238,7 @@ public class MovieController {
             )
     })
     @DeleteMapping("/{movieId}")
-    public ResponseEntity<String> deleteMovie(@PathVariable Long movieId){
+    public ResponseEntity<String> deleteMovie(@PathVariable Long movieId) {
         return null;
     }
 
@@ -252,7 +249,7 @@ public class MovieController {
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
             @ApiResponse(responseCode = "404", description = "Movie with the passed movieId does not exist ",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
@@ -260,14 +257,14 @@ public class MovieController {
                             )}),
             @ApiResponse(responseCode = "404", description = "User with the passed movieId does not exist ",
                     content = {
-                            @Content (
+                            @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(
                                             implementation = ApiException.class
                                     )
                             )}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error adding rating to movie", content = {
-                    @Content (
+                    @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     implementation = ApiException.class
@@ -276,5 +273,7 @@ public class MovieController {
             )
     })
     @PostMapping("/{movieId}/rate/{userId}")
-    public ResponseEntity<Movie> addRating(@PathVariable Long movieId, @PathVariable Long userId, @RequestBody RequestAddRating rating){return null;}
+    public ResponseEntity<Movie> addRating(@PathVariable Long movieId, @PathVariable Long userId, @RequestBody RequestAddRating rating) {
+        return null;
+    }
 }
