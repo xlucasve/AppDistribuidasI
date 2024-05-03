@@ -1,8 +1,7 @@
 package com.MoviePlay.backendapi.exceptions.custom;
-import lombok.Getter;
+
 import org.springframework.validation.BindingResult;
 
-@Getter
 public class BindingResultException extends RuntimeException{
     private final BindingResult bindingResult;
 
@@ -10,4 +9,7 @@ public class BindingResultException extends RuntimeException{
         this.bindingResult = bindingResult;
     }
 
+    public BindingResult getBindingResult() {
+        return bindingResult;
+    }
 }

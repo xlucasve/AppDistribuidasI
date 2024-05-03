@@ -1,6 +1,5 @@
 package com.MoviePlay.backendapi.services;
 
-import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.repositories.MovieRepository;
 import org.springframework.http.HttpStatus;

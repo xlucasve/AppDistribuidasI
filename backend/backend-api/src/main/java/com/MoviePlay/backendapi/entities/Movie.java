@@ -1,7 +1,6 @@
 package com.MoviePlay.backendapi.entities;
 
 import jakarta.persistence.*;
-
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;

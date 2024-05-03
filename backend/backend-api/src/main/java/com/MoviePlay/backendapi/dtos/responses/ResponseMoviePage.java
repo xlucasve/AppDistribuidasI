@@ -1,12 +1,10 @@
 package com.MoviePlay.backendapi.dtos.responses;
 
 import com.MoviePlay.backendapi.entities.Actor;
-import com.MoviePlay.backendapi.entities.Image;
 import com.MoviePlay.backendapi.entities.Genre;
-import jakarta.persistence.*;
+import com.MoviePlay.backendapi.entities.Image;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public record ResponseMoviePage(

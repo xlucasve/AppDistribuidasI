@@ -2,7 +2,6 @@ package com.MoviePlay.backendapi.controllers;
 
 import com.MoviePlay.backendapi.dtos.requests.RequestAddRating;
 import com.MoviePlay.backendapi.dtos.requests.RequestCreateMovie;
-import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
