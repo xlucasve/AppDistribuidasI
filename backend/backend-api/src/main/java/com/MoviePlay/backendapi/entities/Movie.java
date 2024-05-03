@@ -1,5 +1,7 @@
 package com.MoviePlay.backendapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -22,27 +24,23 @@ public class Movie {
     private String synopsis;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_genres",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "genreId")
     )
+    @JsonManagedReference
     private List<Genre> genres = new ArrayList<>();
     private String trailerLink;
     private String posterImageLink;
     private Double rating;
     private Integer voteCount;
-
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Image> galleryImagesLink = new ArrayList<>();
-
-
     private Integer hourLength;
     private Integer minuteLength;
     private LocalDate releaseDate;
-
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -50,9 +48,8 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
+    @JsonManagedReference
     private List<Actor> actors = new ArrayList<>();
-
-
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -60,9 +57,11 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
+    @JsonManagedReference
     private List<Actor> directors = new ArrayList<>();
 
     @ManyToMany(mappedBy = "favoriteMovies", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<User> favoritedBy = new ArrayList<>();
 
     @Override

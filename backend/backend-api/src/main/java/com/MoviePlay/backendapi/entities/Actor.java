@@ -1,5 +1,7 @@
 package com.MoviePlay.backendapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -19,7 +21,8 @@ public class Actor {
     private Integer age;
     private LocalDate dateOfBirth;
     private String portraitImageLink;
-    @ManyToMany(mappedBy = "actors")
+    @ManyToMany(mappedBy = "actors", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Movie> moviesAppeared = new ArrayList<>();
 
     public Actor(Long actorId, String name, Integer age, LocalDate dateOfBirth, String portraitImageLink, List<Movie> moviesAppeared) {
