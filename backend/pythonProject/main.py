@@ -5,17 +5,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-startingPoint = 299536
+startingPoint = 1
 endingPoint = startingPoint + 5
 count = 0
 first = True
-justCreate = True
+justCreate = False
 
 print("OBTENIENDO DATOS CRUDOS DE PELICULA\n")
 print("Peliculas obtenidas:")
 if not justCreate:
   ##Creacion de archivo para guardar json de respuesta
-  f = open("response.json", "a")
+  f = open("response.json", "w")
   f.write('[')
   for movieNumber in range (startingPoint, endingPoint):
 
@@ -62,10 +62,7 @@ if not justCreate:
       count += 1
       print(count)
       first = False
-  print("CANTIDAD DE PELICULAS OBTENIDAS:", count)
-
   f.write("]")
-  print("ha")
   f.close()
 
 
@@ -206,3 +203,12 @@ for movie in data:
 # saving the updated JSON data back to the file
 with open('output.json', 'w') as file:
   json.dump(data, file, indent=2, ensure_ascii=False)
+
+with open('output.json', 'rb') as payload:
+  headers = {
+    'Content-Type': 'application/json'
+  }
+  url = "http://localhost:8080/api/v1/population/"
+  response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+
+print(response.text)
