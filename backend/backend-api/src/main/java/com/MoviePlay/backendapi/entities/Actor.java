@@ -1,6 +1,7 @@
 package com.MoviePlay.backendapi.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -18,18 +19,15 @@ public class Actor {
     @Id
     private Long actorId;
     private String name;
-    private Integer age;
-    private LocalDate dateOfBirth;
     private String portraitImageLink;
-    @ManyToMany(mappedBy = "actors", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Movie> moviesAppeared = new ArrayList<>();
 
-    public Actor(Long actorId, String name, Integer age, LocalDate dateOfBirth, String portraitImageLink, List<Movie> moviesAppeared) {
+    public Actor(Long actorId, String name, String portraitImageLink, List<Movie> moviesAppeared) {
         this.actorId = actorId;
         this.name = name;
-        this.age = age;
-        this.dateOfBirth = dateOfBirth;
+
         this.portraitImageLink = portraitImageLink;
         this.moviesAppeared = moviesAppeared;
     }
@@ -61,14 +59,6 @@ public class Actor {
         this.name = name;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public void setPortraitImageLink(String portraitImageLink) {
         this.portraitImageLink = portraitImageLink;
     }
@@ -85,13 +75,6 @@ public class Actor {
         return this.name;
     }
 
-    public Integer getAge() {
-        return this.age;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return this.dateOfBirth;
-    }
 
     public String getPortraitImageLink() {
         return this.portraitImageLink;

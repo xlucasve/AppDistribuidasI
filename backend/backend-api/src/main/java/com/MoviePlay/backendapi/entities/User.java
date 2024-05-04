@@ -27,7 +27,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
     )
-    @JsonManagedReference
     private List<Movie> favoriteMovies = new ArrayList<>();
 
     //ADD record of rated movies with Rating object

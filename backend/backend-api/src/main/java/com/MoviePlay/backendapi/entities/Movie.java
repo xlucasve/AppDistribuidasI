@@ -19,18 +19,16 @@ public class Movie {
     private Long movieId;
     private String title;
 
-
     @Column(length=1000)
     private String synopsis;
 
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_genres",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "genreId")
     )
-    @JsonManagedReference
     private List<Genre> genres = new ArrayList<>();
     private String trailerLink;
     private String posterImageLink;
@@ -48,7 +46,6 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
-    @JsonManagedReference
     private List<Actor> actors = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -57,11 +54,9 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId")
     )
-    @JsonManagedReference
     private List<Actor> directors = new ArrayList<>();
 
     @ManyToMany(mappedBy = "favoriteMovies", fetch = FetchType.LAZY)
-    @JsonBackReference
     private List<User> favoritedBy = new ArrayList<>();
 
     @Override
@@ -83,7 +78,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long movieId, String title, String synopsis, List<Genre> genres, String trailerLink, String posterImageLink, Double rating, Integer voteCount, List<Image> galleryImagesLink, Integer hourLength, Integer minuteLength, LocalDate releaseDate, List<Actor> actors, List<Actor> directors, List<User> favoritedBy) {
+    public Movie(Long movieId, String title, String synopsis, List<Genre> genres, String trailerLink, String posterImageLink, Double rating, Integer voteCount, List<Image> galleryImagesLink, Integer hourLength, Integer minuteLength, LocalDate releaseDate, List<Actor> actors, List<Actor> directors) {
         this.movieId = movieId;
         this.title = title;
         this.synopsis = synopsis;
@@ -98,7 +93,6 @@ public class Movie {
         this.releaseDate = releaseDate;
         this.actors = actors;
         this.directors = directors;
-        this.favoritedBy = favoritedBy;
     }
 
     public Long getMovieId() {
@@ -213,11 +207,4 @@ public class Movie {
         this.directors = directors;
     }
 
-    public List<User> getFavoritedBy() {
-        return favoritedBy;
-    }
-
-    public void setFavoritedBy(List<User> favoritedBy) {
-        this.favoritedBy = favoritedBy;
-    }
 }

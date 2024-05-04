@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 startingPoint = 299536
-endingPoint = startingPoint + 1
+endingPoint = startingPoint + 5
 count = 0
 first = True
-justCreate = False
+justCreate = True
 
 print("OBTENIENDO DATOS CRUDOS DE PELICULA\n")
 print("Peliculas obtenidas:")
@@ -31,27 +31,30 @@ if not justCreate:
     movieImages = requests.request("GET", imageUrl, headers=headers, data=payload)
     videoData = requests.request("GET", videosUrl, headers=headers, data=payload)
 
-    ##Eliminar "{" o "}" del inicio y final para que se guarde todo en el mismo objeto
-    movieJson = movieData.text[:-1]
-    movieImagesJson = movieImages.text[1:]
 
-
-    ##Get trailer link
-    videoJson = videoData.json()
-    results = videoJson.get("results")
-    trailerFound = False
-
-    for result in results:
-      videoType = result.get("type")
-      if videoType == "Trailer":
-        videoTrailerLink = "https://www.youtube.com/watch?v=" + result.get("key")
-        trailerFound = True
-        trailerLinkToJson = ', "trailerLink": "' + videoTrailerLink + '"'
-        movieJson = movieJson + trailerLinkToJson
-        break
 
     #ADD new movie to the response.json
     if movieData.status_code == 200:
+      ##Eliminar "{" o "}" del inicio y final para que se guarde todo en el mismo objeto
+      movieJson = movieData.text[:-1]
+      movieImagesJson = movieImages.text[1:]
+
+
+
+
+      if videoData.status_code == 200:
+        videoJson = videoData.json()
+        results = videoJson.get("results")
+        trailerFound = False
+        for result in results:
+          videoType = result.get("type")
+          if videoType == "Trailer":
+            videoTrailerLink = "https://www.youtube.com/watch?v=" + result.get("key")
+            trailerFound = True
+            trailerLinkToJson = ', "trailerLink": "' + videoTrailerLink + '"'
+            movieJson = movieJson + trailerLinkToJson
+            break
+
       if not first:
         f.write(",")
       movieObject = movieJson + "," + movieImagesJson
@@ -59,19 +62,20 @@ if not justCreate:
       count += 1
       print(count)
       first = False
+  print("CANTIDAD DE PELICULAS OBTENIDAS:", count)
 
   f.write("]")
+  print("ha")
   f.close()
 
-  print("CANTIDAD DE PELICULAS OBTENIDAS:", count)
+
 
 
 ##Remove unnecesary data
 keys_to_remove = ["job", "backdrop_path", "id","original_title","original_name",  "department", "gender",  "video", "credit_id","logos", "posters","aspect_ratio", "iso_639_1", "spoken_languages", "revenue", "popularity", "crew", "cast_id", "order", "known_for_department", "adult", "credits" "revenue", "status", "tagline", "character","belongs_to_collection", "budget", "id", "homepage", "origin_country", "imdb_id", "original_language", "production_companies", "production_countries"]
 keys_backdrops = ["aspect_ratio", "iso_639_1","vote_average", "vote_count", "width", "height"]
 removed_count = 0
-listActors = []
-listDirectors = []
+
 
 
 print("REALIZANDO LIMPIEZA")
@@ -83,6 +87,11 @@ with open("response.json", "r", encoding='utf8') as file:
 
 # checking if the key exists before removing
 for movie in data:
+  listActors = []
+  listDirectors = []
+  listBackdrops = []
+  count_backdrops = 12
+  count_actors = 40
   for key in keys_to_remove:
     if key in movie:
       del movie[key]
@@ -118,20 +127,22 @@ for movie in data:
       ##Clean data related to actors
       cast = values.get("cast")
       for i in range (0, len(cast)):
-        diction = cast[i]
-        for key in keys_to_remove:
-          if key in diction:
-            del diction[key]
-        if diction.get("profile_path") is not None:
-          cast_path = "https://image.tmdb.org/t/p/original" + diction.get("profile_path")
-          diction["profile_path"] = cast_path
-        else:
-          no_cast_path = "https://wallpapercave.com/wp/wp9566480.png"
-          diction["profile_path"] = no_cast_path
-        profilePicPath = diction["profile_path"]
-        del diction["profile_path"]
-        diction["portraitImageLink"] = profilePicPath
-        listActors.append(diction)
+        if count_actors > 0:
+          diction = cast[i]
+          for key in keys_to_remove:
+            if key in diction:
+              del diction[key]
+          if diction.get("profile_path") is not None:
+            cast_path = "https://image.tmdb.org/t/p/original" + diction.get("profile_path")
+            diction["profile_path"] = cast_path
+          else:
+            no_cast_path = "https://wallpapercave.com/wp/wp9566480.png"
+            diction["profile_path"] = no_cast_path
+          profilePicPath = diction["profile_path"]
+          del diction["profile_path"]
+          diction["portraitImageLink"] = profilePicPath
+          listActors.append(diction)
+          count_actors -= 1
   del movie["credits"]
   movie["actors"] = listActors
   movie["directors"] = listDirectors
@@ -141,18 +152,21 @@ for movie in data:
   ##REMOVE EXTRA DATA FROM IMAGES
   backdrops = movie.get("backdrops")
   for value in backdrops:
-    for key in keys_backdrops:
-      if key in value:
-        del value[key]
-    full_path ="https://image.tmdb.org/t/p/original" + value.get("file_path")
-    value["file_path"] = full_path
-    imageLinkPath = value["file_path"]
-    del value["file_path"]
-    value["link"] = imageLinkPath
+    if count_backdrops > 0:
+      for key in keys_backdrops:
+        if key in value:
+          del value[key]
+      full_path ="https://image.tmdb.org/t/p/original" + value.get("file_path")
+      value["file_path"] = full_path
+      imageLinkPath = value["file_path"]
+      del value["file_path"]
+      value["link"] = imageLinkPath
+      listBackdrops.append(value)
+    count_backdrops -= 1
   ##REMOVE EXTRA DATA FROM  GENRES
-  galleryImages = movie["backdrops"]
+
   del movie["backdrops"]
-  movie["galleryImagesLink"] = galleryImages
+  movie["galleryImagesLink"] = listBackdrops
   genres = movie.get("genres")
   for value in genres:
     for key in keys_to_remove:
