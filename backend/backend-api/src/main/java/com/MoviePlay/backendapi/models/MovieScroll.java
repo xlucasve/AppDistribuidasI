@@ -16,10 +16,10 @@ public class MovieScroll {
     public MovieScroll() {
     }
 
-    public MovieScroll(List<ResponseMovieInScroll> sidescroll, Integer count, String title) {
+    public MovieScroll(List<ResponseMovieInScroll> sidescroll, Integer count, String genreName) {
         this.sidescroll = sidescroll;
         this.count = count;
-        this.title = title;
+        this.genreName = genreName;
     }
 
     public List<ResponseMovieInScroll> getSidescroll() {
@@ -38,11 +38,11 @@ public class MovieScroll {
         this.count = count;
     }
 
-    public String getTitle() {
-        return title;
+    public String getGenreName() {
+        return genreName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setGenreName(String genreName) {
+        this.genreName = genreName;
     }
 }
