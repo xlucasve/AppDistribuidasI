@@ -20,7 +20,12 @@ public class Actor {
     private Long actorId;
     private String name;
     private String portraitImageLink;
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "actor_movies",
+            joinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actorId"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
+    )
     @JsonIgnore
     private List<Movie> moviesAppeared = new ArrayList<>();
 

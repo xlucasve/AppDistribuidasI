@@ -4,9 +4,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-startingPoint = 1
-endingPoint = startingPoint + 5
+##Avengers movie ID for testing: 299536
+startingPoint = 299536
+endingPoint = startingPoint + 1
 count = 0
 first = True
 justCreate = False

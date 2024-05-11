@@ -29,7 +29,8 @@ public class PopulationService {
     public String populateDB(List<Movie> data) {
         for (Movie movie : data) {
             movie = avoidMovieRepeatedData(movie);
-            movieRepository.save(movie);
+            Movie savedMovie = movieRepository.save(movie);
+            addActorMovieRelationship(savedMovie, savedMovie.getActors());
         }
         return "Worked";
     }
@@ -85,5 +86,15 @@ public class PopulationService {
         }
         movie.setDirectors(movieNewDirectorsList);
         return movie;
+    }
+
+    private void addActorMovieRelationship(Movie movie, List<Actor> actors){
+        for (Actor actor : actors){
+            Actor foundActor = actorRepository.findByName(actor.getName()).get();
+            List<Movie> actorMovies = foundActor.getMoviesAppeared();
+            actorMovies.add(movie);
+            foundActor.setMoviesAppeared(actorMovies);
+            actorRepository.save(foundActor);
+        }
     }
 }
