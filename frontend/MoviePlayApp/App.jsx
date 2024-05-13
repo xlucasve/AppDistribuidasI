@@ -1,12 +1,8 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {SafeAreaView, View, FlatList, StyleSheet, Text} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+const Tab = createBottomTabNavigator();
 
 const DATA = [
   {
@@ -31,6 +27,35 @@ const Item = ({title}) => (
 
 const App = () => {
   return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'grey',
+          headerTitleAlign: 'center',
+        }}>
+        <Tab.Screen name="Lista" component={Lista} />
+        <Tab.Screen name="MoviePlay" component={HomeScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+const Lista = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={DATA}
+        renderItem={({item}) => <Item title={item.title} />}
+        keyExtractor={item => item.id}
+        horizontal
+      />
+    </SafeAreaView>
+  );
+};
+
+const HomeScreen = () => {
+  return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
@@ -45,13 +70,16 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    marginTop: 0,
+    alignItems: 'center',
   },
   item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
+    backgroundColor: '#000000',
+    minWidth: 380,
     marginVertical: 8,
     marginHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,

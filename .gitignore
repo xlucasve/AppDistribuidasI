@@ -701,3 +701,4 @@ obj/
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/reactnative,java,intellij,visualstudiocode,eclipse,macos,windows,androidstudio,node
+backend/pythonProject/response.json
