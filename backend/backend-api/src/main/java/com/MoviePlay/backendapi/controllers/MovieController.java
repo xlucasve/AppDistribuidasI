@@ -46,7 +46,7 @@ public class MovieController {
             )
     })
     @GetMapping("/")
-    public ResponseEntity<List<Movie>> getHomeData() {
+    public ResponseEntity<?> getHomeData() {
         return movieService.getHomeData();
     }
 

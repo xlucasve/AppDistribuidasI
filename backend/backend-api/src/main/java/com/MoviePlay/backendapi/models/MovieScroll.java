@@ -1,7 +1,6 @@
 package com.MoviePlay.backendapi.models;
 
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
-import com.MoviePlay.backendapi.entities.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +8,25 @@ import java.util.List;
 
 public class MovieScroll {
 
-    private List<ResponseMovieInScroll> sidescroll = new ArrayList<>();
+    private List<ResponseMovieInScroll> moviesData = new ArrayList<>();
     private Integer count;
     private String genreName;
 
     public MovieScroll() {
     }
 
-    public MovieScroll(List<ResponseMovieInScroll> sidescroll, Integer count, String genreName) {
-        this.sidescroll = sidescroll;
+    public MovieScroll(List<ResponseMovieInScroll> moviesData, Integer count, String genreName) {
+        this.moviesData = moviesData;
         this.count = count;
         this.genreName = genreName;
     }
 
-    public List<ResponseMovieInScroll> getSidescroll() {
-        return sidescroll;
+    public List<ResponseMovieInScroll> getMoviesData() {
+        return moviesData;
     }
 
-    public void setSidescroll(List<ResponseMovieInScroll> sidescroll) {
-        this.sidescroll = sidescroll;
+    public void setMoviesData(List<ResponseMovieInScroll> moviesData) {
+        this.moviesData = moviesData;
     }
 
     public Integer getCount() {
