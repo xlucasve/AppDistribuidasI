@@ -626,6 +626,8 @@
 
 "@babel/plugin-transform-private-methods@^7.22.5", "@babel/plugin-transform-private-methods@^7.24.1":
   version "7.24.1"
+  resolved "https://registry.npmjs.org/@babel/plugin-transform-private-methods/-/plugin-transform-private-methods-7.24.1.tgz"
+  integrity sha512-tGvisebwBO5em4PaYNqt4fkw56K2VALsAbAakY0FjTYqJp7gfdrgr7YX76Or8/cpik0W6+tj3rZ0uHU9Oil4tw==
   dependencies:
     "@babel/helper-create-class-features-plugin" "^7.24.1"
     "@babel/helper-plugin-utils" "^7.24.0"
@@ -2853,6 +2855,9 @@ fs-extra@^8.1.0:
 fs.realpath@^1.0.0:
   version "1.0.0"
 
+fsevents@^2.3.2:
+  version "2.3.3"
+
 function-bind@^1.1.2:
   version "1.1.2"
 
@@ -4441,7 +4446,12 @@ react-native-screens@^3.31.1, "react-native-screens@>= 3.0.0":
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native@*, react-native@0.74.1:
+react-native-splash-screen@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz"
+  integrity sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA==
+
+react-native@*, react-native@>=0.57.0, react-native@0.74.1:
   version "0.74.1"
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"

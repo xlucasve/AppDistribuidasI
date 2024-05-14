@@ -1,15 +1,22 @@
 import React from 'react';
+import {useEffect} from 'react';
 import Login from './src/screens/Login';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  SafeAreaView,
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Platform,
+} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
-
+import SplashScreen from 'react-native-splash-screen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
 
 const DATA = [
   {
@@ -26,13 +33,17 @@ const DATA = [
   },
 ];
 
-const Item = ({ title }) => (
+const Item = ({title}) => (
   <View style={styles.item}>
     <Text style={styles.title}>{title}</Text>
   </View>
 );
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <NavigationContainer>
       {/* <Tab.Navigator
@@ -45,11 +56,10 @@ const App = () => {
         <Tab.Screen name="MoviePlay" component={HomeScreen} />
       </Tab.Navigator> */}
 
-      <Stack.Navigator initialRouteName='Login'>
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
-
     </NavigationContainer>
   );
 };
@@ -59,7 +69,7 @@ const Lista = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
+        renderItem={({item}) => <Item title={item.title} />}
         keyExtractor={item => item.id}
         horizontal
       />
@@ -72,7 +82,7 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
+        renderItem={({item}) => <Item title={item.title} />}
         keyExtractor={item => item.id}
         horizontal
       />
