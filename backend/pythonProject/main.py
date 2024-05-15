@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 ##Avengers movie ID for testing: 299536
-startingPoint = 299536
-endingPoint = startingPoint + 1
+startingPoint = 1
+endingPoint = startingPoint + 20
 count = 0
 first = True
 justCreate = False
