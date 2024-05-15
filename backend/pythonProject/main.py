@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 ##Avengers movie ID for testing: 299536
-startingPoint = 1
-endingPoint = startingPoint + 20
+startingPoint = 10
+endingPoint = startingPoint + 12
 count = 0
 first = True
 justCreate = False
@@ -198,7 +198,8 @@ for movie in data:
   movie["favorites"] = favorites
 
 
-
+localUrl = "http://localhost:8080/api/v1/population/"
+deployUrl = "https://movieplay-api.onrender.com/api/v1/population/"
 
 # saving the updated JSON data back to the file
 with open('output.json', 'w') as file:
@@ -208,7 +209,7 @@ with open('output.json', 'rb') as payload:
   headers = {
     'Content-Type': 'application/json'
   }
-  url = "http://localhost:8080/api/v1/population/"
-  response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+  url = deployUrl
+  response = requests.request("POST", url, headers=headers, data=payload, verify=True)
 
 print(response.text)
