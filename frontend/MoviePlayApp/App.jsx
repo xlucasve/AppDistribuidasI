@@ -1,5 +1,5 @@
 import React from 'react';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import Login from './src/screens/Login';
 import {
   SafeAreaView,
@@ -9,9 +9,9 @@ import {
   Text,
   Platform,
 } from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -33,13 +33,14 @@ const DATA = [
   },
 ];
 
-const Item = ({title}) => (
+const Item = ({ title }) => (
   <View style={styles.item}>
     <Text style={styles.title}>{title}</Text>
   </View>
 );
 
 const App = () => {
+
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -69,7 +70,7 @@ const Lista = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
+        renderItem={({ item }) => <Item title={item.title} />}
         keyExtractor={item => item.id}
         horizontal
       />
@@ -82,7 +83,7 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
+        renderItem={({ item }) => <Item title={item.title} />}
         keyExtractor={item => item.id}
         horizontal
       />
@@ -91,10 +92,12 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     marginTop: 0,
     alignItems: 'center',
+    fontFamily: 'Roboto',
   },
   item: {
     backgroundColor: '#000000',
