@@ -18,6 +18,7 @@ print(urlLocation)
 
 load_dotenv()
 ##Avengers movie ID for testing: 299536
+
 startingPoint = 0
 moviesPerFile = 20
 movieCount = 0
@@ -25,6 +26,7 @@ fileCount = 0
 fileAmmount = 10
 
 justUpload = False
+
 
 print("OBTENIENDO DATOS CRUDOS DE PELICULA\n")
 print("Peliculas obtenidas:")
@@ -236,4 +238,3 @@ for number in range(fileAmmount):
     }
     url = urlLocation
     response = requests.request("POST", url, headers=headers, data=payload, verify=False)
-

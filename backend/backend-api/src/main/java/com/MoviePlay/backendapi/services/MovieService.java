@@ -1,6 +1,7 @@
 package com.MoviePlay.backendapi.services;
 
 import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
+import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.models.MovieScroll;
@@ -30,7 +31,7 @@ public class MovieService {
 
 
 
-    public ResponseEntity<?> getHomeData() {
+    public ResponseEntity<ResponseHomeData> getHomeData() {
         Pageable pageable = PageRequest.of(0, 3);
         Page<Movie> latestMoviesPage = movieRepository.findAllByOrderByReleaseDateDesc(pageable);
         List<ResponseMovieInScroll> latestMovies = dtoMapper.listMovieToListMovieInScroll(latestMoviesPage.getContent());
@@ -53,5 +54,12 @@ public class MovieService {
 
 
         return new ResponseEntity<>(responseHomeData, HttpStatus.OK);
+    }
+
+
+    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(Pageable pageable) {
+        List<ResponseMovieInScroll> movies = dtoMapper.listMovieToListMovieInScroll(movieRepository.findAllByOrderByReleaseDateDesc(pageable).getContent());
+        ResponseInfiniteScroll response = new ResponseInfiniteScroll(movies);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

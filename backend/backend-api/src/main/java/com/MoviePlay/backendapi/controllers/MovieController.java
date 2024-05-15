@@ -2,6 +2,7 @@ package com.MoviePlay.backendapi.controllers;
 
 import com.MoviePlay.backendapi.dtos.requests.RequestAddRating;
 import com.MoviePlay.backendapi.dtos.requests.RequestCreateMovie;
+import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
@@ -46,7 +47,7 @@ public class MovieController {
             )
     })
     @GetMapping("/")
-    public ResponseEntity<?> getHomeData() {
+    public ResponseEntity<ResponseHomeData> getHomeData() {
         return movieService.getHomeData();
     }
 
@@ -66,7 +67,7 @@ public class MovieController {
     })
     @GetMapping("/new")
     public ResponseEntity<ResponseInfiniteScroll> getJustReleased(@ParameterObject Pageable pageable) {
-        return null;
+        return movieService.getJustReleased(pageable);
     }
 
 

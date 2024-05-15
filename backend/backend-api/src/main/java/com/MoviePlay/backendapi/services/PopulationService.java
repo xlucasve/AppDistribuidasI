@@ -27,10 +27,13 @@ public class PopulationService {
     }
 
     public String populateDB(List<Movie> data) {
+
         for (Movie movie : data) {
-            movie = avoidMovieRepeatedData(movie);
-            Movie savedMovie = movieRepository.save(movie);
-            addActorMovieRelationship(savedMovie, savedMovie.getActors());
+            if (movieRepository.findByTitle(movie.getTitle()).isEmpty()) {
+                movie = avoidMovieRepeatedData(movie);
+                Movie savedMovie = movieRepository.save(movie);
+                addActorMovieRelationship(savedMovie, savedMovie.getActors());
+            }
         }
         return "Worked";
     }
