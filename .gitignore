@@ -700,8 +700,8 @@ obj/
 ### AndroidStudio Patch ###
 
 #Python Data Reader Project
-output.json
-response.json
+output*.json
+response*.json
 
 !/gradle/wrapper/gradle-wrapper.jar
 
