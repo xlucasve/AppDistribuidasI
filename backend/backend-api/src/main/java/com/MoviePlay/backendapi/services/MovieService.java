@@ -5,6 +5,7 @@ import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.enums.OrderSearchBy;
+import com.MoviePlay.backendapi.entities.enums.SortSearchBy;
 import com.MoviePlay.backendapi.models.MovieScroll;
 import com.MoviePlay.backendapi.repositories.MovieRepository;
 import com.MoviePlay.backendapi.utils.DTOMapper;
@@ -65,7 +66,7 @@ public class MovieService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy) {
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy, SortSearchBy sortBy) {
 
         Set<Movie> moviesFoundFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
         List<Movie> moviesFoundByTitle = movieRepository.findAllByTitleContainsIgnoreCase(input, pageable).getContent();
@@ -76,12 +77,26 @@ public class MovieService {
 
         List<Movie> moviesList = new ArrayList<>(moviesSet);
 
-        switch (orderBy){
-            case RATING -> moviesList.sort((Comparator.comparing(Movie::getRating)));
-            case DATE -> moviesList.sort((Comparator.comparing(Movie::getReleaseDate)));
-            default -> {
+
+        switch (sortBy){
+            case ASC -> {
+                switch (orderBy) {
+                    case RATING -> moviesList.sort((Comparator.comparing(Movie::getRating)));
+                    case DATE -> moviesList.sort((Comparator.comparing(Movie::getReleaseDate)));
+                    default -> {
+                    }
+                }
+            }
+            case DESC -> {
+                switch (orderBy) {
+                    case RATING -> moviesList.sort((Comparator.comparing(Movie::getRating)).reversed());
+                    case DATE -> moviesList.sort((Comparator.comparing(Movie::getReleaseDate)).reversed());
+                    default -> {
+                    }
+                }
             }
         }
+
         ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(moviesList));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
