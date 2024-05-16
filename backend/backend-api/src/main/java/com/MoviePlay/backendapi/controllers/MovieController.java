@@ -114,7 +114,7 @@ public class MovieController {
     })
     @GetMapping("/search")
     public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy) {
-        return null;
+        return movieService.getMoviesBySearchParam(input, pageable, orderBy);
     }
 
 

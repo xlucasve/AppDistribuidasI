@@ -23,7 +23,7 @@ startingPoint = 0
 moviesPerFile = 20
 movieCount = 0
 fileCount = 0
-fileAmmount = 10
+fileAmmount = 1
 
 justUpload = False
 
