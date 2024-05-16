@@ -7,6 +7,7 @@ import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.enums.OrderSearchBy;
+import com.MoviePlay.backendapi.entities.enums.SortSearchBy;
 import com.MoviePlay.backendapi.exceptions.ApiException;
 import com.MoviePlay.backendapi.services.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -113,8 +114,8 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy) {
-        return null;
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy, @RequestParam SortSearchBy sort) {
+        return movieService.getMoviesBySearchParam(input, pageable, orderBy, sort);
     }
 
 
