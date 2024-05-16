@@ -12,6 +12,5 @@ import java.util.Optional;
 public interface ActorRepository extends JpaRepository<Actor, Long> {
     Optional<Actor> findByName(String name);
 
-    @Query("SELECT a FROM Actor a WHERE a.name LIKE %?1%")
-    Page<Actor> findAllByName(String name, Pageable pageable);
+    Page<Actor> findAllByNameContainsIgnoreCase(String name, Pageable pageable);
 }

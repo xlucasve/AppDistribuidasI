@@ -20,7 +20,7 @@ public class ActorService {
     }
 
     public Set<Movie> getMoviesFromActorBySearchParam(String input, Pageable pageable) {
-        List<Actor> actorsFound = actorRepository.findAllByName(input, pageable).getContent();
+        List<Actor> actorsFound = actorRepository.findAllByNameContainsIgnoreCase(input, pageable).getContent();
         Set<Movie> moviesFromActors = new HashSet<>();
         for (Actor actor : actorsFound){
             moviesFromActors.addAll(actor.getMoviesAppeared());

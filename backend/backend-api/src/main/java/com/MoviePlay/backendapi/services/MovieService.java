@@ -68,7 +68,7 @@ public class MovieService {
     public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy) {
 
         Set<Movie> moviesFoundFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
-        List<Movie> moviesFoundByTitle = movieRepository.findAllByTitle(input, pageable).getContent();
+        List<Movie> moviesFoundByTitle = movieRepository.findAllByTitleContainsIgnoreCase(input, pageable).getContent();
 
         Set<Movie> moviesSet = new HashSet<>();
         moviesSet.addAll(moviesFoundFromActors);

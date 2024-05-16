@@ -15,6 +15,5 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Page<Movie> findAllByOrderByReleaseDateDesc(Pageable pageable);
     Optional<Movie> findByTitle(String title);
 
-    @Query("SELECT m FROM Movie m WHERE m.title LIKE %?1%")
-    Page<Movie> findAllByTitle(String input, Pageable pageable);
+    Page<Movie> findAllByTitleContainsIgnoreCase(String input, Pageable pageable);
 }
