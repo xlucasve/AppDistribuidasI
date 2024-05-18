@@ -1,51 +1,84 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import Logo from "../assets/images/logo.svg";
-import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
+import GoogleLogo from "../assets/images/login_btnGoogle.svg";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-export default Login = () => {
+export default function Login() {
     return (
-        <View className="flex flex-1 items-center justify-center bg-[#01152D] text-white">
-            <View className="flex flex-col items-center 
-                    justify-start bg-[#192941] 
-                    h-[75vh] w-[86vw] rounded-[40px]
-                    shadow-slate-50">
-                <View className="w-[50vw] h-[25vh] rounded-full mt-16 overflow-hidden">
+        <View style={styles.container}>
+            <View style={styles.rectangleContainer}>
+                <View style={styles.logoContainer}>
                     <Logo
                         width={styles.logoContainer.width}
-                        height={styles.logoContainer.width} />
+                        height={styles.logoContainer.height} />
                 </View>
-                <View className="flex flex-1 items-center justify-center mb-7">
-
-                    <Text className="text-white text-[36px] font-bold mb-16">Sign In</Text>
-
-                    <View className="flex flex-row items-center 
-                    justify-center mb-7
-                     ">
-                        <GoogleSigninButton
-                            style={{ width: wp("55%"), height: hp("7.5%") }}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Light}
-                            onPress={() => this.signIn()}
-                        />
-                    </View>
+                <View style={styles.SignInContainer}>
+                    <Text style={styles.signInText}>Sign In</Text>
+                    <TouchableOpacity style={styles.signButton}>
+                        <GoogleLogo />
+                        <Text style={styles.textButton}>Sign in with Google</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-
         </View>
     );
 }
 
-
-
-
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#01152D',
+    },
+    rectangleContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'start',
+        backgroundColor: '#192941',
+        height: hp('75%'),
+        width: wp('86%'),
+        borderRadius: 40,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 50,
+        },
+    },
     logoContainer: {
         width: wp('50%'),
         height: hp('25%'),
+        borderRadius: 100,
+        marginTop: 50,
+        overflow: 'hidden',
+    },
+    SignInContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 60,
+    },
+    signInText: {
+        color: '#fff',
+        fontSize: 36,
+        fontWeight: 'bold',
+        marginBottom: 16,
+    },
+    signButton: {
+        marginVertical: 30,
+        flexDirection: 'row',
+        backgroundColor: '#FAFAFA',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30,
+        width: wp('58%'),
+        height: hp('7.5%'),
+    },
+    textButton: {
+        marginLeft: 18,
+        color: 'black',
+        fontWeight: 'medium',
+        fontSize: 15,
     }
-
 });
-
