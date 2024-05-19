@@ -4,7 +4,8 @@ import Logo from "../assets/images/logo.svg";
 import GoogleLogo from "../assets/images/login_btnGoogle.svg";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-export default function Login() {
+
+export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.rectangleContainer}>
@@ -15,7 +16,7 @@ export default function Login() {
                 </View>
                 <View style={styles.SignInContainer}>
                     <Text style={styles.signInText}>Sign In</Text>
-                    <TouchableOpacity style={styles.signButton}>
+                    <TouchableOpacity style={styles.signButton} onPress={() => navigation.navigate('Home')} >
                         <GoogleLogo />
                         <Text style={styles.textButton}>Sign in with Google</Text>
                     </TouchableOpacity>

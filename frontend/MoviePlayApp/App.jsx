@@ -14,6 +14,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
 import SplashScreen from 'react-native-splash-screen';
+import Profile from './src/screens/Profile';
+import Search from './src/screens/Search';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,7 +49,17 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {/* <Tab.Navigator
+      <Stack.Navigator initialRouteName='Login' >
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Search" component={Search} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+{/* <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'grey',
@@ -57,13 +69,6 @@ const App = () => {
         <Tab.Screen name="MoviePlay" component={HomeScreen} />
       </Tab.Navigator> */}
 
-      <Stack.Navigator initialRouteName='Login' >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
 
 const Lista = () => {
   return (

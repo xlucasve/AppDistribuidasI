@@ -1,14 +1,44 @@
 import React from "react";
-import { Text, Image } from "react-native";
+import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { View } from "react-native";
+import Header from "../components/Header";
 
-const Home = () => {
+
+export default function Home({ navigation }) {
     return (
         <View>
-        <Text>Home</Text>
-        <Image></Image>
+            <Header title="Home" navigation={navigation} />
+            <Text>HOME</Text>
+
+
+            <TouchableOpacity style={styles.temporalButton1} onPress={() => navigation.navigate('Profile')} >
+                <Text>Go to Profile</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.temporalButton2} onPress={() => navigation.navigate('Search')} >
+                <Text>Go to Search</Text>
+            </TouchableOpacity>
+
+
         </View>
     );
-    }
+}
 
-export default Home;
+const styles = StyleSheet.create({
+    temporalButton1: {
+        backgroundColor: 'red',
+        height: 50,
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+
+    temporalButton2: {
+        backgroundColor: 'green',
+        height: 50,
+        alignContent: 'center',
+        justifyContent: 'center',
+    }
+}
+);
+
+
