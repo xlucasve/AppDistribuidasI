@@ -707,3 +707,4 @@ response*.json
 
 # End of https://www.toptal.com/developers/gitignore/api/reactnative,java,intellij,visualstudiocode,eclipse,macos,windows,androidstudio,node
 frontend/MoviePlayApp/.yarn/install-state.gz
+*.pyc
