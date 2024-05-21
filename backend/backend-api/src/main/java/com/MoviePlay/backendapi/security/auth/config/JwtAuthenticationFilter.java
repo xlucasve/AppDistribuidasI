@@ -1,5 +1,7 @@
 package com.MoviePlay.backendapi.security.auth.config;
 
+import com.MoviePlay.backendapi.entities.User;
+import com.MoviePlay.backendapi.repositories.UserRepository;
 import com.MoviePlay.backendapi.security.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,11 +24,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
   private final TokenRepository tokenRepository;
+  private final UserRepository userRepository;
 
-  public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, TokenRepository tokenRepository) {
+  public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, TokenRepository tokenRepository,
+                                 UserRepository userRepository) {
     this.jwtService = jwtService;
     this.userDetailsService = userDetailsService;
     this.tokenRepository = tokenRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -53,21 +58,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     System.out.println("USER EMAIL: " + userEmail);
     System.out.println("SECURITY CONTEXT: " +  SecurityContextHolder.getContext().getAuthentication());
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+      User user = userRepository.findByEmail(userEmail).get();
       var isTokenValid = tokenRepository.findByToken(jwt)
           .map(t -> !t.isExpired() && !t.isRevoked())
           .orElse(false);
       System.out.println("TOKEN WAS FOUND VALID");
-      if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+      System.out.println("IS VALID: " + jwtService.isTokenValid(jwt, user));
+      if (jwtService.isTokenValid(jwt, user) && isTokenValid) {
         System.out.println("SERVICE FOUND TOKEN VALID");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            userDetails,
+            user,
             null,
-            userDetails.getAuthorities()
+                user.getAuthorities()
+
         );
+        System.out.println("TOKEN1" + authToken.isAuthenticated());
         authToken.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );
+        System.out.println("TOKEN2" + authToken);
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
