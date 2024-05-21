@@ -703,3 +703,6 @@ obj/
 # End of https://www.toptal.com/developers/gitignore/api/reactnative,java,intellij,visualstudiocode,eclipse,macos,windows,androidstudio,node
 backend/pythonProject/response*.json
 backend/pythonProject/output*.json
+*.pyc
+response*.json
+output*.json
