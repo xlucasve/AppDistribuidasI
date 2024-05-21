@@ -1,6 +1,9 @@
 import json
 
 def cleanData(data, keys_to_remove, keys_backdrops, file_count_response):
+
+    print("Movies in this file: " + len(data).__str__())
+
     for movie in data:
         listActors = []
         listDirectors = []

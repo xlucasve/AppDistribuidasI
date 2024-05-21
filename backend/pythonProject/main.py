@@ -5,8 +5,6 @@ from dataCleaner import cleanData
 from pathlib import Path
 from dotenv import load_dotenv
 
-import dataCleaner
-
 responses = "responses"
 if Path(responses).is_dir():
   print("Responses folder found...")
@@ -46,12 +44,16 @@ print(urlLocation)
 
 load_dotenv()
 
-startingPoint = 0
-moviesPerFile = 1
+#Datos configurables
+moviesPerFile = 25
+fileAmmount = 100
+
+#Inicializacion de variables
 movieCount = 0
 fileCount = 0
-fileAmmount = 1
-endingPoint = moviesPerFile
+foundMovies = moviesPerFile
+movieNumber = 0 #Ultima pelicula alcanzada:
+
 
 
 print("OBTENIENDO DATOS CRUDOS DE PELICULA\n")
@@ -66,8 +68,8 @@ if not justUpload:
     ##Creacion de archivo para guardar json de respuesta
     f = open("responses/response" + fileCount.__str__() + ".json" , "w")
     f.write('[')
-    for movieNumber in range (startingPoint, endingPoint):
-
+    while foundMovies > 0:
+      movieNumber += 1
       url = "https://api.themoviedb.org/3/movie/"+ movieNumber.__str__() +"?language=en-US&append_to_response=credits"
       imageUrl = "https://api.themoviedb.org/3/movie/" + movieNumber.__str__() +"/images"
       videosUrl = "https://api.themoviedb.org/3/movie/" + movieNumber.__str__() +"/videos?language=en-US"
@@ -109,12 +111,12 @@ if not justUpload:
         movieObject = movieJson + "," + movieImagesJson
         f.write(movieObject)
         movieCount += 1
-        print("Movie number: " + movieCount.__str__())
+        print("Movie number: " + movieCount.__str__() + " | MovieDB ID: " + movieNumber.__str__())
         first = False
+        foundMovies -= 1
     f.write("]")
     f.close()
-    startingPoint += moviesPerFile
-    endingPoint += moviesPerFile
+    foundMovies = moviesPerFile
 
 
 
@@ -133,7 +135,7 @@ for number in range(fileAmmount):
 
   output_file = Path("outputs/output" + str(fileCountResponse) + ".json")
   if not output_file.is_file():
-    print("\nCleaning file number: " + fileCountResponse.__str__() + "\n")
+    print("\nCleaning file number: " + fileCountResponse.__str__() + "")
     with open("responses/response" + fileCountResponse.__str__() + ".json", "r", encoding='utf8') as file:
       data = json.load(file)
     cleanData(data, keys_to_remove, keys_backdrops, fileCountResponse)
@@ -141,7 +143,7 @@ for number in range(fileAmmount):
   # saving the updated JSON data back to the file
 
 
-  print("\nUploading file number: " + fileCountResponse.__str__() + "\n")
+  print("Uploading file number: " + fileCountResponse.__str__() + "\n")
   with open('outputs/output' + fileCountResponse.__str__() + '.json', 'rb') as payload:
     headers = {
       'Content-Type': 'application/json'
