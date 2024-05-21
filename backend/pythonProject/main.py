@@ -1,10 +1,27 @@
 import requests
 import json
 import os
+from dataCleaner import cleanData
+from pathlib import Path
 from dotenv import load_dotenv
+
+responses = "responses"
+if Path(responses).is_dir():
+  print("Responses folder found...")
+else:
+  print("Creating responses folder")
+  Path(responses).mkdir(parents=True, exist_ok=True)
+outputs = "outputs"
+if Path(outputs).is_dir():
+  print("Outputs folder found...")
+else:
+  print("Creating outputs folder")
+  Path(outputs).mkdir(parents=True, exist_ok=True)
 
 uploadLocation = ""
 uploadModes = ["DEPLOY", "LOCAL"]
+downloadMode = ""
+downloadModes = ["SAVED", "GET"]
 while uploadLocation not in uploadModes:
   print("Seleccionar Modo: DEPLOY | LOCAL")
   uploadLocation = input()
@@ -14,18 +31,29 @@ if uploadLocation == "LOCAL":
 else:
   urlLocation = "https://movieplay-api.onrender.com/api/v1/population/"
 
+while downloadMode not in downloadModes:
+  print("Seleccionar Modo: SAVED (Uses Data already stored in system) | GET (Calls API to get data)")
+  downloadMode = input()
+
+if downloadMode == "SAVED":
+  justUpload = True
+else:
+  justUpload = False
+
 print(urlLocation)
 
 load_dotenv()
-##Avengers movie ID for testing: 299536
 
-startingPoint = 0
-moviesPerFile = 20
+#Datos configurables
+moviesPerFile = 25
+fileAmmount = 100
+
+#Inicializacion de variables
 movieCount = 0
 fileCount = 0
-fileAmmount = 1
+foundMovies = moviesPerFile
+movieNumber = 0 #Ultima pelicula alcanzada:
 
-justUpload = False
 
 
 print("OBTENIENDO DATOS CRUDOS DE PELICULA\n")
@@ -38,10 +66,10 @@ if not justUpload:
     print("\nSTARTING NEW FILE NUMBER: " + fileCount.__str__() + "\n")
 
     ##Creacion de archivo para guardar json de respuesta
-    f = open("response" + fileCount.__str__() + ".json" , "w")
+    f = open("responses/response" + fileCount.__str__() + ".json" , "w")
     f.write('[')
-    for movieNumber in range (startingPoint * fileCount, startingPoint * fileCount + moviesPerFile):
-
+    while foundMovies > 0:
+      movieNumber += 1
       url = "https://api.themoviedb.org/3/movie/"+ movieNumber.__str__() +"?language=en-US&append_to_response=credits"
       imageUrl = "https://api.themoviedb.org/3/movie/" + movieNumber.__str__() +"/images"
       videosUrl = "https://api.themoviedb.org/3/movie/" + movieNumber.__str__() +"/videos?language=en-US"
@@ -83,11 +111,12 @@ if not justUpload:
         movieObject = movieJson + "," + movieImagesJson
         f.write(movieObject)
         movieCount += 1
-        print("Movie number: " + movieCount.__str__())
+        print("Movie number: " + movieCount.__str__() + " | MovieDB ID: " + movieNumber.__str__())
         first = False
+        foundMovies -= 1
     f.write("]")
     f.close()
-    startingPoint += moviesPerFile
+    foundMovies = moviesPerFile
 
 
 
@@ -95,7 +124,6 @@ if not justUpload:
 ##Remove unnecesary data
 keys_to_remove = ["job", "backdrop_path", "id","original_title","original_name",  "department", "gender",  "video", "credit_id","logos", "posters","aspect_ratio", "iso_639_1", "spoken_languages", "revenue", "popularity", "crew", "cast_id", "order", "known_for_department", "adult", "credits" "revenue", "status", "tagline", "character","belongs_to_collection", "budget", "id", "homepage", "origin_country", "imdb_id", "original_language", "production_companies", "production_countries"]
 keys_backdrops = ["aspect_ratio", "iso_639_1","vote_average", "vote_count", "width", "height"]
-removed_count = 0
 
 
 
@@ -104,137 +132,22 @@ print("REALIZANDO LIMPIEZA")
 fileCountResponse = 0
 for number in range(fileAmmount):
   fileCountResponse += 1
-  print("\nCleaning file number: " + fileCountResponse.__str__() + "\n")
-  with open("response" + fileCountResponse.__str__() + ".json", "r", encoding='utf8') as file:
-    data = json.load(file)
 
-
-  # checking if the key exists before removing
-  for movie in data:
-    listActors = []
-    listDirectors = []
-    listBackdrops = []
-    count_backdrops = 12
-    count_actors = 40
-    for key in keys_to_remove:
-      if key in movie:
-        del movie[key]
-    if movie["poster_path"] is not None:
-      poster_path ="https://image.tmdb.org/t/p/original" +  movie.get("poster_path")
-      movie["poster_path"] = poster_path
-    else:
-      poster_path = "None"
-      movie["poster_path"] = poster_path
-    ##Remove extra data from crew and cast
-    for keys, values in movie.items():
-      if keys == "credits":
-
-        ##Clean data related to crew
-        crew = values.get("crew")
-        for director in crew[:]:
-          if director.get("job") != "Director":
-            crew.remove(director)
-          else:
-            for key in keys_to_remove:
-              if key in director:
-                del director[key]
-            if director.get("profile_path") is not None:
-              full_crew_path = "https://image.tmdb.org/t/p/original" + director.get("profile_path")
-              director["profile_path"] = full_crew_path
-            else:
-              no_cast_path = "https://wallpapercave.com/wp/wp9566480.png"
-              director["profile_path"] = no_cast_path
-            profilePicPath = director["profile_path"]
-            del director["profile_path"]
-            director["portraitImageLink"] = profilePicPath
-            listDirectors.append(director)
-        ##Clean data related to actors
-        cast = values.get("cast")
-        for i in range (0, len(cast)):
-          if count_actors > 0:
-            diction = cast[i]
-            for key in keys_to_remove:
-              if key in diction:
-                del diction[key]
-            if diction.get("profile_path") is not None:
-              cast_path = "https://image.tmdb.org/t/p/original" + diction.get("profile_path")
-              diction["profile_path"] = cast_path
-            else:
-              no_cast_path = "https://wallpapercave.com/wp/wp9566480.png"
-              diction["profile_path"] = no_cast_path
-            profilePicPath = diction["profile_path"]
-            del diction["profile_path"]
-            diction["portraitImageLink"] = profilePicPath
-            listActors.append(diction)
-            count_actors -= 1
-    del movie["credits"]
-    movie["actors"] = listActors
-    movie["directors"] = listDirectors
-
-
-
-    ##REMOVE EXTRA DATA FROM IMAGES
-    backdrops = movie.get("backdrops")
-    for value in backdrops:
-      if count_backdrops > 0:
-        for key in keys_backdrops:
-          if key in value:
-            del value[key]
-        full_path ="https://image.tmdb.org/t/p/original" + value.get("file_path")
-        value["file_path"] = full_path
-        imageLinkPath = value["file_path"]
-        del value["file_path"]
-        value["link"] = imageLinkPath
-        listBackdrops.append(value)
-      count_backdrops -= 1
-    ##REMOVE EXTRA DATA FROM  GENRES
-
-    del movie["backdrops"]
-    movie["galleryImagesLink"] = listBackdrops
-    genres = movie.get("genres")
-    for value in genres:
-      for key in keys_to_remove:
-        if key in value:
-          del value[key]
-    runtimeTotal = movie["runtime"]
-    hours = 0
-    minutes = 0
-    while runtimeTotal >= 60:
-      hours+=1
-      runtimeTotal -= 60
-    minutes = runtimeTotal
-    del movie["runtime"]
-    movie["hourLength"] = hours
-    movie["minuteLength"] = minutes
-    releaseDate = movie["release_date"]
-    del movie["release_date"]
-    movie["releaseDate"] = releaseDate
-    posterImageLink = movie["poster_path"]
-    del movie["poster_path"]
-    movie["posterImageLink"] = posterImageLink
-    rating = movie["vote_average"]
-    del movie["vote_average"]
-    movie["rating"] = rating
-    voteCount = movie["vote_count"]
-    del movie["vote_count"]
-    movie["voteCount"] = voteCount
-    synopsis = movie["overview"]
-    del movie["overview"]
-    movie["synopsis"] = synopsis
-    favorites = []
-    movie["favorites"] = favorites
-
-
-
+  output_file = Path("outputs/output" + str(fileCountResponse) + ".json")
+  if not output_file.is_file():
+    print("\nCleaning file number: " + fileCountResponse.__str__() + "")
+    with open("responses/response" + fileCountResponse.__str__() + ".json", "r", encoding='utf8') as file:
+      data = json.load(file)
+    cleanData(data, keys_to_remove, keys_backdrops, fileCountResponse)
 
   # saving the updated JSON data back to the file
-  with open('output' + fileCountResponse.__str__() + '.json', 'w') as file:
-    json.dump(data, file, indent=2, ensure_ascii=False)
 
-  print("\nUploading file number: " + fileCountResponse.__str__() + "\n")
-  with open('output' + fileCountResponse.__str__() + '.json', 'rb') as payload:
+
+  print("Uploading file number: " + fileCountResponse.__str__() + "\n")
+  with open('outputs/output' + fileCountResponse.__str__() + '.json', 'rb') as payload:
     headers = {
       'Content-Type': 'application/json'
     }
     url = urlLocation
     response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+    print(response)
