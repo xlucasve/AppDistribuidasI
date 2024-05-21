@@ -51,21 +51,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
-    System.out.println("WE FOUND A JWT");
     jwt = authHeader.substring(7);
-    System.out.println("JWT FOUND: " + jwt);
     userEmail = jwtService.extractEmail(jwt);
-    System.out.println("USER EMAIL: " + userEmail);
-    System.out.println("SECURITY CONTEXT: " +  SecurityContextHolder.getContext().getAuthentication());
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       User user = userRepository.findByEmail(userEmail).get();
       var isTokenValid = tokenRepository.findByToken(jwt)
           .map(t -> !t.isExpired() && !t.isRevoked())
           .orElse(false);
-      System.out.println("TOKEN WAS FOUND VALID");
-      System.out.println("IS VALID: " + jwtService.isTokenValid(jwt, user));
       if (jwtService.isTokenValid(jwt, user) && isTokenValid) {
-        System.out.println("SERVICE FOUND TOKEN VALID");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             user,
             null,

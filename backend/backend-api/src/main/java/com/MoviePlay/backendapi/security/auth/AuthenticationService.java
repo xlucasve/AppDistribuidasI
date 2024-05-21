@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -41,8 +42,10 @@ public class AuthenticationService {
     user.setRealName(request.realName());
     user.setNickname(request.nickname());
     user.setProfilePictureLink(request.profilePictureLink());
+    User savedUser;
 
-    var savedUser = repository.save(user);
+    Optional<User> storedUser = repository.findByEmail(user.getEmail());
+      savedUser = storedUser.orElseGet(() -> repository.save(user));
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
