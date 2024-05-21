@@ -1,7 +1,6 @@
 package com.MoviePlay.backendapi.security.auth;
 
 import com.MoviePlay.backendapi.dtos.requests.RequestLogin;
-import com.MoviePlay.backendapi.dtos.requests.RequestRefreshToken;
 import com.MoviePlay.backendapi.dtos.responses.ResponseLogin;
 import com.MoviePlay.backendapi.exceptions.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,13 +8,23 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
+
+    private final AuthenticationService service;
+
+    public AuthController(AuthenticationService service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Login user", description = "Lets a user log in. If the user account doesn´t exist, it creates the account." +
             " Returns the JWT to authenticate the user while using the app.")
@@ -39,7 +48,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<ResponseLogin> login(@RequestBody RequestLogin requestLogin){
-        return null;
+        return ResponseEntity.ok(service.register(requestLogin));
     }
 
 
@@ -64,8 +73,11 @@ public class AuthController {
             )
     })
     @PostMapping("/refresh")
-    public ResponseEntity<ResponseLogin> refreshToken(@RequestBody RequestRefreshToken tokenData){
-        return null;
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        service.refreshToken(request, response);
     }
 
     @Operation(summary = "Logout user", description = "Logs an user out and deactivates their jwt token.")

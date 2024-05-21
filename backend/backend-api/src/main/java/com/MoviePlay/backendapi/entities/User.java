@@ -1,16 +1,19 @@
 package com.MoviePlay.backendapi.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.MoviePlay.backendapi.security.token.Token;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +31,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
     )
     private List<Movie> favoriteMovies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     //ADD record of rated movies with Rating object
     //Rating will be stored in movie, wrong but needed for the moment
@@ -51,7 +57,7 @@ public class User {
     public User() {
     }
 
-    public User(Long userId, String email, String realName, String nickname, String profilePictureLink, Boolean active, List<Movie> favoriteMovies) {
+    public User(Long userId, String email, String realName, String nickname, String profilePictureLink, Boolean active, List<Movie> favoriteMovies, List<Token> tokens) {
         this.userId = userId;
         this.email = email;
         this.realName = realName;
@@ -59,6 +65,7 @@ public class User {
         this.profilePictureLink = profilePictureLink;
         this.active = active;
         this.favoriteMovies = favoriteMovies;
+        this.tokens = tokens;
     }
 
     public Long getUserId() {
@@ -115,5 +122,48 @@ public class User {
 
     public void setFavoriteMovies(List<Movie> favoriteMovies) {
         this.favoriteMovies = favoriteMovies;
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<Token> tokens) {
+        this.tokens = tokens;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }
