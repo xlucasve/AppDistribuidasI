@@ -35,7 +35,7 @@ public class AuthenticationService {
     this.authenticationManager = authenticationManager;
   }
 
-  public ResponseLogin register(RequestLogin request) {
+  public ResponseLogin login(RequestLogin request) {
     User user = new User();
     user.setEmail(request.userEmail());
     user.setActive(true);
@@ -44,6 +44,12 @@ public class AuthenticationService {
     user.setProfilePictureLink(request.profilePictureLink());
     User savedUser;
 
+
+    /*TODO: If user is found, check if its tokens are valid
+    If they are valid, return them
+    If they are invalid, generate them
+
+      */
     Optional<User> storedUser = repository.findByEmail(user.getEmail());
       savedUser = storedUser.orElseGet(() -> repository.save(user));
     var jwtToken = jwtService.generateToken(user);
