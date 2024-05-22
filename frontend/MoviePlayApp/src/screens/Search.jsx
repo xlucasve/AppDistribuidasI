@@ -6,7 +6,6 @@ import Header from "../components/Header";
 export default function Search({ navigation }) {
     return (
         <View>
-            <Header title="Search" navigation={navigation} />
             <Text>Search</Text>
         </View>
     );

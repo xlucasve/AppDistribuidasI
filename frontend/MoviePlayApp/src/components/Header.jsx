@@ -5,9 +5,9 @@ import Logo from "../assets/images/logo.svg";
 import Search from "../assets/images/search_btn.svg";
 import Back from "../assets/images/back_btn.svg";
 import Filter from "../assets/images/filter_btn.svg";
-
-export default function Header({ title, navigation }) {
-
+import { useNavigation } from '@react-navigation/native';
+export default function Header({ title }) {
+  const navigation = useNavigation();
   const handleLeftClick = () => {
     if (title === 'Home' || 'Profile') {
       navigation.navigate('Home');
