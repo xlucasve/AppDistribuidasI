@@ -82,6 +82,9 @@ public class AuthenticationService {
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
     final String refreshToken;
     final String userEmail;
+
+    //TODO: Make it so that it only accepts RefreshToken
+
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
       return;
     }
