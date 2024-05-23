@@ -10,6 +10,7 @@ export const HomeOptions = {
     headerTitleStyle: {
         fontFamily: 'RobotoSlab-Medium',
         letterSpacing: 6,
+        fontSize: hp('2.75%'),
     },
     headerTitleAlign: 'center',
     headerStyle: {
@@ -38,7 +39,7 @@ export const HomeOptions = {
     headerTitle: 'MI PERFIL',
     headerTitleStyle: {
         color: '#FAFAFA',
-        fontSize: 20,
+        fontSize: hp('2.75%'),
         weight: 'medium',
         letterSpacing: 2,
     },

@@ -1,32 +1,50 @@
 import React from "react";
-import { Text, Image, View, StyleSheet, TouchableOpacity, TextInput, Dimensions } from "react-native";
-import Header from "../components/Header";
-import { backDefaultContainerStyle } from "../styles/GlobalStyles";
+import { Text, Image, View, StyleSheet, TouchableOpacity, TextInput, Dimensions, KeyboardAvoidingView } from "react-native";
+import Header from "../../components/Header";
+import { backDefaultContainerStyle } from "../../styles/GlobalStyles";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Pencil from '../assets/images/editPencil_btn.svg'
+import Pencil from '../../assets/images/editPencil_btn.svg'
+import Default_profile from '../../assets/images/default_profile.png'
+import ModalAccount from "./Modal/ModalAccount";
+
 
 
 export default function Profile() {
 
     const { width, height } = Dimensions.get('window');
 
+    const [deleteACCModalVisible, setDeleteACCModalVisible] = React.useState(false);
+    const [logoutModalVisible, setLogoutModalVisible] = React.useState(false);
     const [userName, setUserName] = React.useState('JuanPerez123');
+    const [isEditing, setIsEditing] = React.useState(true);
 
+
+
+
+    const validateUsername = () => {
+        if (username.length < 3 || username.length > 20) {
+            Alert.alert('Error', 'El nombre de usuario debe tener entre 3 y 20 caracteres.');
+            return false;
+        }
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            Alert.alert('Error', 'El nombre de usuario solo puede contener caracteres alfanuméricos y guiones bajos.');
+            return false;
+        }
+
+        // API POST IF OK THEN RETURN TRUE ELSE (THE USERNAME IS ALREADY IN USE) RETURN FALSE
+        return true;
+    };
 
     return (
-        <View style={styles.container}>
 
+        <View style={styles.container}>
             <View style={styles.editPictureContainer}>
                 <TouchableOpacity style={styles.editPictureContainer.editPencil}>
                     <Pencil />
                 </TouchableOpacity>
                 <View style={styles.editPictureContainer.pictureContainer}>
-                    <Image source={require('../assets/images/default_profile.png')}
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'cover',
-                        }}
+                    <Image source={Default_profile}
+                        style={{ width: '100%', height: '100%' }}
                     />
                 </View>
             </View>
@@ -45,7 +63,7 @@ export default function Profile() {
                         style={styles.editUserContainer.inputUserName}
                         value={userName}
                         onChangeText={setUserName}
-                    // editable={isEditing}
+                        editable={isEditing}
                     />
                     <TouchableOpacity style={styles.editUserContainer.editPencil}>
                         <Pencil />
@@ -55,13 +73,29 @@ export default function Profile() {
 
             <View style={styles.buttonsContainer}>
 
-                <TouchableOpacity style={[styles.buttonsContainer.btnSpace, { backgroundColor: "#D9D9D9" }]}>
+                <TouchableOpacity style={[styles.buttonsContainer.btnSpace, { backgroundColor: "#D9D9D9" }]}
+                    onPress={() => setLogoutModalVisible(true)}
+                >
                     <Text style={styles.buttonsContainer.textBtn}>Cerrar Sesión</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.buttonsContainer.btnSpace, { backgroundColor: "#D51D53" }]}>
+                <ModalAccount
+                    modalVisible={logoutModalVisible}
+                    setModalVisible={setLogoutModalVisible}
+                    infoModal={"Logout"}
+                />
+
+                <TouchableOpacity
+                    style={[styles.buttonsContainer.btnSpace, { backgroundColor: "#D51D53" }]}
+                    onPress={() => setDeleteACCModalVisible(true)}>
                     <Text style={styles.buttonsContainer.textBtn}>Eliminar cuenta</Text>
                 </TouchableOpacity>
+
+                <ModalAccount
+                    modalVisible={deleteACCModalVisible}
+                    setModalVisible={setDeleteACCModalVisible}
+                    infoModal={"DeleteAccount"}
+                />
 
             </View>
 
@@ -92,10 +126,11 @@ const styles = StyleSheet.create({
             width: wp('70%'),
             height: hp('32%'),
             borderRadius: wp('70%') / 2,
-            marginTop: hp('3%'),
+            marginTop: hp('2%'),
             overflow: 'hidden',
             alignContent: 'center',
             justifyContent: 'center',
+            position: 'relative',
         },
 
         editPencil: {
@@ -114,7 +149,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: hp('2%'),
+        marginTop: hp('1%'),
 
         nameText: {
             color: '#FAFAFA',
@@ -133,7 +168,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: hp('7.25%'),
+        marginTop: hp('6.25%'),
         position: 'relative',
 
         userNameLabel: {
@@ -174,7 +209,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: hp('8.5%'),
+        marginTop: hp('8%'),
 
 
         btnSpace: {

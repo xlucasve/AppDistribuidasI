@@ -41,33 +41,34 @@ const styles = StyleSheet.create({
         height: hp('75%'),
         width: wp('86%'),
         borderRadius: 40,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 50,
-        },
+        elevation: 10, // Añadir sombra para Android
+        shadowColor: '#000', // Añadir sombra para iOS
+        shadowOffset: { width: 0, height: 2 }, // Añadir sombra para iOS
+        shadowOpacity: 0.25, // Añadir sombra para iOS
+        shadowRadius: 3.84, // Añadir sombra para iOS
+
     },
     logoContainer: {
         width: wp('50%'),
         height: hp('25%'),
         borderRadius: 100,
-        marginTop: 50,
+        marginTop: hp('6.25%'),
         overflow: 'hidden',
     },
     SignInContainer: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 60,
+        marginVertical: hp('7.5%'),
     },
     signInText: {
         color: '#fff',
-        fontSize: 36,
+        fontSize: hp('4.5%'),
         fontWeight: 'bold',
-        marginBottom: 16,
+        marginBottom: hp('3.5%'),
     },
     signButton: {
-        marginVertical: 30,
+        marginVertical: hp('3.75%'),
         flexDirection: 'row',
         backgroundColor: '#FAFAFA',
         alignItems: 'center',
@@ -77,9 +78,9 @@ const styles = StyleSheet.create({
         height: hp('7.5%'),
     },
     textButton: {
-        marginLeft: 18,
+        marginLeft: wp('3%'),
         color: 'black',
         fontWeight: 'medium',
-        fontSize: 15,
+        fontSize: hp('1.875%'),
     }
 });

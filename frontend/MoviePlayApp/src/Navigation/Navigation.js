@@ -3,7 +3,7 @@ import { Text, Image, StyleSheet, View, Pressable } from "react-native";
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/Home';
-import Profile from '../screens/Profile';
+import Profile from '../screens/Profile/Profile';
 import Search from '../screens/Search';
 import Login from '../screens/Login';
 import Logo from '../assets/images/logo.svg';
