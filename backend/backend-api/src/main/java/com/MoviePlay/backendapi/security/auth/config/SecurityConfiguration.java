@@ -32,12 +32,10 @@ public class SecurityConfiguration {
             "/webjars/**",
             "/swagger-ui.html"};
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
-    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider, LogoutHandler logoutHandler) {
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, LogoutHandler logoutHandler) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.authenticationProvider = authenticationProvider;
         this.logoutHandler = logoutHandler;
     }
 
@@ -52,7 +50,6 @@ public class SecurityConfiguration {
                                 .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
                         logout.logoutUrl("/api/v1/auth/logout")

@@ -10,26 +10,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
-  private final UserDetailsService userDetailsService;
   private final TokenRepository tokenRepository;
   private final UserRepository userRepository;
 
-  public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, TokenRepository tokenRepository,
+  public JwtAuthenticationFilter(JwtService jwtService, TokenRepository tokenRepository,
                                  UserRepository userRepository) {
     this.jwtService = jwtService;
-    this.userDetailsService = userDetailsService;
     this.tokenRepository = tokenRepository;
     this.userRepository = userRepository;
   }
@@ -62,7 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             user,
             null,
-                user.getAuthorities()
+                new ArrayList<>()
+
 
         );
         System.out.println("TOKEN1" + authToken.isAuthenticated());

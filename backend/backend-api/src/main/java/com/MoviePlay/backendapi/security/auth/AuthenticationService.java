@@ -12,8 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,16 +21,12 @@ import java.util.Optional;
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
-  private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
-  private final AuthenticationManager authenticationManager;
 
-  public AuthenticationService(UserRepository repository, TokenRepository tokenRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+  public AuthenticationService(UserRepository repository, TokenRepository tokenRepository, JwtService jwtService) {
     this.repository = repository;
     this.tokenRepository = tokenRepository;
-    this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
-    this.authenticationManager = authenticationManager;
   }
 
   public ResponseLogin login(RequestLogin request) {

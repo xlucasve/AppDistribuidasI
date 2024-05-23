@@ -46,7 +46,7 @@ load_dotenv()
 
 #Datos configurables
 moviesPerFile = 25
-fileAmmount = 100
+fileAmmount = 20
 
 #Inicializacion de variables
 movieCount = 0
@@ -149,5 +149,5 @@ for number in range(fileAmmount):
       'Content-Type': 'application/json'
     }
     url = urlLocation
-    response = requests.request("POST", url, headers=headers, data=payload, verify=False)
-    print(response)
+    response = requests.request("POST", url, headers=headers, data=payload)
+    print(response.text)
