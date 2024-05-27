@@ -1,5 +1,3 @@
-import React from 'react';
-
 const signIn = async (email, realNmae, nickname, photo) => {
   const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
@@ -23,3 +21,5 @@ const signIn = async (email, realNmae, nickname, photo) => {
     .then(result => console.log(result))
     .catch(error => console.error(error));
 };
+
+export default signIn;
