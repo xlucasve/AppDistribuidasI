@@ -70,7 +70,7 @@ const TabGroup = () => {
         component={Profile}
         options={ProfileOptions}
       />
-      <Tab.Screen name="Sign in" component={Login} />
+      <Tab.Screen name="Sign in" component={Login} options={ProfileOptions} />
     </Tab.Navigator>
   );
 };

@@ -6,6 +6,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export default function Login({navigation}) {
@@ -17,7 +18,29 @@ export default function Login({navigation}) {
       });
       await GoogleSignin.hasPlayServices();
       const {user} = await GoogleSignin.signIn();
-      console.log(user);
+      const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+
+      const raw = JSON.stringify({
+        userEmail: user.email,
+        realName: user.givenName + ' ' + user.familyName,
+        nickname: user.name,
+        profilePictureLink: user.photo,
+      });
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      await fetch(
+        'https://movieplay-api.onrender.com/api/v1/auth/login',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => console.log(result.accessToken));
     } catch (error) {
       console.log(error);
     }
