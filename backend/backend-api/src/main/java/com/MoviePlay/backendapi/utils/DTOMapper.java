@@ -10,4 +10,5 @@ import java.util.List;
 public interface DTOMapper{
 
     List<ResponseMovieInScroll> listMovieToListMovieInScroll(List<Movie> movieList);
+    ResponseMovieInScroll movieToResponseInScroll(Movie movie);
 }

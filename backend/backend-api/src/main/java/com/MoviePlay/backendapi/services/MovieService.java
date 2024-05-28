@@ -9,6 +9,7 @@ import com.MoviePlay.backendapi.entities.enums.SortSearchBy;
 import com.MoviePlay.backendapi.models.MovieScroll;
 import com.MoviePlay.backendapi.repositories.MovieRepository;
 import com.MoviePlay.backendapi.utils.DTOMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -98,6 +99,15 @@ public class MovieService {
         }
 
         ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(moviesList));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseMovieInScroll> getMovieById(Long movieId) {
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        if (movie.isEmpty()) {
+            throw new EntityNotFoundException("Movie id with id: " + movieId + " does not exist");
+        }
+        ResponseMovieInScroll response = dtoMapper.movieToResponseInScroll(movie.get());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
