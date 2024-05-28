@@ -72,7 +72,7 @@ public class UserController {
                     )}
             )
     })
-    @PutMapping("/{userId}")
+    @PutMapping("/{userId}/nickname")
     public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId, @RequestBody RequestUpdateNickname request) {
         return userService.updateUserNickname(userId, request);
     }
