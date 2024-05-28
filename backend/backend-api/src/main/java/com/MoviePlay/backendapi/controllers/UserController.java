@@ -1,5 +1,6 @@
 package com.MoviePlay.backendapi.controllers;
 
+import com.MoviePlay.backendapi.dtos.requests.RequestUpdateNickname;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import com.MoviePlay.backendapi.exceptions.ApiException;
@@ -72,8 +73,8 @@ public class UserController {
             )
     })
     @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId) {
-        return null;
+    public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId, @RequestBody RequestUpdateNickname request) {
+        return userService.updateUserNickname(userId, request);
     }
 
     @Operation(summary = "Change User profile picture", description = "Changes a user profile picture. Picture is then stored as an url for frontend use." +
