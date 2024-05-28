@@ -27,13 +27,13 @@ public class ImageService {
 
 
 
-    public ResponseEntity<Map> uploadImage(MultipartFile request) {
+    public String uploadImage(MultipartFile request) {
         try {
 
             String imageUrl = cloudinaryService.uploadImageToCloudinary(request, "profiles_images/doctor", "image");
 
             //TODO: Store new image link in user object
-            return ResponseEntity.ok().body(Map.of("url", imageUrl));
+            return imageUrl;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

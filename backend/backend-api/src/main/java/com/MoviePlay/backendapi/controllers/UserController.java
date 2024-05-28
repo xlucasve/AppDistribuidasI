@@ -48,7 +48,7 @@ public class UserController {
     })
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserData(@PathVariable Long userId) {
-        return null;
+        return userService.getUserById(userId);
     }
 
     @Operation(summary = "Change user nickname", description = "Changes the user nickname. Doesn´t have filters.")
@@ -98,8 +98,8 @@ public class UserController {
             )
     })
     @PutMapping("/{userId}/images")
-    public ResponseEntity<UserResponse> updateUserProfilePicture(@PathVariable Long userId, MultipartFile imageFile) {
-        return null;
+    public ResponseEntity<UserResponse> updateUserProfilePicture(@RequestPart("image") MultipartFile file, @PathVariable Long userId){
+        return userService.changeUserImage(file, userId);
     }
 
     @Operation(summary = "Add movie to user Favorites", description = "Adds a movie to the user favorites list")
@@ -193,9 +193,4 @@ public class UserController {
         return null;
     }
 
-
-    @PostMapping("/image")
-    public ResponseEntity<?> changeUserImage(@RequestPart("image") MultipartFile request){
-        return imageService.uploadImage(request);
-    }
 }
