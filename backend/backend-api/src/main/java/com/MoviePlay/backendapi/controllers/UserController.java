@@ -3,6 +3,8 @@ package com.MoviePlay.backendapi.controllers;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import com.MoviePlay.backendapi.exceptions.ApiException;
+import com.MoviePlay.backendapi.services.ImageService;
+import com.MoviePlay.backendapi.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +17,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+
+    private final UserService userService;
+    private final ImageService imageService;
+
+    public UserController(UserService userService, ImageService imageService) {
+        this.userService = userService;
+        this.imageService = imageService;
+    }
 
     @Operation(summary = "Get user data", description = "Retrieves the data from the user")
     @ApiResponses({
@@ -181,5 +191,11 @@ public class UserController {
     @GetMapping("/{userId}/favorites")
     public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId) {
         return null;
+    }
+
+
+    @PostMapping("/image")
+    public ResponseEntity<?> changeUserImage(@RequestPart("image") MultipartFile request){
+        return imageService.uploadImage(request);
     }
 }
