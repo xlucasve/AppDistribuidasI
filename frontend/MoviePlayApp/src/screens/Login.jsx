@@ -8,6 +8,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import * as Keychain from 'react-native-keychain';
 import signIn from '../api/signin';
 
 export default function Login({navigation}) {
@@ -19,12 +20,27 @@ export default function Login({navigation}) {
       });
       await GoogleSignin.hasPlayServices();
       const {user} = await GoogleSignin.signIn();
-      await signIn(
+      const response = await signIn(
         user.email,
         user.givenName + ' ' + user.familyName,
         user.name,
         user.photo,
       );
+      await Keychain.setGenericPassword(
+        response.accessToken,
+        response.refreshToken,
+      );
+      await getUserCredentials();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserCredentials = async () => {
+    try {
+      const result = await Keychain.getGenericPassword();
+      console.log(result.username);
+      console.log(result.password);
     } catch (error) {
       console.log(error);
     }
