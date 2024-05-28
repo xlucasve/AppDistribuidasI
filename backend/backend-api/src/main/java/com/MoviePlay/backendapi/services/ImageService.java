@@ -16,8 +16,7 @@ import java.util.Map;
 @Service
 public class ImageService {
 
-    @Resource
-    private Cloudinary cloudinary;
+
     private final CloudinaryService cloudinaryService;
     private final ImageRepository imageRepository;
 
@@ -31,8 +30,9 @@ public class ImageService {
     public ResponseEntity<Map> uploadImage(MultipartFile request) {
         try {
 
-            String imageUrl = uploadImageToCloudinary(request, "profiles_images/doctor", "image");
+            String imageUrl = cloudinaryService.uploadImageToCloudinary(request, "profiles_images/doctor", "image");
 
+            //TODO: Store new image link in user object
             return ResponseEntity.ok().body(Map.of("url", imageUrl));
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,29 +42,5 @@ public class ImageService {
 
     }
 
-    private String uploadImageToCloudinary(MultipartFile image, String folderPath, String nameFile) {
 
-        try {
-            // Set image upload options
-            Map options = ObjectUtils.asMap(
-                    "unique_filename", true,
-                    "overwrite", true,
-                    "public_id", nameFile,
-                    "folder", folderPath,
-                    "resource_type", "image",
-                    "transformation", new Transformation<>()
-                            .aspectRatio("1.0").width(450).crop("fill")
-            );
-
-            //Upload image to cloudinary with the above options.
-            Map uploadedFile = cloudinary.uploader().upload(image.getBytes(), options);
-
-            //Return image link
-            return uploadedFile.get("secure_url").toString();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    };
 }
