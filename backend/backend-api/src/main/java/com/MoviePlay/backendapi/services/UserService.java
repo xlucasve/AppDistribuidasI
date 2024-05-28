@@ -1,5 +1,6 @@
 package com.MoviePlay.backendapi.services;
 
+import com.MoviePlay.backendapi.dtos.requests.RequestUpdateNickname;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import com.MoviePlay.backendapi.entities.User;
 import com.MoviePlay.backendapi.repositories.UserRepository;
@@ -44,6 +45,20 @@ public class UserService {
 
         User user = foundUser.get();
         user.setProfilePictureLink(newImageUrl);
+        User storedUser = userRepository.save(user);
+
+        return new ResponseEntity<>(dtoMapper.userToUserResponse(storedUser), HttpStatus.OK);
+    }
+
+    public ResponseEntity<UserResponse> updateUserNickname(Long userId, RequestUpdateNickname request) {
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("User with id: " + userId + " was not found");
+        }
+
+        User user = foundUser.get();
+
+        user.setNickname(request.nickname());
         User storedUser = userRepository.save(user);
 
         return new ResponseEntity<>(dtoMapper.userToUserResponse(storedUser), HttpStatus.OK);
