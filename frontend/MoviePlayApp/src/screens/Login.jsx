@@ -30,17 +30,6 @@ export default function Login({navigation}) {
         response.accessToken,
         response.refreshToken,
       );
-      await getUserCredentials();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getUserCredentials = async () => {
-    try {
-      const result = await Keychain.getGenericPassword();
-      console.log(result.username);
-      console.log(result.password);
     } catch (error) {
       console.log(error);
     }
