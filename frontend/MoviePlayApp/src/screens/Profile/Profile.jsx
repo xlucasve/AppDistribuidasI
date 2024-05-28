@@ -12,7 +12,9 @@ export default function Profile() {
 
     return (
         <View style={styles.container}>
+
             <ProfilePicture />
+
             <View style={styles.infoContainer}>
                 <Text style={styles.infoContainer.nameText}>Juan Perez</Text>
                 <Text style={styles.infoContainer.emailText}>Juan.perez1986@gmail.com</Text>
