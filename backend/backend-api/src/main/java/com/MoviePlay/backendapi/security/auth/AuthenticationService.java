@@ -15,46 +15,71 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AuthenticationService {
-  private final UserRepository repository;
+  private final UserRepository userRepository;
   private final TokenRepository tokenRepository;
   private final JwtService jwtService;
 
-  public AuthenticationService(UserRepository repository, TokenRepository tokenRepository, JwtService jwtService) {
-    this.repository = repository;
+  public AuthenticationService(UserRepository userRepository, TokenRepository tokenRepository, JwtService jwtService) {
+    this.userRepository = userRepository;
     this.tokenRepository = tokenRepository;
     this.jwtService = jwtService;
   }
 
   public ResponseLogin login(RequestLogin request) {
-    User user = new User();
-    user.setEmail(request.userEmail());
-    user.setActive(true);
-    user.setRealName(request.realName());
-    user.setNickname(request.nickname());
-    user.setProfilePictureLink(request.profilePictureLink());
-    User savedUser;
 
 
-    /*TODO: If user is found, check if its tokens are valid
-    If they are valid, return them
-    If they are invalid, generate them
+    Optional<User> storedUser = userRepository.findByEmail(request.userEmail());
+    if (storedUser.isEmpty()){
+      //Stores user if user does not previously exist
+      return loginNewUser(request);
+    }
+    return loginExistingUser(storedUser);
+  }
 
-      */
-    Optional<User> storedUser = repository.findByEmail(user.getEmail());
-      savedUser = storedUser.orElseGet(() -> repository.save(user));
-    var jwtToken = jwtService.generateToken(user);
+  private ResponseLogin loginExistingUser(Optional<User> storedUser) {
+    User user = storedUser.get();
+
+    List<Token> userTokens = tokenRepository.findAllValidTokenByUser(user.getUserId());
+
+    Token accessToken = null;
+    Token refreshToken = null;
+
+    for (Token token : userTokens){
+      if (token.getTokenType() == TokenType.ACCESS){
+        accessToken = token;
+      } else{
+        refreshToken = token;
+      }
+    }
+    return new ResponseLogin(accessToken.getToken(), refreshToken.getToken(), user.getUserId());
+  }
+
+  private ResponseLogin loginNewUser(RequestLogin request){
+
+    User newUser = new User();
+    newUser.setEmail(request.userEmail());
+    newUser.setActive(true);
+    newUser.setRealName(request.realName());
+    newUser.setNickname(request.nickname());
+    newUser.setProfilePictureLink(request.profilePictureLink());
+    User user = userRepository.save(newUser);
+
+    var accessToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(savedUser, jwtToken);
-    return new ResponseLogin(jwtToken, refreshToken);
+
+    saveUserToken(user, accessToken, TokenType.ACCESS);
+    saveUserToken(user, refreshToken, TokenType.REFRESH);
+    return new ResponseLogin(accessToken, refreshToken, user.getUserId());
   }
 
 
-  private void saveUserToken(User user, String jwtToken) {
-    Token token = new Token(jwtToken, TokenType.BEARER, false, false, user);
+  private void saveUserToken(User user, String jwtToken, TokenType tokenType) {
+    Token token = new Token(jwtToken, tokenType, false, false, user);
     tokenRepository.save(token);
   }
 
@@ -85,13 +110,13 @@ public class AuthenticationService {
     refreshToken = authHeader.substring(7);
     userEmail = jwtService.extractEmail(refreshToken);
     if (userEmail != null) {
-      var user = this.repository.findByEmail(userEmail)
+      var user = this.userRepository.findByEmail(userEmail)
               .orElseThrow();
       if (jwtService.isTokenValid(refreshToken, user)) {
         var accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
-        ResponseLogin authResponse = new ResponseLogin(accessToken, refreshToken);
+        saveUserToken(user, accessToken, TokenType.ACCESS);
+        ResponseLogin authResponse = new ResponseLogin(accessToken, refreshToken, user.getUserId());
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }
     }
