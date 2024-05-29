@@ -41,7 +41,7 @@ public class UserService {
             throw new EntityNotFoundException("User with id: " + userId + " was not found");
         }
 
-        String newImageUrl = imageService.uploadImage(file);
+        String newImageUrl = imageService.uploadImage(file, userId);
 
         User user = foundUser.get();
         user.setProfilePictureLink(newImageUrl);

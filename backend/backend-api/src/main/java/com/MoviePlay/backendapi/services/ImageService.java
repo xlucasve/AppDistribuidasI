@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -27,13 +28,10 @@ public class ImageService {
 
 
 
-    public String uploadImage(MultipartFile request) {
+    public String uploadImage(MultipartFile request, Long userId) {
         try {
-
-            String imageUrl = cloudinaryService.uploadImageToCloudinary(request, "profiles_images/doctor", "image");
-
+            return cloudinaryService.uploadImageToCloudinary(request, "profiles_images/users", "image" + userId);
             //TODO: Store new image link in user object
-            return imageUrl;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
