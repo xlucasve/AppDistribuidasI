@@ -1,7 +1,9 @@
 package com.MoviePlay.backendapi.security.auth;
 
 import com.MoviePlay.backendapi.dtos.requests.RequestLogin;
+import com.MoviePlay.backendapi.dtos.requests.RequestRefreshToken;
 import com.MoviePlay.backendapi.dtos.responses.ResponseLogin;
+import com.MoviePlay.backendapi.dtos.responses.ResponseRefresh;
 import com.MoviePlay.backendapi.exceptions.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -73,11 +75,8 @@ public class AuthController {
             )
     })
     @PostMapping("/refresh")
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        service.refreshToken(request, response);
+    public ResponseRefresh refreshToken(@RequestBody RequestRefreshToken request) {
+        return service.refreshToken(request);
     }
 
     @Operation(summary = "Logout user", description = "Logs an user out and deactivates their jwt token.")
