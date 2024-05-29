@@ -1,8 +1,11 @@
 package com.MoviePlay.backendapi.controllers;
 
+import com.MoviePlay.backendapi.dtos.requests.RequestUpdateNickname;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import com.MoviePlay.backendapi.exceptions.ApiException;
+import com.MoviePlay.backendapi.services.ImageService;
+import com.MoviePlay.backendapi.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+
+    private final UserService userService;
+    private final ImageService imageService;
+
+    public UserController(UserService userService, ImageService imageService) {
+        this.userService = userService;
+        this.imageService = imageService;
+    }
 
     @Operation(summary = "Get user data", description = "Retrieves the data from the user")
     @ApiResponses({
@@ -38,7 +49,7 @@ public class UserController {
     })
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserData(@PathVariable Long userId) {
-        return null;
+        return userService.getUserById(userId);
     }
 
     @Operation(summary = "Change user nickname", description = "Changes the user nickname. Doesn´t have filters.")
@@ -61,9 +72,9 @@ public class UserController {
                     )}
             )
     })
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId) {
-        return null;
+    @PutMapping("/{userId}/nickname")
+    public ResponseEntity<UserResponse> updateUserNickname(@PathVariable Long userId, @RequestBody RequestUpdateNickname request) {
+        return userService.updateUserNickname(userId, request);
     }
 
     @Operation(summary = "Change User profile picture", description = "Changes a user profile picture. Picture is then stored as an url for frontend use." +
@@ -88,8 +99,8 @@ public class UserController {
             )
     })
     @PutMapping("/{userId}/images")
-    public ResponseEntity<UserResponse> updateUserProfilePicture(@PathVariable Long userId, MultipartFile imageFile) {
-        return null;
+    public ResponseEntity<UserResponse> updateUserProfilePicture(@RequestPart("image") MultipartFile file, @PathVariable Long userId){
+        return userService.changeUserImage(file, userId);
     }
 
     @Operation(summary = "Add movie to user Favorites", description = "Adds a movie to the user favorites list")
@@ -182,4 +193,5 @@ public class UserController {
     public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId) {
         return null;
     }
+
 }
