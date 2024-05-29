@@ -1,17 +1,22 @@
 import * as React from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Logo from '../assets/images/logo.svg';
 import GoogleLogo from '../assets/images/login_btnGoogle.svg';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/slices/authSlice';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Keychain from 'react-native-keychain';
 import signIn from '../api/signin';
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
+
+  const dispatch = useDispatch();
+
+
   const onGoogleButtonPress = async () => {
     try {
       GoogleSignin.configure({
@@ -19,7 +24,7 @@ export default function Login({navigation}) {
           '568362713599-sjg142r6t6o2nq44nhrv11lnq1g6s37i.apps.googleusercontent.com',
       });
       await GoogleSignin.hasPlayServices();
-      const {user} = await GoogleSignin.signIn();
+      const { user } = await GoogleSignin.signIn();
       const response = await signIn(
         user.email,
         user.givenName + ' ' + user.familyName,
@@ -30,9 +35,14 @@ export default function Login({navigation}) {
         response.accessToken,
         response.refreshToken,
       );
+
+      console.log(user);
+      dispatch(login());
+      navigation.navigate('Profile');
     } catch (error) {
       console.log(error);
     }
+
   };
 
   return (
@@ -75,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     elevation: 10, // Añadir sombra para Android
     shadowColor: '#000', // Añadir sombra para iOS
-    shadowOffset: {width: 0, height: 2}, // Añadir sombra para iOS
+    shadowOffset: { width: 0, height: 2 }, // Añadir sombra para iOS
     shadowOpacity: 0.25, // Añadir sombra para iOS
     shadowRadius: 3.84, // Añadir sombra para iOS
   },
