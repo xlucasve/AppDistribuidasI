@@ -69,7 +69,7 @@ const TabGroup = () => {
 const Navigation = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  console.log(isAuthenticated + " THIS IS NAVIGATION");
+  console.log("IS AUTHENTICATED? ", isAuthenticated + " THIS IS Navigation.js");
 
   return (
     <NavigationContainer>

@@ -1,4 +1,4 @@
-import api, { endpoints } from '../config/apiConfig';
+import { api, endpoints } from '../config/apiConfig';
 
 export const removeMovieFromFavorites = async (userId, movieId) => {
   try {

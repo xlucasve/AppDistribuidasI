@@ -1,16 +1,16 @@
-import * as React from 'react';
+import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Logo from '../assets/images/logo.svg';
 import GoogleLogo from '../assets/images/login_btnGoogle.svg';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/slices/authSlice';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import authService from '../services/authService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { useDispatch } from 'react-redux';
-import { login } from '../redux/slices/authSlice';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import * as Keychain from 'react-native-keychain';
-import signIn from '../api/signin';
+import { GOOGLE_CLIENT_ID } from '@env';
 
 export default function Login({ navigation }) {
 
@@ -21,24 +21,24 @@ export default function Login({ navigation }) {
     try {
       GoogleSignin.configure({
         webClientId:
-          '568362713599-sjg142r6t6o2nq44nhrv11lnq1g6s37i.apps.googleusercontent.com',
+          `${GOOGLE_CLIENT_ID}.apps.googleusercontent.com`,
       });
       await GoogleSignin.hasPlayServices();
       const { user } = await GoogleSignin.signIn();
-      const response = await signIn(
+      const response = await authService.signIn(
         user.email,
         user.givenName + ' ' + user.familyName,
         user.name,
-        user.photo,
+        user.photo
       );
-      await Keychain.setGenericPassword(
-        response.accessToken,
-        response.refreshToken,
-      );
+      // await Keychain.setGenericPassword(
+      //   response.accessToken,
+      //   response.refreshToken,
+      // );
 
-      console.log(user);
+      console.log("Hello " + user.name + "!")
       dispatch(login());
-      navigation.navigate('Profile');
+
     } catch (error) {
       console.log(error);
     }
