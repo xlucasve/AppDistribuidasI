@@ -6,8 +6,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Pencil from '../../assets/images/editPencil_btn.svg';
 import Default_profile from '../../assets/images/default_profile.png';
 
-const ProfilePicture = () => {
-    const [profileImage, setProfileImage] = React.useState(Default_profile);
+const ProfilePicture = ( {picture_url} ) => {
+    const [profileImage, setProfileImage] = React.useState(picture_url);
     const [oldProfileImage, setOldProfileImage] = React.useState(null);
     const [hasProfileImageChanged, setHasProfileImageChanged] = React.useState(false);
 
@@ -80,7 +80,7 @@ const ProfilePicture = () => {
     return (
         <View style={styles.editPictureContainer}>
             <View style={styles.editPictureContainer.pictureContainer}>
-                <Image source={profileImage} style={{ width: '100%', height: '100%' }} />
+                <Image source={{uri: profileImage}} style={{ width: '100%', height: '100%' }} />
             </View>
             <TouchableOpacity
                 style={[styles.editPictureContainer.editPencil, hasProfileImageChanged && { backgroundColor: "#3B5780" }]}

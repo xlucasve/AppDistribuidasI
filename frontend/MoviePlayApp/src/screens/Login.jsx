@@ -4,6 +4,7 @@ import Logo from '../assets/images/logo.svg';
 import GoogleLogo from '../assets/images/login_btnGoogle.svg';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/slices/authSlice';
+import { setUser } from '../redux/slices/userSlice';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import authService from '../services/authService';
 import {
@@ -31,12 +32,9 @@ export default function Login({ navigation }) {
         user.name,
         user.photo
       );
-      // await Keychain.setGenericPassword(
-      //   response.accessToken,
-      //   response.refreshToken,
-      // );
 
       console.log("Hello " + user.name + "!")
+      dispatch(setUser(user));
       dispatch(login());
 
     } catch (error) {

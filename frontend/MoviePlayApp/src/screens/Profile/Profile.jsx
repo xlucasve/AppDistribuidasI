@@ -4,23 +4,30 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import ModalAccount from "./Modal/ModalAccount";
 import ProfilePicture from './ProfilePicture';
 import ProfileNickName from './ProfileNickName';
+import { useSelector } from "react-redux";
 
 export default function Profile() {
     const { width, height } = Dimensions.get('window');
     const [deleteACCModalVisible, setDeleteACCModalVisible] = React.useState(false);
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false);
 
+    const user = useSelector((state) => state.user.userData);
+
+    // const initialNickName = user.name
+
+    console.log("USER DATA: ", user)
+
     return (
         <View style={styles.container}>
 
-            <ProfilePicture />
+            <ProfilePicture picture_url={user.photo} />
 
             <View style={styles.infoContainer}>
-                <Text style={styles.infoContainer.nameText}>Juan Perez</Text>
-                <Text style={styles.infoContainer.emailText}>Juan.perez1986@gmail.com</Text>
+                <Text style={styles.infoContainer.nameText}>{user.name}</Text>
+                <Text style={styles.infoContainer.emailText}>{user.email}</Text>
             </View>
 
-            <ProfileNickName initialNickName="JuanPerez123" />
+            <ProfileNickName initialNickName={user.name} />
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity

@@ -14,18 +14,18 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 const Stack = createNativeStackNavigator();
 
-const StackGroup = () => {
+const MainStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Navigator initialRouteName="TabGroup">
+      <Stack.Screen name="TabGroup" component={TabGroup} options={{ headerShown: false }} />
+      <Stack.Screen name="Search" component={Search} />
     </Stack.Navigator>
   );
 };
 
 const Tab = createBottomTabNavigator();
 
-const TabGroup = () => {
+const TabGroup = ({ navigation }) => {
   return (
     <Tab.Navigator
       initialRouteName="Mi Perfil"
@@ -47,6 +47,14 @@ const TabGroup = () => {
           backgroundColor: '#192941',
           borderTopWidth: 0,
         },
+        headerRight: () => (
+          <Pressable
+            onPress={() => navigation.navigate('Search')}
+            style={{ marginRight: 10 }}
+          >
+            <Ionicons name="search" size={hp('3.5%')} color="#FAFAFA" />
+          </Pressable>
+        ),
       })}
     >
       <Tab.Screen name="Inicio" component={Home} options={HomeOptions} />
@@ -57,12 +65,16 @@ const TabGroup = () => {
           tabBarButton: (props) => <Pressable {...props} disabled={true} />,
         }}
       />
-      <Tab.Screen
-        name="Mi Perfil"
-        component={Profile}
-        options={ProfileOptions}
-      />
+      <Tab.Screen name="Mi Perfil" component={Profile} options={ProfileOptions} />
     </Tab.Navigator>
+  );
+};
+
+const AuthStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Login" component={Login} />
+    </Stack.Navigator>
   );
 };
 
@@ -73,7 +85,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      {isAuthenticated ? <TabGroup /> : <StackGroup />}
+      {isAuthenticated ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Modal, ActivityIndicator } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
+import { clearUser } from "../../../redux/slices/userSlice";
 export default function ModalAccount({ modalVisible, setModalVisible, infoModal }) {
 
     const [isLoading, setIsLoading] = React.useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (modalVisible && infoModal === "DeleteAccount") {
@@ -22,6 +25,17 @@ export default function ModalAccount({ modalVisible, setModalVisible, infoModal 
                                          : "¿Está seguro que quiere eliminar la cuenta?";
 
     const actionBtn = infoModal === "Logout" ? "Cerrar Sesión" : "Eliminar cuenta";
+
+
+    const handleActionBtn = () => {
+        if (infoModal === "Logout") {
+            dispatch(clearUser())
+            dispatch(logout());
+            
+        } else {
+            console.log("Eliminando cuenta...")
+        }
+    }
 
         return (
             <Modal
@@ -44,9 +58,9 @@ export default function ModalAccount({ modalVisible, setModalVisible, infoModal 
                     ) : (
                         <TouchableOpacity
                             style={[styles.btn, { backgroundColor: "#D51D53" }]}
-                            onPress={() => {
-                                setModalVisible(!modalVisible);
-                            }}
+                            onPress={() => 
+                                handleActionBtn()
+                            }
                             disabled={isLoading}
                         >
                             <Text style={styles.textStyle}>{actionBtn}</Text>
