@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -194,7 +195,6 @@ public class AuthenticationService {
             throw new EntityNotFoundException("No user found with id: " + userId);
         }
 
-        revokeAllUserTokens(foundUser.get());
         userRepository.deleteById(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
