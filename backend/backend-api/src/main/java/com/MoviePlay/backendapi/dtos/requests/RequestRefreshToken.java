@@ -1,4 +1,4 @@
 package com.MoviePlay.backendapi.dtos.requests;
 
-public record RequestRefreshToken(String token, String refreshToken) {
+public record RequestRefreshToken(String accessToken, String refreshToken, Long userId) {
 }
