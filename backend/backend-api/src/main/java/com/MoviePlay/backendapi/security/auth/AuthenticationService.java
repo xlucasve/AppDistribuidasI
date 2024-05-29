@@ -14,7 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -48,20 +51,30 @@ public class AuthenticationService {
 
     private ResponseLogin loginExistingUser(Optional<User> storedUser) {
         User user = storedUser.get();
+        String accessToken = null;
+        String refreshToken = null;
 
         List<Token> userTokens = tokenRepository.findAllValidTokenByUser(user.getUserId());
+        if (userTokens.isEmpty()){
+            accessToken = jwtService.generateToken(user);
+            refreshToken = jwtService.generateRefreshToken(user);
 
-        Token accessToken = null;
-        Token refreshToken = null;
-
-        for (Token token : userTokens) {
-            if (token.getTokenType() == TokenType.ACCESS) {
-                accessToken = token;
-            } else {
-                refreshToken = token;
+            saveUserToken(user, accessToken, TokenType.ACCESS);
+            saveUserToken(user, refreshToken, TokenType.REFRESH);
+        } else {
+            for (Token token : userTokens) {
+                if (token.getTokenType() == TokenType.ACCESS) {
+                    accessToken = token.getToken();
+                } else {
+                    refreshToken = token.getToken();
+                }
+            }
+            //Case when refreshToken works but access token is invalid
+            if (accessToken == null){
+                accessToken = jwtService.generateToken(user);
             }
         }
-        return new ResponseLogin(accessToken.getToken(), refreshToken.getToken(), user.getUserId());
+        return new ResponseLogin(accessToken, refreshToken, user.getUserId());
     }
 
     private ResponseLogin loginNewUser(RequestLogin request) {
@@ -164,5 +177,25 @@ public class AuthenticationService {
         saveUserToken(user, accessToken, TokenType.ACCESS);
         return new ResponseRefresh(accessToken);
 
+    }
+
+
+    public ResponseEntity<?> logout(Long userId){
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("No user found with id: " + userId);
+        }
+        revokeAllUserTokens(foundUser.get());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteUser(Long userId) {
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("No user found with id: " + userId);
+        }
+
+        userRepository.deleteById(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

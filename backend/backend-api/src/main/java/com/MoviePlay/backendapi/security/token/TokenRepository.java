@@ -1,5 +1,6 @@
 package com.MoviePlay.backendapi.security.token;
 
+import com.MoviePlay.backendapi.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +17,5 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
   List<Token> findAllValidTokenByUser(Long id);
 
   Optional<Token> findByToken(String token);
+
 }

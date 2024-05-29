@@ -100,7 +100,7 @@ public class AuthController {
             )
     })
     @DeleteMapping("/logout/{userId}")
-    public ResponseEntity<Boolean> logoutUser(@PathVariable Long userId){return null;}
+    public ResponseEntity<?> logoutUser(@PathVariable Long userId){return service.logout(userId);}
 
     @Operation(summary = "Delete user", description = "Delete a user and all its related data.")
     @ApiResponses({
@@ -123,7 +123,7 @@ public class AuthController {
             )
     })
     @DeleteMapping("/delete-account/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId){
-        return null;
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId){
+        return service.deleteUser(userId);
     }
 }

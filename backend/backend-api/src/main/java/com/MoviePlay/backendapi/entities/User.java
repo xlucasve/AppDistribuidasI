@@ -29,7 +29,7 @@ public class User{
     )
     private List<Movie> favoriteMovies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Token> tokens;
 
     //ADD record of rated movies with Rating object
