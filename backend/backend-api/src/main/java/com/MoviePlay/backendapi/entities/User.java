@@ -17,8 +17,6 @@ public class User{
     private Long userId;
     private String email;
     private String realName;
-
-    @Column(unique = true)
     private String nickname;
     private String profilePictureLink;
     private Boolean active;
@@ -31,7 +29,7 @@ public class User{
     )
     private List<Movie> favoriteMovies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
     //ADD record of rated movies with Rating object
