@@ -30,7 +30,7 @@ export default function Home({navigation}) {
     }
   }, []);
 
-  const Item = items => (
+  const CarouselItem = items => (
     <View style={styles.carouselItemContainer}>
       <Image
         source={{uri: items.image}}
@@ -52,7 +52,7 @@ export default function Home({navigation}) {
           <FlatList
             data={movieData.bigMovies.moviesData}
             renderItem={({item}) => (
-              <Item title={item.title} image={item.posterImageLink} />
+              <CarouselItem title={item.title} image={item.posterImageLink} />
             )}
             keyExtractor={item => item.movieId}
             horizontal
