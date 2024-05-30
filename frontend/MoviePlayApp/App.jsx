@@ -1,15 +1,13 @@
 import React from 'react';
-import { useEffect } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, Platform, Pressable, } from 'react-native';
+import {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import Navigation from './src/navigation/Navigation.js';
+import Navigation from './src/Navigation/Navigation.js';
 import store from './src/redux/store.js';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 
-// 
+//
 
 export default function App() {
-
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -19,9 +17,7 @@ export default function App() {
       <Navigation />
     </Provider>
   );
-};
-
-
+}
 
 // const Item = ({ title }) => (
 //   <View style={styles.item}>
@@ -75,5 +71,3 @@ export default function App() {
 //     fontSize: 32,
 //   },
 // });
-
-
