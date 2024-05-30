@@ -24,7 +24,9 @@ export default function Home({navigation}) {
       setMovieData(response);
       setIsLoading(false);
     };
-    getData();
+    if (isLoading) {
+      getData();
+    }
   }, []);
 
   const Item = items => (
@@ -54,6 +56,10 @@ export default function Home({navigation}) {
             keyExtractor={item => item.movieId}
             horizontal
             pagingEnabled
+            ItemSeparatorComponent={() => <View style={{width: 22}} />}
+            contentContainerStyle={{paddingRight: 22}}
+            bounces={false}
+            showsHorizontalScrollIndicator={false}
           />
         </View>
       </View>
@@ -70,19 +76,15 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
   fullHomeContainer: {
     flex: 1,
-    backgroundColor: 'red',
   },
 
   carouselContainer: {
     flex: 0.85,
     paddingTop: '4%',
-    width: '100%',
-    backgroundColor: 'yellow',
+    marginLeft: '5%',
   },
 
   carouselItemContainer: {
-    paddingLeft: '5%',
     alignItems: 'center',
-    backgroundColor: 'green',
   },
 });
