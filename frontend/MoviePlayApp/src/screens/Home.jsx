@@ -14,6 +14,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import SideScrollList from '../components/RenderList';
 
 export default function Home({navigation}) {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -63,7 +64,6 @@ export default function Home({navigation}) {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <View style={styles.genreListsContainer}></View>
       </ScrollView>
     );
   };

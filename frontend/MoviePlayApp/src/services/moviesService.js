@@ -5,7 +5,6 @@ const movieService = {
   getHomeData: async () => {
     try {
       const accessToken = 'Bearer ' + (await authService.getAccessToken());
-      console.log(accessToken);
       const myHeaders = new Headers();
       myHeaders.append('Authorization', accessToken);
 
