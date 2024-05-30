@@ -32,7 +32,7 @@ export default function Home({navigation}) {
       <Image
         source={{uri: items.image}}
         style={{
-          borderRadius: 60,
+          borderRadius: 50,
           resizeMode: 'cover',
           width: wp('90%'),
           height: hp('65%'),
@@ -70,18 +70,19 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
   fullHomeContainer: {
     flex: 1,
+    backgroundColor: 'red',
   },
 
   carouselContainer: {
-    flex: 1,
-    paddingLeft: wp('4%'),
+    flex: 0.85,
+    paddingTop: '4%',
+    width: '100%',
+    backgroundColor: 'yellow',
   },
 
   carouselItemContainer: {
-    flex: 1,
-    paddingTop: hp('2%'),
-    paddingRight: wp('6%'),
-    alignContent: 'center',
+    paddingLeft: '5%',
     alignItems: 'center',
+    backgroundColor: 'green',
   },
 });
