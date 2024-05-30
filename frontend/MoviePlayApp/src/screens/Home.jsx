@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  FlatList,
 } from 'react-native';
 import {View} from 'react-native';
 import Header from '../components/Header';
@@ -27,34 +28,35 @@ export default function Home({navigation}) {
     const getData = async () => {
       let response = await movieService.getHomeData();
       setMovieData(response);
-      console.log(movieData);
     };
     getData();
   }, []);
 
+  const Item = items => (
+    <View>
+      <Image source={{uri: items.image}} style={{width: 400, height: 400}} />
+      <Text>{items.title}</Text>
+    </View>
+  );
+
+  const BigMovieCarousel = () => {
+    return (
+      <View>
+        <FlatList
+          data={movieData.bigMovies.moviesData}
+          renderItem={({item}) => (
+            <Item title={item.title} image={item.posterImageLink} />
+          )}
+          keyExtractor={item => item.movieId}
+          horizontal
+        />
+      </View>
+    );
+  };
+
   return (
     <View style={backDefaultContainerStyle}>
-      <TouchableOpacity
-        style={styles.temporalButton1}
-        onPress={() => navigation.navigate('Profile')}>
-        <Text>Go to Profile</Text>
-      </TouchableOpacity>
-
-      <Text>
-        THIS IS A TEST
-        <TextInput ref={textRef} editable={isEditable} />
-      </Text>
-      <TouchableOpacity
-        style={styles.temporalButton2}
-        onPress={() => {
-          logTokeN();
-        }}>
-        <Text>OPEN INPUT</Text>
-      </TouchableOpacity>
-
-      {/* <TouchableOpacity style={styles.temporalButton2} onPress={() => navigation.navigate('Search')} >
-                <Text>Go to Search</Text>
-            </TouchableOpacity> */}
+      <BigMovieCarousel />
     </View>
   );
 }
