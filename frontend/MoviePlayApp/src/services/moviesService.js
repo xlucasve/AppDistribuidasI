@@ -20,7 +20,6 @@ const movieService = {
         requestOptions,
       );
       const result = await response.json();
-      console.log(result);
       return result;
     } catch (error) {
       console.error(error);

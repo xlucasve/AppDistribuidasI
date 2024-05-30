@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {View} from 'react-native';
 import {backDefaultContainerStyle} from '../styles/GlobalStyles';
@@ -40,13 +41,13 @@ export default function Home({navigation}) {
           height: hp('65%'),
         }}
       />
-      <Text>{items.title}</Text>
+      <Text style={styles.carouselMovieTitle}>{items.title}</Text>
     </View>
   );
 
   const BigMovieCarousel = () => {
     return (
-      <View style={styles.fullHomeContainer}>
+      <ScrollView style={styles.fullHomeContainer}>
         <View style={styles.carouselContainer}>
           <FlatList
             data={movieData.bigMovies.moviesData}
@@ -62,7 +63,8 @@ export default function Home({navigation}) {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-      </View>
+        <View style={styles.genreListsContainer}></View>
+      </ScrollView>
     );
   };
 
@@ -86,5 +88,15 @@ const styles = StyleSheet.create({
 
   carouselItemContainer: {
     alignItems: 'center',
+  },
+
+  carouselMovieTitle: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 32,
+    color: '#FAFAFA',
+  },
+
+  genreListsContainer: {
+    backgroundColor: 'yellow',
   },
 });

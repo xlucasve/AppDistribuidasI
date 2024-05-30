@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/Inter-SemiBold.ttf",
+      "sha1": "5e0c44e57e7e090252d79f622899e67585bb892c"
+    },
+    {
       "path": "src/assets/fonts/RobotoSlab-Medium.ttf",
       "sha1": "25663f37e1c85471b95cab8c5dd06948388b0bd3"
     }
