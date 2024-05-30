@@ -1,55 +1,102 @@
-import React from "react";
-import { Text, Image, TouchableOpacity, StyleSheet, TextInput } from "react-native";
-import { View } from "react-native";
-import Header from "../components/Header";
-import { backDefaultContainerStyle } from "../styles/GlobalStyles";
+import React from 'react';
+import {
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
+import {View} from 'react-native';
+import {backDefaultContainerStyle} from '../styles/GlobalStyles';
+import movieService from '../services/moviesService';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import SideScrollList from '../components/RenderList';
 
-export default function Home({ navigation }) {
+export default function Home({navigation}) {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [movieData, setMovieData] = React.useState({});
 
-    const textRef = React.useRef(null);
-    const [isEditable, setIsEditable] = React.useState(false);
+  React.useEffect(() => {
+    const getData = async () => {
+      let response = await movieService.getHomeData();
+      setMovieData(response);
+      setIsLoading(false);
+    };
+    if (isLoading) {
+      getData();
+    }
+  }, []);
 
+  const CarouselItem = items => (
+    <View style={styles.carouselItemContainer}>
+      <Image
+        source={{uri: items.image}}
+        style={{
+          borderRadius: 50,
+          resizeMode: 'cover',
+          width: wp('90%'),
+          height: hp('65%'),
+        }}
+      />
+      <Text style={styles.carouselMovieTitle}>{items.title}</Text>
+    </View>
+  );
+
+  const BigMovieCarousel = () => {
     return (
-        <View style={backDefaultContainerStyle}>
-            <TouchableOpacity style={styles.temporalButton1} onPress={() => navigation.navigate('Profile')} >
-                <Text>Go to Profile</Text>
-            </TouchableOpacity>
-
-            <Text>THIS IS A TEST
-                <TextInput
-                    ref={textRef}
-                    editable={isEditable}
-                />
-            </Text>
-            <TouchableOpacity style={styles.temporalButton2} onPress={() => { setIsEditable(true); textRef.current.focus() }} >
-                <Text>OPEN INPUT</Text>
-            </TouchableOpacity>
-
-            {/* <TouchableOpacity style={styles.temporalButton2} onPress={() => navigation.navigate('Search')} >
-                <Text>Go to Search</Text>
-            </TouchableOpacity> */}
+      <ScrollView style={styles.fullHomeContainer}>
+        <View style={styles.carouselContainer}>
+          <FlatList
+            data={movieData.bigMovies.moviesData}
+            renderItem={({item}) => (
+              <CarouselItem title={item.title} image={item.posterImageLink} />
+            )}
+            keyExtractor={item => item.movieId}
+            horizontal
+            pagingEnabled
+            ItemSeparatorComponent={() => <View style={{width: 22}} />}
+            contentContainerStyle={{paddingRight: 22}}
+            bounces={false}
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
+      </ScrollView>
     );
+  };
+
+  return (
+    <View style={backDefaultContainerStyle}>
+      {isLoading ? <ActivityIndicator /> : <BigMovieCarousel />}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  fullHomeContainer: {
+    flex: 1,
+  },
 
+  carouselContainer: {
+    flex: 0.85,
+    paddingTop: '4%',
+    marginLeft: '5%',
+  },
 
+  carouselItemContainer: {
+    alignItems: 'center',
+  },
 
-    temporalButton1: {
-        backgroundColor: 'red',
-        height: 50,
-        alignContent: 'center',
-        justifyContent: 'center',
-    },
+  carouselMovieTitle: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 32,
+    color: '#FAFAFA',
+  },
 
-    temporalButton2: {
-        backgroundColor: 'green',
-        height: 50,
-        alignContent: 'center',
-        justifyContent: 'center',
-    }
-}
-);
-
-
+  genreListsContainer: {
+    backgroundColor: 'yellow',
+  },
+});
