@@ -2,16 +2,12 @@ import React from 'react';
 import {
   Text,
   Image,
-  TouchableOpacity,
   StyleSheet,
-  TextInput,
   FlatList,
   ActivityIndicator,
 } from 'react-native';
 import {View} from 'react-native';
-import Header from '../components/Header';
 import {backDefaultContainerStyle} from '../styles/GlobalStyles';
-import authService from '../services/authService';
 import movieService from '../services/moviesService';
 import {
   widthPercentageToDP as wp,
@@ -19,16 +15,8 @@ import {
 } from 'react-native-responsive-screen';
 
 export default function Home({navigation}) {
-  const textRef = React.useRef(null);
-  const [isEditable, setIsEditable] = React.useState(false);
-
   const [isLoading, setIsLoading] = React.useState(true);
   const [movieData, setMovieData] = React.useState({});
-
-  const logTokeN = async () => {
-    console.log(await authService.getAccessToken());
-    console.log(await authService.getRefreshToken());
-  };
 
   React.useEffect(() => {
     const getData = async () => {
