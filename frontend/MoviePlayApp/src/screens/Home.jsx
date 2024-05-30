@@ -13,6 +13,10 @@ import Header from '../components/Header';
 import {backDefaultContainerStyle} from '../styles/GlobalStyles';
 import authService from '../services/authService';
 import movieService from '../services/moviesService';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default function Home({navigation}) {
   const textRef = React.useRef(null);
@@ -40,9 +44,10 @@ export default function Home({navigation}) {
       <Image
         source={{uri: items.image}}
         style={{
-          width: 51,
-          height: 51,
-          resizeMode: 'contain',
+          borderRadius: 60,
+          resizeMode: 'cover',
+          width: wp('90%'),
+          height: hp('65%'),
         }}
       />
       <Text>{items.title}</Text>
@@ -52,15 +57,17 @@ export default function Home({navigation}) {
   const BigMovieCarousel = () => {
     return (
       <View style={styles.fullHomeContainer}>
-        <FlatList
-          data={movieData.bigMovies.moviesData}
-          renderItem={({item}) => (
-            <Item title={item.title} image={item.posterImageLink} />
-          )}
-          keyExtractor={item => item.movieId}
-          horizontal
-          pagingEnabled
-        />
+        <View style={styles.carouselContainer}>
+          <FlatList
+            data={movieData.bigMovies.moviesData}
+            renderItem={({item}) => (
+              <Item title={item.title} image={item.posterImageLink} />
+            )}
+            keyExtractor={item => item.movieId}
+            horizontal
+            pagingEnabled
+          />
+        </View>
       </View>
     );
   };
@@ -77,8 +84,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  carouselContainer: {
+    flex: 1,
+    paddingLeft: wp('4%'),
+  },
+
   carouselItemContainer: {
-    flex: 0.9,
-    marginRight: 100,
+    flex: 1,
+    paddingTop: hp('2%'),
+    paddingRight: wp('6%'),
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
