@@ -47,14 +47,28 @@ public class MovieService {
 
         List<MovieScroll> genreScrolls = new ArrayList<>();
 
+        Set<String> genresUsed = new HashSet<>();
+
+
         for (int i = 0; i < 3; i++){
+            String sidescrollGenreName = "Mejores Películas";
             Pageable last10Movies = PageRequest.of(i, 10);
-            List<ResponseMovieInScroll> movies = dtoMapper.listMovieToListMovieInScroll(movieRepository.findAllByOrderByReleaseDateDesc(last10Movies).getContent());
-            MovieScroll movieScroll = new MovieScroll(movies, movies.size(), "GenreName");
+            List<Movie> foundMovies = movieRepository.findAllByOrderByReleaseDateDesc(last10Movies).getContent();
+            for (Movie movie: foundMovies){
+                if (!genresUsed.contains(movie.getGenres().get(0).getName())){
+                    sidescrollGenreName = movie.getGenres().get(0).getName();
+                    genresUsed.add(movie.getGenres().get(0).getName());
+                    break;
+                }
+            }
+            List<ResponseMovieInScroll> movies = dtoMapper.listMovieToListMovieInScroll(foundMovies);
+            //Quick hack to try to get a different genre name
+            MovieScroll movieScroll = new MovieScroll(movies, movies.size(), sidescrollGenreName);
             genreScrolls.add(movieScroll);
         }
 
-        ResponseHomeData responseHomeData = new ResponseHomeData(bigMovies, genreScrolls);
+        //Quick patch to ease work on frontend
+        ResponseHomeData responseHomeData = new ResponseHomeData(bigMovies, genreScrolls.get(0),genreScrolls.get(1),genreScrolls.get(1));
 
 
         return new ResponseEntity<>(responseHomeData, HttpStatus.OK);

@@ -6,7 +6,9 @@ import java.util.List;
 
 public record ResponseHomeData(
         MovieScroll bigMovies,
-        List<MovieScroll> sidescrolls)
+        MovieScroll firstSidescroll,
+        MovieScroll secondSidescroll,
+        MovieScroll thirdSidescroll)
 {}
 
 
