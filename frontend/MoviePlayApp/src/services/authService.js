@@ -7,7 +7,6 @@ const authService = {
       const response = await api.post(endpoints.auth.login(), {
         userEmail: email,
         realName: realName,
-        nickname: nickname,
         profilePictureLink: photo,
       });
       const { accessToken, refreshToken } = response.data;

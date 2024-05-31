@@ -28,13 +28,14 @@ export default function Login({ navigation }) {
       const { user } = await GoogleSignin.signIn();
       const response = await authService.signIn(
         user.email,
-        user.givenName + ' ' + user.familyName,
         user.name,
         user.photo
       );
 
       console.log("Hello " + user.name + "!")
-      dispatch(setUser(user));
+      const userToDispatch = { userId: response.userId, ...user }
+
+      dispatch(setUser(userToDispatch));
       dispatch(login());
 
     } catch (error) {

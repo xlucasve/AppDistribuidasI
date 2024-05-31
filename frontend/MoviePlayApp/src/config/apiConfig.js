@@ -1,7 +1,8 @@
-import { API_BASE_URL_DEV, API_BASE_URL_PROD } from '@env';
+import { API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL } from '@env';
 import axios from 'axios';
 
-const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
+// const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
+const API_BASE_URL = API_BASE_URL_LOCAL;
 
 const API_VERSION = '/api/v1';
 
