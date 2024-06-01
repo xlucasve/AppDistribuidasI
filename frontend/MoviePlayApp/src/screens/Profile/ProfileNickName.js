@@ -3,12 +3,14 @@ import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'reac
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Pencil from '../../assets/images/editPencil_btn.svg';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import userService from '../../services/userService';
+import store from '../../redux/store';
 
 const ProfileNickName = ({ initialNickName }) => {
     const [nickName, setNickName] = useState(initialNickName);
     const [hasNickNameChanged, setHasNickNameChanged] = useState(false);
     const [oldNickName, setOldNickName] = useState(initialNickName);
-
+    const userId = store.getState().user.userData.userId;
     const nicknameInputRef = useRef(null);
 
     const validateNickname = () => {
@@ -22,6 +24,14 @@ const ProfileNickName = ({ initialNickName }) => {
         if (!/^[a-zA-Z0-9_]+$/.test(nickName)) {
             Alert.alert('Error', 'El nombre de usuario solo puede contener caracteres alfanuméricos y guiones bajos.');
             return false;
+        }
+
+        try {
+            const response = userService.updateUserNickname(userId, nickName);
+            // CHECK 409 in case of username already in use
+            }
+         catch (error) {
+            console.log(error);
         }
 
         // API POST IF OK THEN RETURN TRUE ELSE (THE USERNAME IS ALREADY IN USE) RETURN FALSE

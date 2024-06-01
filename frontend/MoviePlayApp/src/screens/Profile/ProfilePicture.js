@@ -1,15 +1,16 @@
 import React from "react";
-import { View, Image, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { View, Image, TouchableOpacity, Alert, StyleSheet, Text } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Pencil from '../../assets/images/editPencil_btn.svg';
-import Default_profile from '../../assets/images/default_profile.png';
-
+import store from "../../redux/store";
+import userService from "../../services/userService";
 const ProfilePicture = ( {picture_url} ) => {
     const [profileImage, setProfileImage] = React.useState(picture_url);
     const [oldProfileImage, setOldProfileImage] = React.useState(null);
     const [hasProfileImageChanged, setHasProfileImageChanged] = React.useState(false);
+    const userId = store.getState().user.userData.userId;
 
     const handleProfileImageEdit = () => {
         Alert.alert(
@@ -73,9 +74,15 @@ const ProfilePicture = ( {picture_url} ) => {
     const saveProfileImage = () => {
         setHasProfileImageChanged(false);
         setOldProfileImage(null);
-        // API POST IF OK THEN RETURN TRUE ELSE RETURN FALSE
-        return true;
+        try {
+            const response = userService.updateUserProfilePicture(userId, profileImage);
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
+
+
 
     return (
         <View style={styles.editPictureContainer}>

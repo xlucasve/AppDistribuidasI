@@ -32,11 +32,11 @@ export default function Login({ navigation }) {
         user.photo
       );
 
-      console.log("Hello " + user.name + "!")
+
       const userToDispatch = { userId: response.userId, ...user }
 
       dispatch(setUser(userToDispatch));
-      dispatch(login());
+      dispatch(login(response.accessToken));
 
     } catch (error) {
       console.log(error);

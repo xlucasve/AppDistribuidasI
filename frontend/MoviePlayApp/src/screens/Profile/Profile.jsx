@@ -1,33 +1,54 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ModalAccount from "./Modal/ModalAccount";
 import ProfilePicture from './ProfilePicture';
 import ProfileNickName from './ProfileNickName';
 import { useSelector } from "react-redux";
-
+import userService from "../../services/userService";
 export default function Profile() {
     const { width, height } = Dimensions.get('window');
     const [deleteACCModalVisible, setDeleteACCModalVisible] = React.useState(false);
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false);
+    const [user, setUser] = React.useState(null);
 
-    const user = useSelector((state) => state.user.userData);
+    const userId = useSelector((state) => state.user.userData.userId);
 
     // const initialNickName = user.name
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const userData = await userService.getUserData(userId);
+                setUser(userData);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchUserData();
+    }
+        , [userId]);
 
-    console.log("USER DATA: ", user)
+    if (user === null || user === undefined) {
+        return (
+            <View style={styles.container}>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
+
+    console.log("USER: ", user)
 
     return (
         <View style={styles.container}>
 
-            <ProfilePicture picture_url={user.photo} />
+            <ProfilePicture picture_url={user.profilePictureLink} />
 
             <View style={styles.infoContainer}>
-                <Text style={styles.infoContainer.nameText}>{user.name}</Text>
+                <Text style={styles.infoContainer.nameText}>{user.realName}</Text>
                 <Text style={styles.infoContainer.emailText}>{user.email}</Text>
             </View>
 
-            <ProfileNickName initialNickName={user.name} />
+            <ProfileNickName initialNickName={user.nickname} />
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity

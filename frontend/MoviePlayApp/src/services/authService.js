@@ -2,7 +2,7 @@ import { api, endpoints } from '../config/apiConfig';
 import * as Keychain from 'react-native-keychain';
 
 const authService = {
-  signIn: async (email, realName, nickname, photo) => {
+  signIn: async (email, realName, photo) => {
     try {
       const response = await api.post(endpoints.auth.login(), {
         userEmail: email,
