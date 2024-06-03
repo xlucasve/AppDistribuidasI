@@ -36,6 +36,7 @@ const ProfilePicture = ( {picture_url} ) => {
             ],
             { cancelable: true }
         );
+        // saveProfileImage();
     };
 
     const handleImageResponse = (response) => {
@@ -44,7 +45,7 @@ const ProfilePicture = ( {picture_url} ) => {
         } else if (response.errorCode) {
             console.log('Error: ', response.errorMessage);
         } else {
-            const source = { uri: response.assets[0].uri };
+            const source = response.assets[0].uri;
             setOldProfileImage(profileImage);
             setProfileImage(source);
             setHasProfileImageChanged(true);
@@ -87,7 +88,9 @@ const ProfilePicture = ( {picture_url} ) => {
     return (
         <View style={styles.editPictureContainer}>
             <View style={styles.editPictureContainer.pictureContainer}>
-                <Image source={{uri: profileImage}} style={{ width: '100%', height: '100%' }} />
+                <Image source={{uri: profileImage}}
+                alt="Profile Picture"
+                style={{ width: '100%', height: '100%' }} />
             </View>
             <TouchableOpacity
                 style={[styles.editPictureContainer.editPencil, hasProfileImageChanged && { backgroundColor: "#3B5780" }]}

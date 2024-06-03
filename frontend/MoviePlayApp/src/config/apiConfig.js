@@ -16,14 +16,17 @@ const api = axios.create({
 
 
 api.interceptors.request.use(
-  config => {
-    const token = store.getState().auth.accessToken;
+  (config) => {
+    const state = store.getState();
+    const token = state.auth.accessToken;
+    
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );

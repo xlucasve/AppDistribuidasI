@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ModalAccount from "./Modal/ModalAccount";
 import ProfilePicture from './ProfilePicture';
 import ProfileNickName from './ProfileNickName';
 import { useSelector } from "react-redux";
 import userService from "../../services/userService";
+import LoadingPage from "../../components/LoadingPage";
 export default function Profile() {
-    const { width, height } = Dimensions.get('window');
     const [deleteACCModalVisible, setDeleteACCModalVisible] = React.useState(false);
     const [logoutModalVisible, setLogoutModalVisible] = React.useState(false);
     const [user, setUser] = React.useState(null);
 
     const userId = useSelector((state) => state.user.userData.userId);
 
-    // const initialNickName = user.name
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -31,12 +30,10 @@ export default function Profile() {
     if (user === null || user === undefined) {
         return (
             <View style={styles.container}>
-                <Text>Loading...</Text>
+                <LoadingPage />
             </View>
         );
     }
-
-    console.log("USER: ", user)
 
     return (
         <View style={styles.container}>
@@ -78,6 +75,7 @@ export default function Profile() {
                 />
             </View>
         </View>
+
     );
 }
 

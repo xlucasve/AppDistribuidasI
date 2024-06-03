@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Keyboard } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Pencil from '../../assets/images/editPencil_btn.svg';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -17,7 +17,7 @@ const ProfileNickName = ({ initialNickName }) => {
         setHasNickNameChanged(false);
         setOldNickName(nickName);
 
-        if (nickName.length < 3 || nickName.length > 15) {
+        if (nickName.length < 3 || nickName.length > 20) {
             Alert.alert('Error', 'El nombre de usuario debe tener entre 3 y 20 caracteres.');
             return false;
         }
@@ -28,6 +28,7 @@ const ProfileNickName = ({ initialNickName }) => {
 
         try {
             const response = userService.updateUserNickname(userId, nickName);
+            Keyboard.dismiss();
             // CHECK 409 in case of username already in use
             }
          catch (error) {
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         width: wp('75%'),
-        textAlign: 'center',
+        textAlign: 'left',
+        paddingLeft: wp('5%'),
     },
     editPencil: {
         position: 'absolute',
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D51D53',
         borderRadius: 100,
         alignSelf: 'flex-start',
-        left: 5,
+        right: 50,
     },
 });
 

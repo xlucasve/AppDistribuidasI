@@ -21,7 +21,7 @@ const authService = {
 
   logout: async (userId) => {
     try {
-      const response = await api.post(endpoints.auth.logout(userId));
+      const response = await api.delete(endpoints.auth.logout(userId));
       await Keychain.resetGenericPassword();
       return response.data;
     } catch (error) {

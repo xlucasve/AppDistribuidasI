@@ -31,12 +31,15 @@ export default function Login({ navigation }) {
         user.name,
         user.photo
       );
-
-
       const userToDispatch = { userId: response.userId, ...user }
 
       dispatch(setUser(userToDispatch));
-      dispatch(login(response.accessToken));
+      dispatch(login({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken
+      }));
+
+      console.log("CURRENT ID: ", userToDispatch.userId);
 
     } catch (error) {
       console.log(error);

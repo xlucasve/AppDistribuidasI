@@ -4,12 +4,10 @@ const userService = {
 
   getUserData: async (userId) => {
     try {
-      console.log(api.defaults.headers.common['Authorization'])
-      api.defaults.headers.common['Authorization'] = `Bearer ${store.getState().auth.accessToken}`;
-      console.log(api.defaults.headers.common['Authorization'])
       const response = await api.get(endpoints.user.getUserData(userId));
       return response.data;
     } catch (error) {
+      console.log(api.defaults.headers.Authorization)
       console.error('Error getting user data:', error);
       throw error;
     }
@@ -17,7 +15,6 @@ const userService = {
 
   updateUserNickname: async (userId, nickname) => {
     try {
-      api.defaults.headers.common['Authorization'] = `Bearer ${store.getState().auth.accessToken}`;
       const response = await api.put(endpoints.user.changeNickname(userId), { nickname });
       return response.data;
     } catch (error) {
@@ -28,8 +25,8 @@ const userService = {
 
   updateUserProfilePicture: async (userId, image) => {
     try {
-      api.defaults.headers.common['Authorization'] = `Bearer ${store.getState().auth.accessToken}`;
       const response = await api.put(endpoints.user.changeProfilePicture(userId), { image });
+      console.log('response', response)
       return response.data;
     } catch (error) {
       console.error('Error updating user profile picture:', error);
