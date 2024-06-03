@@ -1,9 +1,9 @@
 import React from 'react';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import Navigation from './src/Navigation/Navigation.js';
+import Navigation from './src/navigation/Navigation.js';
 import store from './src/redux/store.js';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 
 //
 
