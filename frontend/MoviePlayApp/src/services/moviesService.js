@@ -1,25 +1,12 @@
 import {api, endpoints} from '../config/apiConfig';
-import authService from './authService';
 
 const movieService = {
   getHomeData: async () => {
     try {
-      const accessToken = 'Bearer ' + (await authService.getAccessToken());
-      const myHeaders = new Headers();
-      myHeaders.append('Authorization', accessToken);
+      const response = await api.get(endpoints.movie.getMoviesForHomepage());
 
-      const requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
-
-      const response = await fetch(
-        'https://movieplay-api.onrender.com/api/v1/movies/',
-        requestOptions,
-      );
-      const result = await response.json();
-      return result;
+      return response.data;
+      
     } catch (error) {
       console.error(error);
     }

@@ -7,16 +7,17 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import {View} from 'react-native';
-import {backDefaultContainerStyle} from '../styles/GlobalStyles';
+import { View } from 'react-native';
+import { backDefaultContainerStyle } from '../styles/GlobalStyles';
 import movieService from '../services/moviesService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SideScrollList from '../components/RenderList';
+import LoadingPage from '../components/LoadingPage';
 
-export default function Home({navigation}) {
+export default function Home({ navigation }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [movieData, setMovieData] = React.useState({});
 
@@ -34,7 +35,7 @@ export default function Home({navigation}) {
   const CarouselItem = items => (
     <View style={styles.carouselItemContainer}>
       <Image
-        source={{uri: items.image}}
+        source={{ uri: items.image }}
         style={{
           borderRadius: 50,
           resizeMode: 'cover',
@@ -52,14 +53,14 @@ export default function Home({navigation}) {
         <View style={styles.carouselContainer}>
           <FlatList
             data={movieData.bigMovies.moviesData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <CarouselItem title={item.title} image={item.posterImageLink} />
             )}
             keyExtractor={item => item.movieId}
             horizontal
             pagingEnabled
-            ItemSeparatorComponent={() => <View style={{width: 22}} />}
-            contentContainerStyle={{paddingRight: 22}}
+            ItemSeparatorComponent={() => <View style={{ width: 22 }} />}
+            contentContainerStyle={{ paddingRight: 22 }}
             bounces={false}
             showsHorizontalScrollIndicator={false}
           />
@@ -70,7 +71,8 @@ export default function Home({navigation}) {
 
   return (
     <View style={backDefaultContainerStyle}>
-      {isLoading ? <ActivityIndicator /> : <BigMovieCarousel />}
+      {isLoading ? <LoadingPage /> : <BigMovieCarousel />}
+      {/* <LoadingPage /> */}
     </View>
   );
 }

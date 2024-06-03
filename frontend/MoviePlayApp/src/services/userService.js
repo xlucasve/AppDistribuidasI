@@ -7,7 +7,6 @@ const userService = {
       const response = await api.get(endpoints.user.getUserData(userId));
       return response.data;
     } catch (error) {
-      console.log(api.defaults.headers.Authorization)
       console.error('Error getting user data:', error);
       throw error;
     }
