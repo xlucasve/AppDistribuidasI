@@ -1,24 +1,44 @@
-import { API_BASE_URL_DEV, API_BASE_URL_PROD } from '@env';
+import { API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL } from '@env';
+import store from '../redux/store';
 import axios from 'axios';
 
-const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
+// const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
+const API_BASE_URL = API_BASE_URL_LOCAL;
 
 const API_VERSION = '/api/v1';
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-export const endpoints = {
+
+api.interceptors.request.use(
+  (config) => {
+    const state = store.getState();
+    const token = state.auth.accessToken;
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
+const endpoints = {
   user: {
     removeMovieFromFavorites: (userId, movieId) => `${API_VERSION}/users/${userId}/movies/${movieId}`,
     getUserData: (userId) => `${API_VERSION}/users/${userId}`,
     getFavoriteMovies: (userId) => `${API_VERSION}/users/${userId}/favorites`,
     addMovieToFavorites: (userId, movieId) => `${API_VERSION}/users/${userId}/movies/${movieId}`,
-    changeNickname: (userId) => `${API_VERSION}/users/${userId}`,
+    changeNickname: (userId) => `${API_VERSION}/users/${userId}/nickname`,
     changeProfilePicture: (userId) => `${API_VERSION}/users/${userId}/images`,
   },
   movie: {
@@ -36,3 +56,5 @@ export const endpoints = {
     login: () => `${API_VERSION}/auth/login`,
   },
 };
+
+export {api, endpoints};

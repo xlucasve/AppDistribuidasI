@@ -4,6 +4,7 @@ import Logo from '../assets/images/logo.svg';
 import GoogleLogo from '../assets/images/login_btnGoogle.svg';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/slices/authSlice';
+import { setUser } from '../redux/slices/userSlice';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import authService from '../services/authService';
 import {
@@ -27,17 +28,18 @@ export default function Login({ navigation }) {
       const { user } = await GoogleSignin.signIn();
       const response = await authService.signIn(
         user.email,
-        user.givenName + ' ' + user.familyName,
         user.name,
         user.photo
       );
-      // await Keychain.setGenericPassword(
-      //   response.accessToken,
-      //   response.refreshToken,
-      // );
+      const userToDispatch = { userId: response.userId, ...user }
 
-      console.log("Hello " + user.name + "!")
-      dispatch(login());
+      dispatch(setUser(userToDispatch));
+      dispatch(login({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken
+      }));
+
+      console.log("CURRENT ID: ", userToDispatch.userId);
 
     } catch (error) {
       console.log(error);

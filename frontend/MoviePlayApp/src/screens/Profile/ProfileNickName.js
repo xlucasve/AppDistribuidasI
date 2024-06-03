@@ -1,27 +1,38 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Keyboard } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Pencil from '../../assets/images/editPencil_btn.svg';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import userService from '../../services/userService';
+import store from '../../redux/store';
 
 const ProfileNickName = ({ initialNickName }) => {
     const [nickName, setNickName] = useState(initialNickName);
     const [hasNickNameChanged, setHasNickNameChanged] = useState(false);
     const [oldNickName, setOldNickName] = useState(initialNickName);
-
+    const userId = store.getState().user.userData.userId;
     const nicknameInputRef = useRef(null);
 
     const validateNickname = () => {
         setHasNickNameChanged(false);
         setOldNickName(nickName);
 
-        if (nickName.length < 3 || nickName.length > 15) {
+        if (nickName.length < 3 || nickName.length > 20) {
             Alert.alert('Error', 'El nombre de usuario debe tener entre 3 y 20 caracteres.');
             return false;
         }
         if (!/^[a-zA-Z0-9_]+$/.test(nickName)) {
             Alert.alert('Error', 'El nombre de usuario solo puede contener caracteres alfanuméricos y guiones bajos.');
             return false;
+        }
+
+        try {
+            const response = userService.updateUserNickname(userId, nickName);
+            Keyboard.dismiss();
+            // CHECK 409 in case of username already in use
+            }
+         catch (error) {
+            console.log(error);
         }
 
         // API POST IF OK THEN RETURN TRUE ELSE (THE USERNAME IS ALREADY IN USE) RETURN FALSE
@@ -107,7 +118,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         width: wp('75%'),
-        textAlign: 'center',
+        textAlign: 'left',
+        paddingLeft: wp('5%'),
     },
     editPencil: {
         position: 'absolute',
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D51D53',
         borderRadius: 100,
         alignSelf: 'flex-start',
-        left: 5,
+        right: 50,
     },
 });
 

@@ -1,15 +1,16 @@
 import React from "react";
-import { View, Image, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { View, Image, TouchableOpacity, Alert, StyleSheet, Text } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Pencil from '../../assets/images/editPencil_btn.svg';
-import Default_profile from '../../assets/images/default_profile.png';
-
-const ProfilePicture = () => {
-    const [profileImage, setProfileImage] = React.useState(Default_profile);
+import store from "../../redux/store";
+import userService from "../../services/userService";
+const ProfilePicture = ( {picture_url} ) => {
+    const [profileImage, setProfileImage] = React.useState(picture_url);
     const [oldProfileImage, setOldProfileImage] = React.useState(null);
     const [hasProfileImageChanged, setHasProfileImageChanged] = React.useState(false);
+    const userId = store.getState().user.userData.userId;
 
     const handleProfileImageEdit = () => {
         Alert.alert(
@@ -35,6 +36,7 @@ const ProfilePicture = () => {
             ],
             { cancelable: true }
         );
+        // saveProfileImage();
     };
 
     const handleImageResponse = (response) => {
@@ -43,7 +45,7 @@ const ProfilePicture = () => {
         } else if (response.errorCode) {
             console.log('Error: ', response.errorMessage);
         } else {
-            const source = { uri: response.assets[0].uri };
+            const source = response.assets[0].uri;
             setOldProfileImage(profileImage);
             setProfileImage(source);
             setHasProfileImageChanged(true);
@@ -73,14 +75,22 @@ const ProfilePicture = () => {
     const saveProfileImage = () => {
         setHasProfileImageChanged(false);
         setOldProfileImage(null);
-        // API POST IF OK THEN RETURN TRUE ELSE RETURN FALSE
-        return true;
+        try {
+            const response = userService.updateUserProfilePicture(userId, profileImage);
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
+
+
 
     return (
         <View style={styles.editPictureContainer}>
             <View style={styles.editPictureContainer.pictureContainer}>
-                <Image source={profileImage} style={{ width: '100%', height: '100%' }} />
+                <Image source={{uri: profileImage}}
+                alt="Profile Picture"
+                style={{ width: '100%', height: '100%' }} />
             </View>
             <TouchableOpacity
                 style={[styles.editPictureContainer.editPencil, hasProfileImageChanged && { backgroundColor: "#3B5780" }]}

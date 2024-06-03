@@ -55,6 +55,14 @@ export const ProfileOptions = {
       <Logo width={styles.logoSize.width} height={styles.logoSize.height} />
     </Pressable>
   ),
+  headerRight: () => (
+    <Pressable style={styles.rightHeader}>
+      <Search
+        width={styles.searchSize.width}
+        height={styles.searchSize.height}
+      />
+    </Pressable>
+  ),
 };
 
 const styles = StyleSheet.create({
@@ -68,17 +76,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 100,
     overflow: 'hidden',
-    marginLeft: 15,
+    marginLeft: wp('4%'),
+    marginTop: hp('.3%'),
   },
 
   rightHeader: {
-    marginRight: 20,
+    marginRight: wp('5%'),
+    marginTop: hp('.5%'),
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   searchSize: {
     width: wp('9%'),
-    height: hp('4%'),
+    height: hp('4.3%')
   },
 });
