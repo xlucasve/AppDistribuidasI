@@ -15,10 +15,9 @@ const userService = {
   updateUserNickname: async (userId, nickname) => {
     try {
       const response = await api.put(endpoints.user.changeNickname(userId), { nickname });
-      return response.data;
+      return response;
     } catch (error) {
-      console.error('Error updating user nickname:', error);
-      throw error;
+      throw error
     }
   },
 

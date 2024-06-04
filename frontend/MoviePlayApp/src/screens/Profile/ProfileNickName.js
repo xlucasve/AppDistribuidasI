@@ -13,30 +13,33 @@ const ProfileNickName = ({ initialNickName }) => {
     const userId = store.getState().user.userData.userId;
     const nicknameInputRef = useRef(null);
 
-    const validateNickname = () => {
+    const validateNickname = async () => {
         setHasNickNameChanged(false);
         setOldNickName(nickName);
+        Keyboard.dismiss();
 
         if (nickName.length < 3 || nickName.length > 20) {
             Alert.alert('Error', 'El nombre de usuario debe tener entre 3 y 20 caracteres.');
-            return false;
+            setNickName(oldNickName);
+            return;
         }
         if (!/^[a-zA-Z0-9_]+$/.test(nickName)) {
             Alert.alert('Error', 'El nombre de usuario solo puede contener caracteres alfanuméricos y guiones bajos.');
-            return false;
+            setNickName(oldNickName);
+            return;
         }
 
         try {
-            const response = userService.updateUserNickname(userId, nickName);
-            Keyboard.dismiss();
-            // CHECK 409 in case of username already in use
+            const response = await userService.updateUserNickname(userId, nickName);
             }
          catch (error) {
+            if (error.response.status === 409) {
+                Alert.alert('Error', 'El nombre de usuario ya está en uso.');
+                setNickName(oldNickName);
+            }
             console.log(error);
         }
-
         // API POST IF OK THEN RETURN TRUE ELSE (THE USERNAME IS ALREADY IN USE) RETURN FALSE
-        return true;
     };
 
     const handleNicknameEdit = () => {
