@@ -5,6 +5,7 @@ import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import com.MoviePlay.backendapi.entities.User;
 import com.MoviePlay.backendapi.repositories.UserRepository;
 import com.MoviePlay.backendapi.utils.DTOMapper;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,12 @@ public class UserService {
         if (foundUser.isEmpty()){
             throw new EntityNotFoundException("User with id: " + userId + " was not found");
         }
+
+        Optional<User> userWithSameNickname = userRepository.findByNickname(request.nickname());
+        if (userWithSameNickname.isPresent() && !userWithSameNickname.get().getUserId().equals(userId)) {
+            throw new EntityExistsException();
+        }
+
 
         User user = foundUser.get();
 

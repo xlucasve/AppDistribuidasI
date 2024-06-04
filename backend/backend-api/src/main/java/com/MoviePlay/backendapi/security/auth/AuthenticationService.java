@@ -21,10 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuthenticationService {
@@ -80,11 +77,16 @@ public class AuthenticationService {
     private ResponseLogin loginNewUser(RequestLogin request) {
 
         User newUser = new User();
+
         newUser.setEmail(request.userEmail());
         newUser.setActive(true);
         newUser.setRealName(request.realName());
-        newUser.setNickname(request.nickname());
         newUser.setProfilePictureLink(request.profilePictureLink());
+
+        String randomNickname = request.realName().toLowerCase().replaceAll("\\s+", "");
+        randomNickname += UUID.randomUUID().toString().substring(0, 5);
+        newUser.setNickname(randomNickname);
+
         User user = userRepository.save(newUser);
 
         var accessToken = jwtService.generateToken(user);
