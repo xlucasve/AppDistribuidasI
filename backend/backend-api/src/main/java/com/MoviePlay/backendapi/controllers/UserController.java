@@ -63,6 +63,14 @@ public class UserController {
                                     implementation = ApiException.class
                             )
                     )}),
+            @ApiResponse(responseCode = "409", description = "User nickname already exists", content = {
+                    @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = ApiException.class
+                            )
+                    )
+            }),
             @ApiResponse(responseCode = "500", description = "Internal Server Error changing user nickname", content = {
                     @Content(
                             mediaType = "application/json",
