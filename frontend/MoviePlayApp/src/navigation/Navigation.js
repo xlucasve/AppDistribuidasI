@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/Home';
@@ -7,10 +7,11 @@ import Search from '../screens/Search';
 import Login from '../screens/Login';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeOptions, ProfileOptions } from './HeaderOptions';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { clearUser } from '../redux/slices/userSlice';
 
 const Stack = createNativeStackNavigator();
 
@@ -79,6 +80,7 @@ const AuthStack = () => {
 };
 
 const Navigation = () => {
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   console.log("IS AUTHENTICATED? ", isAuthenticated + " THIS IS Navigation.js");

@@ -1,33 +1,48 @@
-import React, { useEffect } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import ModalAccount from "./Modal/ModalAccount";
+import { useDispatch, useSelector } from 'react-redux';
+import { Keyboard } from 'react-native';
+import ModalAccount from './Modal/ModalAccount';
 import ProfilePicture from './ProfilePicture';
 import ProfileNickName from './ProfileNickName';
-import { useSelector } from "react-redux";
-import userService from "../../services/userService";
-import LoadingPage from "../../components/LoadingPage";
-export default function Profile() {
-    const [deleteACCModalVisible, setDeleteACCModalVisible] = React.useState(false);
-    const [logoutModalVisible, setLogoutModalVisible] = React.useState(false);
-    const [user, setUser] = React.useState(null);
+import LoadingPage from '../../components/LoadingPage';
+import ErrorScreen from '../ErrorScreen';
+import { setError, clearError } from '../../redux/slices/errorSlice';
+import userService from '../../services/userService';
 
+export default function Profile() {
+    const [deleteACCModalVisible, setDeleteACCModalVisible] = useState(false);
+    const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+    const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
+    const error = useSelector((state) => state.error.message);
     const userId = useSelector((state) => state.user.userData.userId);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    const fetchUserData = async (userId) => {
+        try {
+            dispatch(clearError());
+            const userData = await userService.getUserData(userId);
+            setUser(userData);
+        } catch (error) {
+            console.log(error);
+            dispatch(setError('Failed to fetch user data. Please try again.'));
+        }
+    };
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userData = await userService.getUserData(userId);
-                setUser(userData);
-            } catch (error) {
-                console.log(error);
-            }
+        if (isAuthenticated) {
+            fetchUserData(userId);
         }
-        fetchUserData();
-    }
-        , [userId]);
 
-    if (user === null || user === undefined) {
+    }, [dispatch]);
+
+    if (error) {
+        return <ErrorScreen message={error} onRetry={() => fetchUserData()} />;
+    }
+
+    if (!isAuthenticated || user === null || user === undefined) {
         return (
             <View style={styles.container}>
                 <LoadingPage />
@@ -35,9 +50,10 @@ export default function Profile() {
         );
     }
 
+
+
     return (
         <View style={styles.container}>
-
             <ProfilePicture picture_url={user.profilePictureLink} />
 
             <View style={styles.infoContainer}>
@@ -49,7 +65,7 @@ export default function Profile() {
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity
-                    style={[styles.buttonsContainer.btnSpace, { backgroundColor: "#D9D9D9" }]}
+                    style={[styles.buttonsContainer.btnSpace, { backgroundColor: '#D9D9D9' }]}
                     onPress={() => setLogoutModalVisible(true)}
                 >
                     <Text style={styles.buttonsContainer.textBtn}>Cerrar Sesión</Text>
@@ -58,11 +74,11 @@ export default function Profile() {
                 <ModalAccount
                     modalVisible={logoutModalVisible}
                     setModalVisible={setLogoutModalVisible}
-                    infoModal={"Logout"}
+                    infoModal={'Logout'}
                 />
 
                 <TouchableOpacity
-                    style={[styles.buttonsContainer.btnSpace, { backgroundColor: "#D51D53" }]}
+                    style={[styles.buttonsContainer.btnSpace, { backgroundColor: '#D51D53' }]}
                     onPress={() => setDeleteACCModalVisible(true)}
                 >
                     <Text style={styles.buttonsContainer.textBtn}>Eliminar cuenta</Text>
@@ -71,11 +87,10 @@ export default function Profile() {
                 <ModalAccount
                     modalVisible={deleteACCModalVisible}
                     setModalVisible={setDeleteACCModalVisible}
-                    infoModal={"DeleteAccount"}
+                    infoModal={'DeleteAccount'}
                 />
             </View>
         </View>
-
     );
 }
 

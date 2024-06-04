@@ -30,17 +30,20 @@ export default function ModalAccount({ modalVisible, setModalVisible, infoModal 
     const actionBtn = infoModal === "Logout" ? "Cerrar Sesión" : "Eliminar cuenta";
 
 
-    const handleActionBtn = () => {
+    const handleActionBtn = async () => {
         try {
             if (infoModal === "DeleteAccount") {
-                const response = authService.deleteUser(userId);
+                const response = await authService.deleteUser(userId);
+                console.log(response)
             } 
             else {
-                const response = authService.logout(userId);
+                const response = await authService.logout(userId);
+                console.log(response)
             }
-            console.log(response);
-            dispatch(clearUser())
+
             dispatch(logout(userId))
+            setModalVisible(false)
+        
          } catch (error) {
             console.log(error);
         }

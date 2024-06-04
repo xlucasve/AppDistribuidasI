@@ -71,8 +71,8 @@ export default function Home({ navigation }) {
 
   return (
     <View style={backDefaultContainerStyle}>
-      {isLoading ? <LoadingPage /> : <BigMovieCarousel />}
-      {/* <LoadingPage /> */}
+      {/* {isLoading ? <LoadingPage /> : <BigMovieCarousel />} */}
+      <LoadingPage />
     </View>
   );
 }
