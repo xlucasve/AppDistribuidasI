@@ -41,11 +41,10 @@ const authService = {
     }
   },
 
-  refreshToken: async () => {
+  refreshToken: async (userId, accessToken, refreshToken) => {
     try {
-      const refreshToken = await Keychain.getGenericPassword().password;
       const response = await api.post(endpoints.auth.refreshToken(), {
-        refreshToken,
+        userId, accessToken, refreshToken,
       });
       const {accessToken, newRefreshToken} = response.data;
 

@@ -1,6 +1,7 @@
 import { API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL } from '@env';
 import store from '../redux/store';
 import axios from 'axios';
+import authService from '../services/authService';
 
 // const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
 const API_BASE_URL = API_BASE_URL_LOCAL;
@@ -27,6 +28,44 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 403 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        
+        const state = store.getState();
+        const refreshToken = state.auth.refreshToken;
+        const userId = state.user.userData.userId;
+        const oldAccessToken = state.auth.accessToken;
+
+        const response = await authService.refreshToken(userId, oldAccessToken, refreshToken);
+
+        const newAccessToken = response.data.accessToken;
+
+        store.dispatch(refreshToken({accessToken: newAccessToken, refreshToken: refreshToken}));
+
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+
+        console.error('Token refresh failed:', refreshError);
+        return Promise.reject(refreshError);
+      }
+    }
+
     return Promise.reject(error);
   }
 );
