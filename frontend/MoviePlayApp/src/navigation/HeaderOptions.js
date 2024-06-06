@@ -6,7 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Search from '../assets/images/search_btn.svg';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 export const HomeOptions = {
   headerTitle: 'MOVIEPLAY',
@@ -30,13 +30,16 @@ export const HomeOptions = {
   headerRight: () => {
     const navigation = useNavigation();
     return (
-    <Pressable style={styles.rightHeader} onPress={() => navigation.navigate('Search')}>
-      <Search
-        width={styles.searchSize.width}
-        height={styles.searchSize.height}
-      />
-    </Pressable>
-  )},
+      <Pressable
+        style={styles.rightHeader}
+        onPress={() => navigation.navigate('Search')}>
+        <Search
+          width={styles.searchSize.width}
+          height={styles.searchSize.height}
+        />
+      </Pressable>
+    );
+  },
 };
 
 export const ProfileOptions = {
@@ -61,13 +64,16 @@ export const ProfileOptions = {
   headerRight: () => {
     const navigation = useNavigation();
     return (
-    <Pressable style={styles.rightHeader} onPress={() => navigation.navigate('Search')}>
-      <Search
-        width={styles.searchSize.width}
-        height={styles.searchSize.height}
-      />
-    </Pressable>
-  )},
+      <Pressable
+        style={styles.rightHeader}
+        onPress={() => navigation.navigate('Search')}>
+        <Search
+          width={styles.searchSize.width}
+          height={styles.searchSize.height}
+        />
+      </Pressable>
+    );
+  },
 };
 
 const styles = StyleSheet.create({
@@ -94,6 +100,6 @@ const styles = StyleSheet.create({
 
   searchSize: {
     width: wp('9%'),
-    height: hp('4.3%')
+    height: hp('4.3%'),
   },
 });
