@@ -12,27 +12,13 @@ import SearchIcon from '../assets/images/search_btn.svg';
 import movieImageTest from '../assets/images/movieImageTest.png';
 import MovieCard from '../components/MovieCard';
 import {useNavigation} from '@react-navigation/native';
+import movieService from '../services/moviesService';
+import LoadingPage from '../components/LoadingPage';
 
 export default function Search({navigation}) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleChangeInput = input => {
-    setSearchInput(input);
-  };
-
-  const handleSearch = async () => {
-    /* setIsLoading(true);
-    const response = await movieService.searchMovies(
-      searchInput,
-      'DESC',
-      'DATE',
-    );
-    setMovieData(response);
-    setIsLoading(false);
-    console.log(response); */
-  };
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -60,7 +46,24 @@ export default function Search({navigation}) {
         </View>
       ),
     });
-  }, []);
+  });
+
+  const handleChangeInput = input => {
+    setSearchInput(input);
+  };
+
+  const handleSearch = async () => {
+    setIsLoading(true);
+    console.log(searchInput);
+    const response = await movieService.searchMovies(
+      searchInput,
+      'DESC',
+      'DATE',
+    );
+    setMovieData(response);
+    setIsLoading(false);
+    console.log(response);
+  };
 
   movie_test_data = {
     movieId: 1,
@@ -83,11 +86,19 @@ export default function Search({navigation}) {
     ],
   };
 
+  const SearchView = () => {
+    return (
+      <View style={styles.container}>
+        <Text>{searchInput}</Text>
+        <MovieCard movie={movie_test_data} />
+        <MovieCard movie={movie_test_data} />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text>{searchInput}</Text>
-      <MovieCard movie={movie_test_data} />
-      <MovieCard movie={movie_test_data} />
+      {isLoading ? <LoadingPage /> : <SearchView />}
     </View>
   );
 }
