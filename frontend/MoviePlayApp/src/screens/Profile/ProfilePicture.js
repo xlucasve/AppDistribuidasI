@@ -44,7 +44,7 @@ const ProfilePicture = ( {picture_url} ) => {
         } else if (response.errorCode) {
             console.log('Error: ', response.errorMessage);
         } else {
-            const source = { uri: response.assets[0].uri };
+            const source = response.assets[0].uri ;
             setOldProfileImage(profileImage);
             setProfileImage(source);
             setHasProfileImageChanged(true);

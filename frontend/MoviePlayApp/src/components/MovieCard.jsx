@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     },
     title: {
       color: '#FAFAFA',
-      fontSize: hp('2.4%'),
+      fontSize: hp('2.5%'),
       fontWeight: 'bold',
     },
     rating: {
