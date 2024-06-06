@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import Profile from '../screens/Profile/Profile';
-import Search from '../screens/Search';
+import Search from '../screens/Search/Search';
 import Login from '../screens/Login';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeOptions, ProfileOptions} from './HeaderOptions';

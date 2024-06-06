@@ -8,21 +8,24 @@ import {
   FlatList,
 } from 'react-native';
 import { View } from 'react-native';
-import SearchIcon from '../assets/images/search_btn.svg';
+import SearchIcon from '../../assets/images/search_btn_black.svg';
 
-import MovieCard from '../components/MovieCard';
-import movieService from '../services/moviesService';
-import LoadingPage from '../components/LoadingPage';
-import FilterIcon from '../assets/images/filter_btn.svg';
+import MovieCard from '../../components/MovieCard';
+import movieService from '../../services/moviesService';
+import LoadingPage from '../../components/LoadingPage';
+import FilterIcon from '../../assets/images/filter_btn.svg';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import FilterPopup from './FilterPopUp';
+
 export default function Search({ navigation }) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isFilterPopupVisible, setIsFilterPopupVisible] = useState(false);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -30,7 +33,7 @@ export default function Search({ navigation }) {
         <View style={styles.headerContainer}>
           <View style={styles.searchIcon}>
             <TouchableOpacity style={styles.searchIcon.btn} onPress={() => handleSearch()}>
-              <SearchIcon width={28} height={28} fill={"#000"} />
+              <SearchIcon width={28} height={28} />
             </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
@@ -45,7 +48,9 @@ export default function Search({ navigation }) {
         </View>
       ),
       headerRight: () => (
-        <TouchableOpacity style={styles.filterBtn}>
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => setIsFilterPopupVisible(!isFilterPopupVisible)}>
           <FilterIcon width={25} height={25} />
         </TouchableOpacity>
       ),
@@ -87,6 +92,11 @@ export default function Search({ navigation }) {
   return (
     <View style={styles.container}>
       {isLoading ? <LoadingPage /> : <SearchView />}
+      <FilterPopup
+        visible={isFilterPopupVisible}
+        onClose={() => setIsFilterPopupVisible(false)}
+      // onApply={applyFilters}
+      />
     </View>
   );
 }
