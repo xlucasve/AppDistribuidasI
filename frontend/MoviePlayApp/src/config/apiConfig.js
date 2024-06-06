@@ -1,4 +1,4 @@
-import { API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL } from '@env';
+import {API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL} from '@env';
 import store from '../redux/store';
 import axios from 'axios';
 import authService from '../services/authService';
@@ -15,9 +15,8 @@ const api = axios.create({
   },
 });
 
-
 api.interceptors.request.use(
-  (config) => {
+  config => {
     const state = store.getState();
     const token = state.auth.accessToken;
 
@@ -27,70 +26,79 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
-  }
+  },
 );
 
-
 api.interceptors.response.use(
-  (response) => {
+  response => {
     return response;
   },
-  async (error) => {
+  async error => {
     const originalRequest = error.config;
 
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        
         const state = store.getState();
         const refreshToken = state.auth.refreshToken;
         const userId = state.user.userData.userId;
         const oldAccessToken = state.auth.accessToken;
 
-        const response = await authService.refreshToken(userId, oldAccessToken, refreshToken);
+        const response = await authService.refreshToken(
+          userId,
+          oldAccessToken,
+          refreshToken,
+        );
 
         const newAccessToken = response.data.accessToken;
 
-        store.dispatch(refreshToken({accessToken: newAccessToken, refreshToken: refreshToken}));
+        store.dispatch(
+          refreshToken({
+            accessToken: newAccessToken,
+            refreshToken: refreshToken,
+          }),
+        );
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
       } catch (refreshError) {
-
         console.error('Token refresh failed:', refreshError);
         return Promise.reject(refreshError);
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
-
 
 const endpoints = {
   user: {
-    removeMovieFromFavorites: (userId, movieId) => `${API_VERSION}/users/${userId}/movies/${movieId}`,
-    getUserData: (userId) => `${API_VERSION}/users/${userId}`,
-    getFavoriteMovies: (userId) => `${API_VERSION}/users/${userId}/favorites`,
-    addMovieToFavorites: (userId, movieId) => `${API_VERSION}/users/${userId}/movies/${movieId}`,
-    changeNickname: (userId) => `${API_VERSION}/users/${userId}/nickname`,
-    changeProfilePicture: (userId) => `${API_VERSION}/users/${userId}/images`,
+    removeMovieFromFavorites: (userId, movieId) =>
+      `${API_VERSION}/users/${userId}/movies/${movieId}`,
+    getUserData: userId => `${API_VERSION}/users/${userId}`,
+    getFavoriteMovies: userId => `${API_VERSION}/users/${userId}/favorites`,
+    addMovieToFavorites: (userId, movieId) =>
+      `${API_VERSION}/users/${userId}/movies/${movieId}`,
+    changeNickname: userId => `${API_VERSION}/users/${userId}/nickname`,
+    changeProfilePicture: userId => `${API_VERSION}/users/${userId}/images`,
   },
   movie: {
     getMoviesForHomepage: () => `${API_VERSION}/movies/`,
-    getMovieById: (movieId) => `${API_VERSION}/movies/${movieId}`,
-    searchMovies: () => `${API_VERSION}/movies/search`,
+    getMovieById: movieId => `${API_VERSION}/movies/${movieId}`,
+    searchMovies: (input, sort, orderBy) =>
+      `${API_VERSION}/movies/search?input=${input}&page=0&size=30&sort=${sort}&orderBy=${orderBy}`,
     getNewReleases: () => `${API_VERSION}/movies/new`,
-    rateMovie: (movieId, userId) => `${API_VERSION}/movies/${movieId}/rate/${userId}`,
+    rateMovie: (movieId, userId) =>
+      `${API_VERSION}/movies/${movieId}/rate/${userId}`,
   },
 
   auth: {
-    logout: (userId) => `${API_VERSION}/auth/logout/${userId}`,
-    deleteUser: (userId) => `${API_VERSION}/auth/delete-account/${userId}`,
+    logout: userId => `${API_VERSION}/auth/logout/${userId}`,
+    deleteUser: userId => `${API_VERSION}/auth/delete-account/${userId}`,
     refreshToken: () => `${API_VERSION}/auth/refresh`,
     login: () => `${API_VERSION}/auth/login`,
   },
