@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,7 +8,7 @@ import FavoriteMovie_false from '../assets/images/favoriteMovie_false.svg';
 import FavoriteMovie_true from '../assets/images/favoriteMovie_true.svg';
 import RatingStar from '../assets/images/ratingStar.svg';
 
-export default function MovieCard({movie}) {
+export default function MovieCard({ movie }) {
   const [isFavorite, setIsFavorite] = React.useState(false);
 
   const genresList = movie.genres.map(genre => {
@@ -16,13 +16,15 @@ export default function MovieCard({movie}) {
   });
 
   const ratingStarsList = [];
+  const rate = (movie.rating / 2).toFixed(2);
+
 
   for (let i = 1; i <= 5; i++) {
     ratingStarsList.push(
       <RatingStar
         key={i}
         style={styles.body.ratingStar}
-        fill={i < movie.rating ? '#FFD700' : '#03152D'}
+        fill={i < rate ? '#FFD700' : '#03152D'}
         width={styles.body.ratingStar.width}
         height={styles.body.ratingStar.height}
       />,
@@ -33,9 +35,11 @@ export default function MovieCard({movie}) {
     <View style={styles.container}>
       <View style={styles.poster.container}>
         <Image
-          source={{uri: movie.posterImageLink}}
+          source={{ uri: movie.posterImageLink }}
           alt={movie.title}
           style={styles.poster.image}
+          resizeMode='center'
+
         />
       </View>
 
@@ -43,7 +47,7 @@ export default function MovieCard({movie}) {
         <Text style={styles.body.title}>{movie.title}</Text>
         <View style={styles.body.rating.container}>
           {ratingStarsList}
-          <Text style={styles.body.rating.text}>{movie.rating}</Text>
+          <Text style={styles.body.rating.text}>{rate}</Text>
         </View>
         <View style={styles.body.genre}>{genresList}</View>
         <Pressable
@@ -73,7 +77,6 @@ const styles = StyleSheet.create({
     container: {
       width: wp('25%'),
       height: hp('17%'),
-      borderRadius: 10,
       overflow: 'hidden',
       borderRadius: 10,
       shadowColor: '#000',
@@ -84,10 +87,12 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 4,
+
     },
     image: {
-      width: wp('90%'),
-      height: hp('65%'),
+      width: '100%',
+      height: '100%',
+      borderRadius: 10
     },
   },
 
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GenreCard = ({genre}) => {
+const GenreCard = ({ genre }) => {
   return (
     <View style={styles.body.genre.container}>
       <Text style={styles.body.genre.text}>{genre}</Text>

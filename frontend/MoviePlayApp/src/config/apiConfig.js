@@ -3,8 +3,8 @@ import store from '../redux/store';
 import axios from 'axios';
 import authService from '../services/authService';
 
-// const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
-const API_BASE_URL = API_BASE_URL_LOCAL;
+const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
+// const API_BASE_URL = API_BASE_URL_LOCAL;
 
 const API_VERSION = '/api/v1';
 
@@ -77,23 +77,19 @@ api.interceptors.response.use(
 
 const endpoints = {
   user: {
-    removeMovieFromFavorites: (userId, movieId) =>
-      `${API_VERSION}/users/${userId}/movies/${movieId}`,
+    removeMovieFromFavorites: (userId, movieId) => `${API_VERSION}/users/${userId}/movies/${movieId}`,
     getUserData: userId => `${API_VERSION}/users/${userId}`,
     getFavoriteMovies: userId => `${API_VERSION}/users/${userId}/favorites`,
-    addMovieToFavorites: (userId, movieId) =>
-      `${API_VERSION}/users/${userId}/movies/${movieId}`,
+    addMovieToFavorites: (userId, movieId) =>`${API_VERSION}/users/${userId}/movies/${movieId}`,
     changeNickname: userId => `${API_VERSION}/users/${userId}/nickname`,
     changeProfilePicture: userId => `${API_VERSION}/users/${userId}/images`,
   },
   movie: {
     getMoviesForHomepage: () => `${API_VERSION}/movies/`,
     getMovieById: movieId => `${API_VERSION}/movies/${movieId}`,
-    searchMovies: (input, sort, orderBy) =>
-      `${API_VERSION}/movies/search?input=${input}&page=0&size=30&sort=${sort}&orderBy=${orderBy}`,
+    searchMovies: (input, sort, orderBy) => `${API_VERSION}/movies/search?input=${input}&page=0&size=30&sort=${sort}&orderBy=${orderBy}`,
     getNewReleases: () => `${API_VERSION}/movies/new`,
-    rateMovie: (movieId, userId) =>
-      `${API_VERSION}/movies/${movieId}/rate/${userId}`,
+    rateMovie: (movieId, userId) => `${API_VERSION}/movies/${movieId}/rate/${userId}`,
   },
 
   auth: {

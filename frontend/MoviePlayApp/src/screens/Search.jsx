@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   Image,
@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import SearchIcon from '../assets/images/search_btn.svg';
 
 import movieImageTest from '../assets/images/movieImageTest.png';
 import MovieCard from '../components/MovieCard';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import movieService from '../services/moviesService';
 import LoadingPage from '../components/LoadingPage';
 
-export default function Search({navigation}) {
+export default function Search({ navigation }) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +95,7 @@ export default function Search({navigation}) {
       <View style={styles.container}>
         <FlatList
           data={movieData.movies}
-          renderItem={({item}) => <MovieCard movie={item} />}
+          renderItem={({ item }) => <MovieCard movie={item} />}
           keyExtractor={item => item.movieId}
         />
       </View>
