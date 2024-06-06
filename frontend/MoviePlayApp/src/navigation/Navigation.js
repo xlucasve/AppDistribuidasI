@@ -13,6 +13,7 @@ import { Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { clearUser } from '../redux/slices/userSlice';
 
+
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -48,14 +49,14 @@ const TabGroup = ({ navigation }) => {
           backgroundColor: '#192941',
           borderTopWidth: 0,
         },
-        headerRight: () => (
-          <Pressable
-            onPress={() => navigation.navigate('Search')}
-            style={{ marginRight: 10 }}
-          >
-            <Ionicons name="search" size={hp('3.5%')} color="#FAFAFA" />
-          </Pressable>
-        ),
+        // headerRight: () => (
+        //   <Pressable
+        //     onPress={() => navigation.navigate('Search')}
+        //     style={{ marginRight: 10 }}
+        //   >
+        //     <Ionicons name="search" size={hp('3.5%')} color="#FAFAFA" />
+        //   </Pressable>
+        // ),
       })}
     >
       <Tab.Screen name="Inicio" component={Home} options={HomeOptions} />
