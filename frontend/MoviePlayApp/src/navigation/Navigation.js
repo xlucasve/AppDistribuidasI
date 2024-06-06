@@ -52,7 +52,7 @@ const Tab = createBottomTabNavigator();
 const TabGroup = ({navigation}) => {
   return (
     <Tab.Navigator
-      initialRouteName="Mi Perfil"
+      initialRouteName="Inicio"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, focused}) => {
           let iconName;
@@ -93,7 +93,7 @@ const TabGroup = ({navigation}) => {
 const AuthStack = () => {
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 };
