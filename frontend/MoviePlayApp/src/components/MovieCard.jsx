@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
       elevation: 4,
     },
     image: {
-      width: '100%',
-      height: '100%',
+      width: wp('90%'),
+      height: hp('65%'),
     },
   },
 
