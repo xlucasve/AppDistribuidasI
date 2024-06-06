@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Text,
   Image,
@@ -7,19 +7,21 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import SearchIcon from '../assets/images/search_btn.svg';
 
 import movieImageTest from '../assets/images/movieImageTest.png';
 import MovieCard from '../components/MovieCard';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import movieService from '../services/moviesService';
 import LoadingPage from '../components/LoadingPage';
 
-export default function Search({ navigation }) {
+export default function Search({navigation}) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const inputRef = useRef();
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -32,9 +34,10 @@ export default function Search({ navigation }) {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
+              ref={inputRef}
+              onChangeText={text => (inputRef.text = text)}
               style={styles.inputText}
               defaultValue={searchInput}
-              onChangeText={value => handleChangeInput(value)}
               placeholder="Hoy quiero buscar..."
               onSubmitEditing={() => handleSearch()}
             />
@@ -49,18 +52,15 @@ export default function Search({ navigation }) {
     });
   });
 
-  const handleChangeInput = input => {
-    setSearchInput(input);
-  };
-
   const handleSearch = async () => {
-    if (!searchInput.trim().length) {
+    let textInputValue = inputRef.text;
+    if (!textInputValue.trim().length) {
       return;
     }
 
     setIsLoading(true);
     const response = await movieService.searchMovies(
-      searchInput.trimStart(),
+      textInputValue.trimStart(),
       'DESC',
       'DATE',
     );
@@ -95,7 +95,7 @@ export default function Search({ navigation }) {
       <View style={styles.container}>
         <FlatList
           data={movieData.movies}
-          renderItem={({ item }) => <MovieCard movie={item} />}
+          renderItem={({item}) => <MovieCard movie={item} />}
           keyExtractor={item => item.movieId}
         />
       </View>
