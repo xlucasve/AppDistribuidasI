@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Image } from "react-native";
+import { Text, Image, StyleSheet } from "react-native";
 import { View } from "react-native";
 
 import movieImageTest from "../assets/images/movieImageTest.png";
@@ -9,7 +9,7 @@ export default function Search({ navigation }) {
 
     movie_test_data = {
         "movieId": 1,
-        "title": "Dune II",
+        "title": "Dune: Part 2",
         "posterImageLink": movieImageTest,
         "rating": 4.2,
         "genres": [
@@ -29,8 +29,17 @@ export default function Search({ navigation }) {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
+            <MovieCard movie={movie_test_data} />
             <MovieCard movie={movie_test_data} />
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: "#03152D",
+    },
+});
