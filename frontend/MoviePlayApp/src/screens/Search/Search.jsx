@@ -8,26 +8,32 @@ import {
   FlatList,
 } from 'react-native';
 import { View } from 'react-native';
-import SearchIcon from '../assets/images/search_btn.svg';
+import SearchIcon from '../../assets/images/search_btn_black.svg';
 
-import movieImageTest from '../assets/images/movieImageTest.png';
-import MovieCard from '../components/MovieCard';
-import { useNavigation } from '@react-navigation/native';
-import movieService from '../services/moviesService';
-import LoadingPage from '../components/LoadingPage';
+import MovieCard from '../../components/MovieCard';
+import movieService from '../../services/moviesService';
+import LoadingPage from '../../components/LoadingPage';
+import FilterIcon from '../../assets/images/filter_btn.svg';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+import FilterPopup from './FilterPopUp';
 
 export default function Search({ navigation }) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isFilterPopupVisible, setIsFilterPopupVisible] = useState(false);
 
   React.useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
         <View style={styles.headerContainer}>
           <View style={styles.searchIcon}>
-            <TouchableOpacity onPress={() => handleSearch()}>
-              <SearchIcon width={35} height={35} />
+            <TouchableOpacity style={styles.searchIcon.btn} onPress={() => handleSearch()}>
+              <SearchIcon width={28} height={28} />
             </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
@@ -42,9 +48,11 @@ export default function Search({ navigation }) {
         </View>
       ),
       headerRight: () => (
-        <View>
-          <SearchIcon width={35} height={35} />
-        </View>
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => setIsFilterPopupVisible(!isFilterPopupVisible)}>
+          <FilterIcon width={25} height={25} />
+        </TouchableOpacity>
       ),
     });
   });
@@ -68,27 +76,6 @@ export default function Search({ navigation }) {
     setIsLoading(false);
   };
 
-  movie_test_data = {
-    movieId: 1,
-    title: 'Dune: Part 2',
-    posterImageLink:
-      'https://image.tmdb.org/t/p/original/gzb6P78zeFTnv9eoFYnaJ2YrZ5q.jpg',
-    rating: 4.2,
-    genres: [
-      {
-        genreId: 1,
-        name: 'Acción',
-      },
-      {
-        genreId: 2,
-        name: 'Sci-Fi',
-      },
-      {
-        genreId: 3,
-        name: 'Thriller',
-      },
-    ],
-  };
 
   const SearchView = () => {
     return (
@@ -105,6 +92,11 @@ export default function Search({ navigation }) {
   return (
     <View style={styles.container}>
       {isLoading ? <LoadingPage /> : <SearchView />}
+      <FilterPopup
+        visible={isFilterPopupVisible}
+        onClose={() => setIsFilterPopupVisible(false)}
+      // onApply={applyFilters}
+      />
     </View>
   );
 }
@@ -117,24 +109,25 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    flex: 1,
+    width: wp('64%'),
+    height: hp('5.2%'),
     flexDirection: 'row',
+    backgroundColor: '#CECECE',
+    borderRadius: 10,
+    alignItems: 'center',
   },
   searchIcon: {
-    backgroundColor: '#BEBEBE',
-    borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10,
+    marginLeft: wp('2%'),
   },
   inputContainer: {
-    backgroundColor: '#BEBEBE',
-    justifyContent: 'space-around',
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
-    width: '55%',
-    height: '80%',
+    marginLeft: wp('.5%'),
   },
   inputText: {
-    fontSize: 14,
-    color: 'black',
+    fontSize: hp('2%'),
+    color: '#000',
   },
+
+  filterBtn: {
+    marginRight: wp('1.5%'),
+  }
 });

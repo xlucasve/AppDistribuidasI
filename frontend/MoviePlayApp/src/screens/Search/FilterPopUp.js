@@ -79,7 +79,7 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
               valueField="value"
               placeholder="Selecciona una opción"
               value={selectedOrderASC}
-              onChange={item => setSelectedOrder(item.value)}
+              onChange={item => setSelectedOrderASC(item.value)}
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
