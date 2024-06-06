@@ -71,14 +71,7 @@ const TabGroup = ({navigation}) => {
           backgroundColor: '#192941',
           borderTopWidth: 0,
         },
-        // headerRight: () => (
-        //   <Pressable
-        //     onPress={() => navigation.navigate('Search')}
-        //     style={{ marginRight: 10 }}
-        //   >
-        //     <Ionicons name="search" size={hp('3.5%')} color="#FAFAFA" />
-        //   </Pressable>
-        // ),
+
       })}>
       <Tab.Screen name="Inicio" component={Home} options={HomeOptions} />
       <Tab.Screen
@@ -107,8 +100,6 @@ const AuthStack = () => {
 
 const Navigation = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-
-  console.log('IS AUTHENTICATED? ', isAuthenticated + ' THIS IS Navigation.js');
 
   return (
     <NavigationContainer>

@@ -38,7 +38,7 @@ export default function MovieCard({ movie }) {
           source={{ uri: movie.posterImageLink }}
           alt={movie.title}
           style={styles.poster.image}
-          resizeMode='center'
+          resizeMode='cover'
 
         />
       </View>
@@ -66,8 +66,8 @@ export default function MovieCard({ movie }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: wp('90%'),
-    height: hp('17.5%'),
+    width: wp('100%'),
+    height: hp('20%'),
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -76,9 +76,8 @@ const styles = StyleSheet.create({
   poster: {
     container: {
       width: wp('25%'),
-      height: hp('17%'),
-      overflow: 'hidden',
-      borderRadius: 10,
+      height: hp('20%'),
+      borderRadius: 15,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -86,38 +85,37 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
-      elevation: 4,
+      elevation: 7,
 
     },
     image: {
       width: '100%',
       height: '100%',
-      borderRadius: 10
+      borderRadius: 15,
+      elevation: 7,
     },
   },
 
   body: {
     container: {
       width: wp('65%'),
-      height: hp('17%'),
+      height: hp('20%'),
       justifyContent: 'space-around',
       marginLeft: wp('4%'),
-      top: hp('-1%'),
     },
     title: {
       color: '#FAFAFA',
-      fontSize: hp('3%'),
+      fontSize: hp('2.5%'),
       fontWeight: 'bold',
     },
     rating: {
       container: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: hp('1%'),
       },
       text: {
-        color: '#FAFAFA',
-        fontSize: hp('2.5%'),
+        color: '#FDFDFD',
+        fontSize: hp('2.1%'),
         marginLeft: wp('1%'),
       },
     },
@@ -144,7 +142,7 @@ const styles = StyleSheet.create({
     },
 
     favorite: {
-      bottom: hp('-.8%'),
+
     },
   },
 });
