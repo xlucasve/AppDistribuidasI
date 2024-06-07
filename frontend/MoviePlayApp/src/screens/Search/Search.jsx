@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Text,
   Image,
@@ -27,6 +27,8 @@ export default function Search({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isFilterPopupVisible, setIsFilterPopupVisible] = useState(false);
 
+  const inputRef = useRef();
+
   React.useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
@@ -38,9 +40,11 @@ export default function Search({ navigation }) {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
+              ref={inputRef}
+              onChangeText={text => (inputRef.text = text)}
               style={styles.inputText}
               defaultValue={searchInput}
-              onChangeText={value => handleChangeInput(value)}
+
               placeholder="Hoy quiero buscar..."
               onSubmitEditing={() => handleSearch()}
             />
@@ -57,24 +61,47 @@ export default function Search({ navigation }) {
     });
   });
 
-  const handleChangeInput = input => {
-    setSearchInput(input);
+
+  const filterGenres = (movies, selectedGenres) => {
+    if (selectedGenres.length === 0 || movies === undefined) {
+      return movies;
+    }
+
+    return movies.filter(movie => {
+      for (let i = 0; i < movie.genres.length; i++) {
+        if (selectedGenres.includes(movie.genres[i].name)) {
+          return true;
+        }
+      }
+      return false;
+    });
   };
 
-  const handleSearch = async () => {
-    if (!searchInput.trim().length) {
+  const handleSearch = async (selectedGenres = [], selectedOrderASC = true, orderBy = 'DATE') => {
+    let textInputValue = inputRef.text;
+    if (!textInputValue.trim().length) {
       return;
     }
 
+    console.log("Selected genres: ", selectedGenres, "Selected order: ", selectedOrderASC, "Order by: ", orderBy);
+
     setIsLoading(true);
     const response = await movieService.searchMovies(
-      searchInput.trimStart(),
-      'DESC',
-      'DATE',
+      textInputValue.trimStart(),
+      selectedOrderASC ? 'ASC' : 'DESC',
+      orderBy,
     );
+
+    movieSet = filterGenres(response.movies, selectedGenres);
+
     setMovieData(response);
     setIsLoading(false);
   };
+
+  const applyFilters = (selectedGenres, selectedOrderASC) => {
+    handleSearch(selectedGenres, selectedOrderASC);
+  };
+
 
 
   const SearchView = () => {
@@ -89,13 +116,25 @@ export default function Search({ navigation }) {
     );
   };
 
+
+
   return (
     <View style={styles.container}>
-      {isLoading ? <LoadingPage /> : <SearchView />}
+      {
+        (isLoading)
+          ? <LoadingPage />
+          : (movieData.movies !== undefined && movieData.movies.length > 0)
+            ? <SearchView />
+            : (inputRef.text && inputRef.text.length > 0)
+              ? <RenderNoResults textSearched={inputRef.text} />
+              : <RenderNoSearch />
+      }
+
+
       <FilterPopup
         visible={isFilterPopupVisible}
         onClose={() => setIsFilterPopupVisible(false)}
-      // onApply={applyFilters}
+        onApply={applyFilters}
       />
     </View>
   );
@@ -129,5 +168,51 @@ const styles = StyleSheet.create({
 
   filterBtn: {
     marginRight: wp('1.5%'),
-  }
+  },
+
+
+
+  noSearchContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noSearchText: {
+    color: '#FAFAFA',
+    fontSize: hp('2.5%'),
+    fontWeight: 'bold',
+  },
+
+  noResultsContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: wp('10%'),
+    justifyContent: 'center',
+  },
+
+  noResultsText: {
+    color: '#FAFAFA',
+    fontSize: hp('2.5%'),
+    fontWeight: 'bold',
+  },
+
+
+
 });
+
+
+const RenderNoSearch = () => {
+  return (
+    <View style={styles.noSearchContainer}>
+      <Text style={styles.noSearchText}>Hoy estoy pensando en buscar...</Text>
+    </View>
+  );
+};
+
+const RenderNoResults = ({ textSearched }) => {
+  return (
+    <View style={styles.noResultsContainer}>
+      <Text style={styles.noResultsText}>No se encontraron resultados para "{`${textSearched}`}".</Text>
+    </View>
+  );
+}

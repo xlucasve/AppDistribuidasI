@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -13,31 +13,32 @@ import Order_desc from '../../assets/images/order_desc.svg';
 const FilterPopup = ({ visible, onClose, onApply }) => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedOrderASC, setSelectedOrderASC] = useState(true);
+  const [orderBy, setOrderBy] = useState('');
 
-  const genres = [
-    "Cine de autor",
-    "Film Noir",
-    "Familiar",
-    "Deportes",
-    "Histórica",
-    "Biografía",
-    "Thriller",
-    "Suspense",
-    "Musical",
-    "Western",
-    "Documental",
-    "Guerra",
-    "Romance",
-    "Misterio",
-    "Fantasía",
-    "Acción",
-    "Comedia",
-    "Animación",
-    "Drama"
-];
+    const genreMap = {
+        "Comedia": "Comedy",
+        "Acción": "Action",
+        "Drama": "Drama",
+        "Animación": "Animation",
+        "Cine de autor": "Art Cinema",
+        "Film Noir": "Film Noir",
+        "Familiar": "Family",
+        "Deportes": "Sports",
+        "Histórica": "Historical",
+        "Biografía": "Biography",
+        "Thriller": "Thriller",
+        "Suspense": "Suspense",
+        "Musical": "Musical",
+        "Western": "Western",
+        "Documental": "Documentary",
+        "Guerra": "War",
+        "Romance": "Romance",
+        "Misterio": "Mystery",
+        "Fantasía": "Fantasy"
 
+    }
   const orderOptions = [
-    { label: 'Fecha de publicación', value: 'DATE' },
+    { label: 'Año de publicación', value: 'DATE' },
     { label: 'Calificación', value: 'RATING' },
   ];
 
@@ -50,7 +51,8 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
   };
 
   const applyFilters = () => {
-    onApply(selectedGenres, selectedOrderASC);
+    const mappedGenres = selectedGenres.map(genre => genreMap[genre]);
+    onApply(mappedGenres, selectedOrderASC, orderBy);
     onClose();
   };
 
@@ -78,8 +80,8 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
               labelField="label"
               valueField="value"
               placeholder="Selecciona una opción"
-              value={selectedOrderASC}
-              onChange={item => setSelectedOrderASC(item.value)}
+              value={orderBy}
+              onChange={item => setOrderBy(item.value)}
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
@@ -101,8 +103,9 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
 
           <View style={styles.genreContainer}>
             <Text style={styles.genreContainer.title}>Géneros</Text>
+            <ScrollView style={styles.genreContainer.genreScrollContainer} contentContainerStyle={styles.genreContainer.genreScrollContent} >
             <View style={styles.genreContainer.chipsContainer}>
-              {genres.map((genre, index) => (
+              {Object.keys(genreMap).map((genre, index) => (
                 <TouchableOpacity
                   key={index}
                   style={[
@@ -115,6 +118,7 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
                 </TouchableOpacity>
               ))}
             </View>
+            </ScrollView>
           </View>
 
           <View style={styles.apply.container}>
@@ -182,6 +186,13 @@ const styles = StyleSheet.create({
     genreText: {
       color: '#000',
     },
+    genreScrollContainer: {
+        maxHeight: hp('30%'), // Adjust the max height as needed
+      },
+      genreScrollContent: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+      },
   },
 
 
