@@ -27,6 +27,7 @@ export default function Search({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
   const [isFilterPopupVisible, setIsFilterPopupVisible] = useState(false);
   const [orderByMethod, setOrderByMethod] = useState('');
+  const [selectedGenres, setSelectedGenres] = useState([]);
 
   const inputRef = useRef();
 
@@ -64,25 +65,26 @@ export default function Search({navigation}) {
   });
 
   const filterGenres = (movies, selectedGenres) => {
+    const filteredMovies = {movies: []};
     if (selectedGenres.length === 0 || movies === undefined) {
-      return movies;
+      movies.map(movie => {
+        filteredMovies.movies.push(movie);
+      });
+      return filteredMovies;
     }
 
-    return movies.filter(movie => {
+    movies.filter(movie => {
       for (let i = 0; i < movie.genres.length; i++) {
         if (selectedGenres.includes(movie.genres[i].name)) {
-          return true;
+          filteredMovies.movies.push(movie);
         }
       }
       return false;
     });
+    return filteredMovies;
   };
 
-  const handleSearch = async (
-    selectedGenres = [],
-    selectedOrderASC = true,
-    orderBy = orderByMethod,
-  ) => {
+  const handleSearch = async (selectedOrderASC = true) => {
     let textInputValue = inputRef.text;
     if (!textInputValue.trim().length) {
       return;
@@ -110,13 +112,15 @@ export default function Search({navigation}) {
     );
 
     movieSet = filterGenres(response.movies, selectedGenres);
+    console.log(response);
+    console.log(movieSet);
 
-    setMovieData(response);
+    setMovieData(movieSet);
     setIsLoading(false);
   };
 
-  const applyFilters = (selectedGenres, selectedOrderASC) => {
-    handleSearch(selectedGenres, selectedOrderASC);
+  const applyFilters = selectedOrderASC => {
+    handleSearch(selectedOrderASC);
   };
 
   const SearchView = () => {
@@ -147,6 +151,8 @@ export default function Search({navigation}) {
         visible={isFilterPopupVisible}
         onClose={() => setIsFilterPopupVisible(false)}
         onApply={applyFilters}
+        selectedGenres={selectedGenres}
+        setSelectedGenres={setSelectedGenres}
         orderByMethod={orderByMethod}
         setOrderByMethod={setOrderByMethod}
       />

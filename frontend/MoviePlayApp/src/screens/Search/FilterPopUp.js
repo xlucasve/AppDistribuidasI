@@ -24,8 +24,9 @@ const FilterPopup = ({
   onApply,
   orderByMethod,
   setOrderByMethod,
+  selectedGenres,
+  setSelectedGenres,
 }) => {
-  const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedOrderASC, setSelectedOrderASC] = useState(true);
 
   const genreMap = {
