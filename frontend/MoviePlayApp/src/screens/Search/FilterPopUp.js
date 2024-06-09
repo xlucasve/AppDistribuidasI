@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import React, {useState} from 'react';
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  ScrollView,
+} from 'react-native';
+import {Dropdown} from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   widthPercentageToDP as wp,
@@ -10,36 +18,40 @@ import {
 import Order_asc from '../../assets/images/order_asc.svg';
 import Order_desc from '../../assets/images/order_desc.svg';
 
-const FilterPopup = ({ visible, onClose, onApply }) => {
+const FilterPopup = ({
+  visible,
+  onClose,
+  onApply,
+  orderByMethod,
+  setOrderByMethod,
+}) => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedOrderASC, setSelectedOrderASC] = useState(true);
-  const [orderBy, setOrderBy] = useState('');
 
-    const genreMap = {
-        "Comedia": "Comedy",
-        "Acción": "Action",
-        "Drama": "Drama",
-        "Animación": "Animation",
-        "Cine de autor": "Art Cinema",
-        "Film Noir": "Film Noir",
-        "Familiar": "Family",
-        "Deportes": "Sports",
-        "Histórica": "Historical",
-        "Biografía": "Biography",
-        "Thriller": "Thriller",
-        "Suspense": "Suspense",
-        "Musical": "Musical",
-        "Western": "Western",
-        "Documental": "Documentary",
-        "Guerra": "War",
-        "Romance": "Romance",
-        "Misterio": "Mystery",
-        "Fantasía": "Fantasy"
-
-    }
+  const genreMap = {
+    Comedia: 'Comedy',
+    Acción: 'Action',
+    Drama: 'Drama',
+    Animación: 'Animation',
+    'Cine de autor': 'Art Cinema',
+    'Film Noir': 'Film Noir',
+    Familiar: 'Family',
+    Deportes: 'Sports',
+    Histórica: 'Historical',
+    Biografía: 'Biography',
+    Thriller: 'Thriller',
+    Suspense: 'Suspense',
+    Musical: 'Musical',
+    Western: 'Western',
+    Documental: 'Documentary',
+    Guerra: 'War',
+    Romance: 'Romance',
+    Misterio: 'Mystery',
+    Fantasía: 'Fantasy',
+  };
   const orderOptions = [
-    { label: 'Año de publicación', value: 'DATE' },
-    { label: 'Calificación', value: 'RATING' },
+    {label: 'Año de publicación', value: 'DATE'},
+    {label: 'Calificación', value: 'RATING'},
   ];
 
   const toggleGenre = genre => {
@@ -52,7 +64,7 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
 
   const applyFilters = () => {
     const mappedGenres = selectedGenres.map(genre => genreMap[genre]);
-    onApply(mappedGenres, selectedOrderASC, orderBy);
+    onApply(mappedGenres, selectedOrderASC, orderByMethod);
     onClose();
   };
 
@@ -61,8 +73,7 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
       transparent={true}
       visible={visible}
       animationType="slide"
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
           <View style={styles.header}>
@@ -71,53 +82,63 @@ const FilterPopup = ({ visible, onClose, onApply }) => {
               <Ionicons name="close" size={hp('4%')} color={'#FAFAFA'} />
             </TouchableOpacity>
           </View>
-          
+
           <View style={styles.dropdownContainer}>
             <Text style={styles.dropdownTitle}>Ordenar por:</Text>
             <View style={styles.orderContainer}>
-            <Dropdown
-              data={orderOptions}
-              labelField="label"
-              valueField="value"
-              placeholder="Selecciona una opción"
-              value={orderBy}
-              onChange={item => setOrderBy(item.value)}
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              itemTextStyle={styles.itemTextStyle}
-              containerStyle={styles.dropdownContainerStyle}
-              itemContainerStyle={styles.dropdownItemContainerStyle}
-              itemStyle={styles.itemStyle}
-              activeColor='#313131'
-            />
-            <Pressable style={styles.orderBtn} onPress={() => setSelectedOrderASC(!selectedOrderASC)}>
-
-                { selectedOrderASC === true
-                ? <Order_asc width={styles.heigth_width_order.width} height={styles.heigth_width_order.width} />
-                : <Order_desc width={styles.heigth_width_order.width} height={styles.heigth_width_order.width} />}
-                
-                </Pressable>
+              <Dropdown
+                data={orderOptions}
+                labelField="label"
+                valueField="value"
+                placeholder="Selecciona una opción"
+                value={orderByMethod}
+                onChange={item => setOrderByMethod(item.value)}
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                itemTextStyle={styles.itemTextStyle}
+                containerStyle={styles.dropdownContainerStyle}
+                itemContainerStyle={styles.dropdownItemContainerStyle}
+                itemStyle={styles.itemStyle}
+                activeColor="#313131"
+              />
+              <Pressable
+                style={styles.orderBtn}
+                onPress={() => setSelectedOrderASC(!selectedOrderASC)}>
+                {selectedOrderASC === true ? (
+                  <Order_asc
+                    width={styles.heigth_width_order.width}
+                    height={styles.heigth_width_order.width}
+                  />
+                ) : (
+                  <Order_desc
+                    width={styles.heigth_width_order.width}
+                    height={styles.heigth_width_order.width}
+                  />
+                )}
+              </Pressable>
             </View>
           </View>
 
           <View style={styles.genreContainer}>
             <Text style={styles.genreContainer.title}>Géneros</Text>
-            <ScrollView style={styles.genreContainer.genreScrollContainer} contentContainerStyle={styles.genreContainer.genreScrollContent} >
-            <View style={styles.genreContainer.chipsContainer}>
-              {Object.keys(genreMap).map((genre, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.genreContainer.genreChip,
-                    selectedGenres.includes(genre) && styles.genreContainer.genreChipSelected,
-                  ]}
-                  onPress={() => toggleGenre(genre)}
-                >
-                  <Text style={styles.genreContainer.genreText}>{genre}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <ScrollView
+              style={styles.genreContainer.genreScrollContainer}
+              contentContainerStyle={styles.genreContainer.genreScrollContent}>
+              <View style={styles.genreContainer.chipsContainer}>
+                {Object.keys(genreMap).map((genre, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.genreContainer.genreChip,
+                      selectedGenres.includes(genre) &&
+                        styles.genreContainer.genreChipSelected,
+                    ]}
+                    onPress={() => toggleGenre(genre)}>
+                    <Text style={styles.genreContainer.genreText}>{genre}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </ScrollView>
           </View>
 
@@ -187,16 +208,13 @@ const styles = StyleSheet.create({
       color: '#000',
     },
     genreScrollContainer: {
-        maxHeight: hp('30%'), // Adjust the max height as needed
-      },
-      genreScrollContent: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-      },
+      maxHeight: hp('30%'), // Adjust the max height as needed
+    },
+    genreScrollContent: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
   },
-
-
-
 
   dropdownContainer: {
     marginBottom: hp('2%'),
@@ -225,31 +243,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
 
-
   orderBtn: {
     marginRight: wp('.5%'),
-
   },
 
   heigth_width_order: {
     height: hp('10%'),
     width: wp('10%'),
-    },
+  },
 
   placeholderStyle: {
     color: '#BEBEBE',
     fontSize: hp('2%'),
-    backgroundColor: '#313131'
+    backgroundColor: '#313131',
   },
   selectedTextStyle: {
     color: '#FAFAFA',
     fontSize: hp('2%'),
-    backgroundColor: '#313131'
+    backgroundColor: '#313131',
   },
   inputSearchStyle: {
     color: '#000',
     fontSize: hp('2%'),
-    backgroundColor: '#313131'
+    backgroundColor: '#313131',
   },
   itemTextStyle: {
     color: '#FAFAFA',
@@ -264,9 +280,6 @@ const styles = StyleSheet.create({
   dropdownItemContainerStyle: {
     backgroundColor: '#313131',
   },
-  
-
-
 
   apply: {
     container: {

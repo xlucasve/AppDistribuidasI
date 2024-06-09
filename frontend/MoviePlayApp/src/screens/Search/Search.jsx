@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import {
   Text,
   Image,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import SearchIcon from '../../assets/images/search_btn_black.svg';
 
 import MovieCard from '../../components/MovieCard';
@@ -21,11 +21,12 @@ import {
 
 import FilterPopup from './FilterPopUp';
 
-export default function Search({ navigation }) {
+export default function Search({navigation}) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFilterPopupVisible, setIsFilterPopupVisible] = useState(false);
+  const [orderByMethod, setOrderByMethod] = useState('');
 
   const inputRef = useRef();
 
@@ -34,7 +35,9 @@ export default function Search({ navigation }) {
       headerTitle: () => (
         <View style={styles.headerContainer}>
           <View style={styles.searchIcon}>
-            <TouchableOpacity style={styles.searchIcon.btn} onPress={() => handleSearch()}>
+            <TouchableOpacity
+              style={styles.searchIcon.btn}
+              onPress={() => handleSearch()}>
               <SearchIcon width={28} height={28} />
             </TouchableOpacity>
           </View>
@@ -44,7 +47,6 @@ export default function Search({ navigation }) {
               onChangeText={text => (inputRef.text = text)}
               style={styles.inputText}
               defaultValue={searchInput}
-
               placeholder="Hoy quiero buscar..."
               onSubmitEditing={() => handleSearch()}
             />
@@ -61,7 +63,6 @@ export default function Search({ navigation }) {
     });
   });
 
-
   const filterGenres = (movies, selectedGenres) => {
     if (selectedGenres.length === 0 || movies === undefined) {
       return movies;
@@ -77,13 +78,29 @@ export default function Search({ navigation }) {
     });
   };
 
-  const handleSearch = async (selectedGenres = [], selectedOrderASC = true, orderBy = 'DATE') => {
+  const handleSearch = async (
+    selectedGenres = [],
+    selectedOrderASC = true,
+    orderBy = orderByMethod,
+  ) => {
     let textInputValue = inputRef.text;
     if (!textInputValue.trim().length) {
       return;
     }
 
-    console.log("Selected genres: ", selectedGenres, "Selected order: ", selectedOrderASC, "Order by: ", orderBy);
+    if (orderByMethod == '') {
+      console.log('Empty');
+      orderBy = 'DATE';
+    }
+
+    console.log(
+      'Selected genres: ',
+      selectedGenres,
+      'Selected order: ',
+      selectedOrderASC,
+      'Order by: ',
+      orderBy,
+    );
 
     setIsLoading(true);
     const response = await movieService.searchMovies(
@@ -102,39 +119,36 @@ export default function Search({ navigation }) {
     handleSearch(selectedGenres, selectedOrderASC);
   };
 
-
-
   const SearchView = () => {
     return (
       <View style={styles.container}>
         <FlatList
           data={movieData.movies}
-          renderItem={({ item }) => <MovieCard movie={item} />}
+          renderItem={({item}) => <MovieCard movie={item} />}
           keyExtractor={item => item.movieId}
         />
       </View>
     );
   };
 
-
-
   return (
     <View style={styles.container}>
-      {
-        (isLoading)
-          ? <LoadingPage />
-          : (movieData.movies !== undefined && movieData.movies.length > 0)
-            ? <SearchView />
-            : (inputRef.text && inputRef.text.length > 0)
-              ? <RenderNoResults textSearched={inputRef.text} />
-              : <RenderNoSearch />
-      }
-
+      {isLoading ? (
+        <LoadingPage />
+      ) : movieData.movies !== undefined && movieData.movies.length > 0 ? (
+        <SearchView />
+      ) : inputRef.text && inputRef.text.length > 0 ? (
+        <RenderNoResults textSearched={inputRef.text} />
+      ) : (
+        <RenderNoSearch />
+      )}
 
       <FilterPopup
         visible={isFilterPopupVisible}
         onClose={() => setIsFilterPopupVisible(false)}
         onApply={applyFilters}
+        orderByMethod={orderByMethod}
+        setOrderByMethod={setOrderByMethod}
       />
     </View>
   );
@@ -170,8 +184,6 @@ const styles = StyleSheet.create({
     marginRight: wp('1.5%'),
   },
 
-
-
   noSearchContainer: {
     flex: 1,
     alignItems: 'center',
@@ -195,11 +207,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2.5%'),
     fontWeight: 'bold',
   },
-
-
-
 });
-
 
 const RenderNoSearch = () => {
   return (
@@ -209,10 +217,12 @@ const RenderNoSearch = () => {
   );
 };
 
-const RenderNoResults = ({ textSearched }) => {
+const RenderNoResults = ({textSearched}) => {
   return (
     <View style={styles.noResultsContainer}>
-      <Text style={styles.noResultsText}>No se encontraron resultados para "{`${textSearched}`}".</Text>
+      <Text style={styles.noResultsText}>
+        No se encontraron resultados para "{`${textSearched}`}".
+      </Text>
     </View>
   );
-}
+};
