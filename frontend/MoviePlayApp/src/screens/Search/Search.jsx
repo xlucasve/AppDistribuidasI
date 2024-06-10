@@ -28,6 +28,7 @@ export default function Search({navigation}) {
   const [isFilterPopupVisible, setIsFilterPopupVisible] = useState(false);
   const [orderByMethod, setOrderByMethod] = useState('');
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedOrderASC, setSelectedOrderASC] = useState(true);
 
   const inputRef = useRef();
 
@@ -69,31 +70,42 @@ export default function Search({navigation}) {
     if (selectedGenres.length === 0 || movies === undefined) {
       movies.map(movie => {
         filteredMovies.movies.push(movie);
+        console.log(filteredMovies.movies);
       });
       return filteredMovies;
     }
 
     movies.filter(movie => {
       for (let i = 0; i < movie.genres.length; i++) {
-        if (selectedGenres.includes(movie.genres[i].name)) {
+        if (
+          selectedGenres.includes(movie.genres[i].name) &&
+          !filteredMovies.movies.includes(movie)
+        ) {
           filteredMovies.movies.push(movie);
         }
       }
       return false;
     });
+    console.log(filteredMovies.movies);
+
     return filteredMovies;
   };
 
-  const handleSearch = async (selectedOrderASC = true) => {
+  const handleSearch = async () => {
     let textInputValue = inputRef.text;
     if (!textInputValue.trim().length) {
       return;
     }
 
-    if (orderByMethod == '') {
+    if (orderByMethod != 'RATING' && orderByMethod != 'DATE') {
       console.log('Empty');
       orderBy = 'DATE';
+    } else {
+      orderBy = orderByMethod;
     }
+
+    console.log('Order By' + orderBy);
+    console.log('Method ' + orderByMethod);
 
     console.log(
       'Selected genres: ',
@@ -112,15 +124,13 @@ export default function Search({navigation}) {
     );
 
     movieSet = filterGenres(response.movies, selectedGenres);
-    console.log(response);
-    console.log(movieSet);
 
     setMovieData(movieSet);
     setIsLoading(false);
   };
 
-  const applyFilters = selectedOrderASC => {
-    handleSearch(selectedOrderASC);
+  const applyFilters = () => {
+    handleSearch();
   };
 
   const SearchView = () => {
@@ -155,6 +165,8 @@ export default function Search({navigation}) {
         setSelectedGenres={setSelectedGenres}
         orderByMethod={orderByMethod}
         setOrderByMethod={setOrderByMethod}
+        selectedOrderASC={selectedOrderASC}
+        setSelectedOrderASC={setSelectedOrderASC}
       />
     </View>
   );

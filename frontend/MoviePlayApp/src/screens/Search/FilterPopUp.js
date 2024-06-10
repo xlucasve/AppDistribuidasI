@@ -26,9 +26,9 @@ const FilterPopup = ({
   setOrderByMethod,
   selectedGenres,
   setSelectedGenres,
+  selectedOrderASC,
+  setSelectedOrderASC,
 }) => {
-  const [selectedOrderASC, setSelectedOrderASC] = useState(true);
-
   const genreMap = {
     Comedia: 'Comedy',
     Acción: 'Action',
