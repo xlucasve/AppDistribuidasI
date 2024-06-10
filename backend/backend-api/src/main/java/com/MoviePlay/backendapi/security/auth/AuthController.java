@@ -102,7 +102,7 @@ public class AuthController {
     @DeleteMapping("/logout/{userId}")
     public ResponseEntity<?> logoutUser(@PathVariable Long userId){return service.logout(userId);}
 
-   /* @Operation(summary = "Delete user", description = "Delete a user and all its related data.")
+   @Operation(summary = "Delete user", description = "Delete a user and all its related data.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully deleted user"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -125,5 +125,5 @@ public class AuthController {
     @DeleteMapping("/delete-account/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId){
         return service.deleteUser(userId);
-    }*/
+    }
 }

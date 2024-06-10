@@ -1,7 +1,9 @@
 package com.MoviePlay.backendapi.security.token;
 
 import com.MoviePlay.backendapi.entities.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -17,5 +19,10 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
   List<Token> findAllValidTokenByUser(Long id);
 
   Optional<Token> findByToken(String token);
+
+  @Modifying
+  @Transactional
+  @Query(value="delete from Token t where t.user = ?1")
+  void deleteTokensWhenDeletingAccount(User user);
 
 }

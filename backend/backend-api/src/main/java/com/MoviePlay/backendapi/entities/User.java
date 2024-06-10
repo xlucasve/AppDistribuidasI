@@ -31,8 +31,7 @@ public class User{
     )
     private List<Movie> favoriteMovies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+
 
     //ADD record of rated movies with Rating object
     //Rating will be stored in movie, wrong but needed for the moment
@@ -56,7 +55,7 @@ public class User{
     public User() {
     }
 
-    public User(Long userId, String email, String realName, String nickname, String profilePictureLink, Boolean active, List<Movie> favoriteMovies, List<Token> tokens) {
+    public User(Long userId, String email, String realName, String nickname, String profilePictureLink, Boolean active, List<Movie> favoriteMovies) {
         this.userId = userId;
         this.email = email;
         this.realName = realName;
@@ -64,7 +63,6 @@ public class User{
         this.profilePictureLink = profilePictureLink;
         this.active = active;
         this.favoriteMovies = favoriteMovies;
-        this.tokens = tokens;
     }
 
     public Long getUserId() {
@@ -123,12 +121,5 @@ public class User{
         this.favoriteMovies = favoriteMovies;
     }
 
-    public List<Token> getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(List<Token> tokens) {
-        this.tokens = tokens;
-    }
 
 }

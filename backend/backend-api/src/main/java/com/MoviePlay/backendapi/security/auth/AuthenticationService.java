@@ -197,6 +197,7 @@ public class AuthenticationService {
             throw new EntityNotFoundException("No user found with id: " + userId);
         }
 
+        tokenRepository.deleteTokensWhenDeletingAccount(foundUser.get());
         userRepository.deleteById(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
