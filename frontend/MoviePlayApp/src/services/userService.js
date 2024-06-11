@@ -37,12 +37,10 @@ const userService = {
 
       formData.append('image', media);
 
-      console.log(image);
       const response = await api_image.put(
         endpoints.user.changeProfilePicture(userId),
         formData,
       );
-      console.log('response', response);
       return response.data;
     } catch (error) {
       console.error('Error updating user profile picture:', error);

@@ -87,8 +87,6 @@ api_image.interceptors.request.use(
     const state = store.getState();
     const token = state.auth.accessToken;
 
-    console.log('Appended token');
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
