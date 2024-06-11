@@ -116,5 +116,12 @@ def cleanData(data, keys_to_remove, keys_backdrops, file_count_response):
         favorites = []
         movie["favorites"] = favorites
 
+    newData = []
+    for movie in data:
+        if movie["posterImageLink"] is not "None":
+            newData.append(movie)
+
+    print(len(newData))
+    print(len(data))
     with open('outputs/output' + file_count_response.__str__() + '.json', 'w') as file:
-        json.dump(data, file, indent=2, ensure_ascii=False)
+        json.dump(newData, file, indent=2, ensure_ascii=False)
