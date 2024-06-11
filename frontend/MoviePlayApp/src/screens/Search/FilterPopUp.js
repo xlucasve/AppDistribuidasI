@@ -41,7 +41,7 @@ const FilterPopup = ({
     Histórica: 'Historical',
     Biografía: 'Biography',
     Thriller: 'Thriller',
-    Suspense: 'Suspense',
+    Suspenso: 'Suspense',
     Musical: 'Musical',
     Western: 'Western',
     Documental: 'Documentary',
@@ -56,10 +56,16 @@ const FilterPopup = ({
   ];
 
   const toggleGenre = genre => {
-    if (selectedGenres.includes(genre)) {
-      setSelectedGenres(selectedGenres.filter(g => g !== genre));
+    if (selectedGenres.includes(genreMap[genre])) {
+      setSelectedGenres(
+        selectedGenres.filter(g => {
+          g !== genreMap[genre];
+          console.log(g);
+          console.log(genreMap[genre]);
+        }),
+      );
     } else {
-      setSelectedGenres([...selectedGenres, genre]);
+      setSelectedGenres([...selectedGenres, genreMap[genre]]);
     }
   };
 
@@ -132,7 +138,7 @@ const FilterPopup = ({
                     key={index}
                     style={[
                       styles.genreContainer.genreChip,
-                      selectedGenres.includes(genre) &&
+                      selectedGenres.includes(genreMap[genre]) &&
                         styles.genreContainer.genreChipSelected,
                     ]}
                     onPress={() => toggleGenre(genre)}>
