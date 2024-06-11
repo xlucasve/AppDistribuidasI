@@ -3,7 +3,7 @@ import store from '../redux/store';
 import axios from 'axios';
 import authService from '../services/authService';
 
-const API_BASE_URL = __DEV__ ? API_BASE_URL_DEV : API_BASE_URL_PROD;
+const API_BASE_URL = 'https://movieplay-api.onrender.com/';
 // const API_BASE_URL = API_BASE_URL_LOCAL;
 
 const API_VERSION = '/api/v1';
@@ -19,6 +19,9 @@ api.interceptors.request.use(
   config => {
     const state = store.getState();
     const token = state.auth.accessToken;
+
+    console.log('Config de Request Interceptor');
+    console.log(config);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -37,6 +40,12 @@ api.interceptors.response.use(
   },
   async error => {
     const originalRequest = error.config;
+
+    console.log('Error de Response Interceptor');
+    console.log(error);
+
+    console.log('Original Request');
+    console.log(error.config);
 
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
