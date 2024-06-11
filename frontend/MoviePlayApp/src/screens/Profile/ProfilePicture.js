@@ -84,11 +84,14 @@ const ProfilePicture = ({picture_url}) => {
     }
   };
 
-  const saveProfileImage = () => {
+  const saveProfileImage = async () => {
     setHasProfileImageChanged(false);
     setOldProfileImage(null);
     try {
-      const response = userService.updateUserProfilePicture(userId, imageData);
+      const response = await userService.updateUserProfilePicture(
+        userId,
+        imageData,
+      );
     } catch (error) {
       console.log(error);
     }

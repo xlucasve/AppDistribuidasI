@@ -106,13 +106,10 @@ api_image.interceptors.response.use(
   },
   async error => {
     const originalRequest = error.config;
-    console.log('about to read status');
-    console.log('ERROR');
-    console.log(error.config);
 
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
-      console.log('Read status');
+
       try {
         const state = store.getState();
         const refreshToken = state.auth.refreshToken;

@@ -26,20 +26,16 @@ const userService = {
   updateUserProfilePicture: async (userId, image) => {
     try {
       const formData = new FormData();
-      console.log('Created formdata');
-      console.log('user id' + userId);
 
-      formData.append('image', {
-        uri: image.uri,
-        type: 'image/jpeg/jpg',
+      const media = {
         name: image.fileName,
-      });
+        height: image.height,
+        width: image.width,
+        type: image.type,
+        uri: image.uri,
+      };
 
-      console.log(image.uri);
-      console.log(image.fileName);
-
-      console.log('Form data appended');
-      console.log(formData);
+      formData.append('image', media);
 
       console.log(image);
       const response = await api_image.put(
