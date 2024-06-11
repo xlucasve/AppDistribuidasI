@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
 
   carouselMovieTitle: {
     fontFamily: 'Inter-SemiBold',
-    fontSize: 32,
+    fontSize: 24,
+
     color: '#FAFAFA',
   },
 

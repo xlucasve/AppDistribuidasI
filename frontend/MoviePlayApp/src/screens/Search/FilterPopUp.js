@@ -57,21 +57,14 @@ const FilterPopup = ({
 
   const toggleGenre = genre => {
     if (selectedGenres.includes(genreMap[genre])) {
-      setSelectedGenres(
-        selectedGenres.filter(g => {
-          g !== genreMap[genre];
-          console.log(g);
-          console.log(genreMap[genre]);
-        }),
-      );
+      setSelectedGenres(selectedGenres.filter(g => g !== genreMap[genre]));
     } else {
       setSelectedGenres([...selectedGenres, genreMap[genre]]);
     }
   };
 
   const applyFilters = () => {
-    const mappedGenres = selectedGenres.map(genre => genreMap[genre]);
-    onApply(mappedGenres, selectedOrderASC, orderByMethod);
+    onApply(selectedGenres, selectedOrderASC, orderByMethod);
     onClose();
   };
 

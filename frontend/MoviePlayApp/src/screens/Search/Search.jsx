@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginLeft: wp('.5%'),
+    width: '82%',
   },
   inputText: {
     fontSize: hp('2%'),
