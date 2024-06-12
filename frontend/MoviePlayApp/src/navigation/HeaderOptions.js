@@ -61,19 +61,19 @@ export const ProfileOptions = {
       <Logo width={styles.logoSize.width} height={styles.logoSize.height} />
     </Pressable>
   ),
-  headerRight: () => {
-    const navigation = useNavigation();
-    return (
-      <Pressable
-        style={styles.rightHeader}
-        onPress={() => navigation.navigate('Search')}>
-        <Search
-          width={styles.searchSize.width}
-          height={styles.searchSize.height}
-        />
-      </Pressable>
-    );
-  },
+  // headerRight: () => {
+  //   const navigation = useNavigation();
+  //   return (
+  //     <Pressable
+  //       style={styles.rightHeader}
+  //       onPress={() => navigation.navigate('Search')}>
+  //       <Search
+  //         width={styles.searchSize.width}
+  //         height={styles.searchSize.height}
+  //       />
+  //     </Pressable>
+  //   );
+  // },
 };
 
 const styles = StyleSheet.create({

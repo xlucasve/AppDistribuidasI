@@ -5,42 +5,50 @@ import Pencil from '../../assets/images/editPencil_btn.svg';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import userService from '../../services/userService';
 import store from '../../redux/store';
+import ModalAlert from './Modal/ModalAlert';
 
 const ProfileNickName = ({ initialNickName }) => {
+
     const [nickName, setNickName] = useState(initialNickName);
     const [hasNickNameChanged, setHasNickNameChanged] = useState(false);
-    const [oldNickName, setOldNickName] = useState(initialNickName);
+    const [oldNickName, setOldNickName] = useState(null);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState({ title: '', message: '' });
+
     const userId = store.getState().user.userData.userId;
     const nicknameInputRef = useRef(null);
 
     const validateNickname = async () => {
-        setHasNickNameChanged(false);
         setOldNickName(nickName);
         Keyboard.dismiss();
 
         if (nickName.length < 3 || nickName.length > 20) {
-            Alert.alert('Error', 'El nombre de usuario debe tener entre 3 y 20 caracteres.');
-            setNickName(oldNickName);
-            return;
+            handleModalAlert('Error', 'El nombre de usuario debe tener entre 3 y 20 caracteres.');
         }
-        if (!/^[a-zA-Z0-9_]+$/.test(nickName)) {
-            Alert.alert('Error', 'El nombre de usuario solo puede contener caracteres alfanuméricos y guiones bajos.');
-            setNickName(oldNickName);
-            return;
+        else if (!/^[a-zA-Z0-9_]+$/.test(nickName)) {
+            handleModalAlert('Error', 'El nombre de usuario solo puede contener caracteres alfanuméricos y guiones bajos.');
+        }
+        else {
+            try {
+                await userService.updateUserNickname(userId, nickName);
+            } catch (error) {
+                console.log(error);
+                if (error.response.status === 409) {
+                    handleModalAlert('Error', 'El nombre de usuario ya está en uso.');
+                }} 
         }
 
-        try {
-            const response = await userService.updateUserNickname(userId, nickName);
-            }
-         catch (error) {
-            if (error.response.status === 409) {
-                Alert.alert('Error', 'El nombre de usuario ya está en uso.');
-                setNickName(oldNickName);
-            }
-            console.log(error);
-        }
-        // API POST IF OK THEN RETURN TRUE ELSE (THE USERNAME IS ALREADY IN USE) RETURN FALSE
+        setOldNickName(null);
+        setHasNickNameChanged(false);
     };
+
+    const handleModalAlert = (title, message) => {
+        setModalMessage({ title: title, message: message });
+        setModalVisible(true);
+        setNickName(oldNickName);
+    }
+
 
     const handleNicknameEdit = () => {
         if (nicknameInputRef.current) {
@@ -49,8 +57,10 @@ const ProfileNickName = ({ initialNickName }) => {
     };
 
 
-
     const handleChangeText = (val) => {
+        if (hasNickNameChanged === false && oldNickName === null) {
+            setOldNickName(nickName);
+        }
         setNickName(val);
         setHasNickNameChanged(true);
     };
@@ -90,6 +100,14 @@ const ProfileNickName = ({ initialNickName }) => {
                     </TouchableOpacity>
                 }
             </View>
+
+            <ModalAlert
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                title={modalMessage.title}
+                message={modalMessage.message}
+            />
+
         </View>
     );
 };

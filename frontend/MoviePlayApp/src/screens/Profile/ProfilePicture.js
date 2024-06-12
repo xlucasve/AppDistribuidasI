@@ -17,11 +17,10 @@ import Pencil from '../../assets/images/editPencil_btn.svg';
 import store from '../../redux/store';
 import userService from '../../services/userService';
 const ProfilePicture = ({picture_url}) => {
-  const [profileImage, setProfileImage] = React.useState(picture_url);
+  const [profileImage, setProfileImage] = React.useState({uri: picture_url});
   const [oldProfileImage, setOldProfileImage] = React.useState(null);
   const [hasProfileImageChanged, setHasProfileImageChanged] =
     React.useState(false);
-  const [imageData, setImageData] = React.useState({});
   const userId = store.getState().user.userData.userId;
 
   const handleProfileImageEdit = () => {
@@ -56,10 +55,8 @@ const ProfilePicture = ({picture_url}) => {
     } else if (response.errorCode) {
       console.log('Error: ', response.errorMessage);
     } else {
-      setImageData(response.assets[0]);
-      const source = response.assets[0].uri;
+        setProfileImage(response.assets[0]);
       setOldProfileImage(profileImage);
-      setProfileImage(source);
       setHasProfileImageChanged(true);
     }
   };
@@ -85,23 +82,25 @@ const ProfilePicture = ({picture_url}) => {
   };
 
   const saveProfileImage = async () => {
-    setHasProfileImageChanged(false);
-    setOldProfileImage(null);
+
     try {
       const response = await userService.updateUserProfilePicture(
         userId,
-        imageData,
+        profileImage,
       );
     } catch (error) {
       console.log(error);
+      setProfileImage(oldProfileImage);
     }
+    setHasProfileImageChanged(false);
+    setOldProfileImage(null);
   };
 
   return (
     <View style={styles.editPictureContainer}>
       <View style={styles.editPictureContainer.pictureContainer}>
         <Image
-          source={{uri: profileImage}}
+          source={{uri: profileImage.uri}}
           style={{width: '100%', height: '100%'}}
         />
       </View>

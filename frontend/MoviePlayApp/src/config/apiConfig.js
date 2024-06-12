@@ -20,8 +20,8 @@ api.interceptors.request.use(
     const state = store.getState();
     const token = state.auth.accessToken;
 
-    console.log('Config de Request Interceptor');
-    console.log(config);
+    // console.log('Config de Request Interceptor');
+    // console.log(config);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
