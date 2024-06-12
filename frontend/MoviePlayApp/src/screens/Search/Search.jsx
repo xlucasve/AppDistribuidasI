@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {View} from 'react-native';
 import SearchIcon from '../../assets/images/search_btn_black.svg';
+import SearchIconWhite from '../../assets/images/search_btn.svg';
 
 import MovieCard from '../../components/MovieCard';
 import movieService from '../../services/moviesService';
@@ -49,7 +50,7 @@ export default function Search({navigation}) {
               onChangeText={text => (inputRef.text = text)}
               style={styles.inputText}
               defaultValue={searchInput}
-              placeholder="Hoy quiero buscar..."
+              placeholder="Buscar Película o Actor"
               onSubmitEditing={() => handleSearch()}
             />
           </View>
@@ -212,6 +213,7 @@ const styles = StyleSheet.create({
     color: '#FAFAFA',
     fontSize: hp('2.5%'),
     fontWeight: 'bold',
+    paddingBottom: 25,
   },
 
   noResultsContainer: {
@@ -232,6 +234,7 @@ const RenderNoSearch = () => {
   return (
     <View style={styles.noSearchContainer}>
       <Text style={styles.noSearchText}>Hoy estoy pensando en buscar...</Text>
+      <SearchIconWhite width={130} height={130} />
     </View>
   );
 };
