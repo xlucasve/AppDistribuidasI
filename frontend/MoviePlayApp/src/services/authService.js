@@ -13,6 +13,7 @@ const authService = {
 
       await Keychain.setGenericPassword(accessToken, refreshToken);
       return response.data;
+      
     } catch (error) {
       console.error(error);
       throw error;

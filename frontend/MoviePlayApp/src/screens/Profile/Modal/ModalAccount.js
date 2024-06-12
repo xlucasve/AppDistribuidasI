@@ -101,29 +101,22 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgba(0,0,0,0.7)"
+        backgroundColor: "rgba(0,0,0,0.6)"
     },
     modalView: {
         width: wp('88%'),
-        height: hp('18.75%'),
         backgroundColor: "#192941",
         borderRadius: 7,
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
+        padding: wp('5%'),
+        justifyContent: 'center',
     },
 
     btnsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: hp('2.75%'),
     },
 
     btn: {
@@ -146,6 +139,6 @@ const styles = StyleSheet.create({
         fontSize: hp("3%"),
         textAlign: "center",
         marginHorizontal: hp('2%'),
-        marginTop: hp('1.5%'),
+        marginBottom: hp('2%'),
     }
 });

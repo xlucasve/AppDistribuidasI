@@ -52,7 +52,7 @@ const Tab = createBottomTabNavigator();
 const TabGroup = ({navigation}) => {
   return (
     <Tab.Navigator
-      initialRouteName="Inicio"
+      initialRouteName="Mi Perfil"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, focused}) => {
           let iconName;

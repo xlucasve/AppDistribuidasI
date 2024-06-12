@@ -27,7 +27,7 @@ export default function Profile() {
             setUser(userData);
         } catch (error) {
             console.log(error);
-            dispatch(setError('Failed to fetch user data. Please try again.'));
+            dispatch(setError('Error al cargar la información del usuario'));
         }
     };
 
@@ -126,14 +126,14 @@ const styles = StyleSheet.create({
         btnSpace: {
             borderRadius: 10,
             width: wp('40%'),
-            height: hp('6%'),
+            padding: wp('3.5%'),
             alignItems: 'center',
             justifyContent: 'center',
             marginHorizontal: hp('2%'),
         },
         textBtn: {
             color: '#050505',
-            fontSize: hp('2.5%'),
+            fontSize: hp('2.3%'),
             fontWeight: 'medium',
         },
     },

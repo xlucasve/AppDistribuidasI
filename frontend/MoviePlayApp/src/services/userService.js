@@ -1,7 +1,7 @@
-import {api, api_image, endpoints} from '../config/apiConfig';
-import store from '../redux/store';
+import { api, apiWithFormData, endpoints } from '../config/apiConfig';
+
 const userService = {
-  getUserData: async userId => {
+  getUserData: async (userId) => {
     try {
       const response = await api.get(endpoints.user.getUserData(userId));
       return response.data;
@@ -37,10 +37,11 @@ const userService = {
 
       formData.append('image', media);
 
-      const response = await api_image.put(
+      const response = await apiWithFormData.put(
         endpoints.user.changeProfilePicture(userId),
         formData,
       );
+
       return response.data;
     } catch (error) {
       console.error('Error updating user profile picture:', error);
