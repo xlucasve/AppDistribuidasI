@@ -14,7 +14,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {clearUser} from '../redux/slices/userSlice';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +52,7 @@ const Tab = createBottomTabNavigator();
 const TabGroup = ({navigation}) => {
   return (
     <Tab.Navigator
-      initialRouteName="Mi Perfil"
+      initialRouteName="Inicio"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, focused}) => {
           let iconName;
