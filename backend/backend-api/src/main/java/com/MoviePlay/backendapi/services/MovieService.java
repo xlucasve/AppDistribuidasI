@@ -11,7 +11,6 @@ import com.MoviePlay.backendapi.repositories.MovieRepository;
 import com.MoviePlay.backendapi.utils.DTOMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -113,14 +112,7 @@ public class MovieService {
             }
         }
 
-        int start = (int)pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), moviesList.size());
-
-        List<Movie> paginatedList = moviesList.subList(start, end);
-
-        Page<Movie> paginatedMovies = new PageImpl<>(paginatedList, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()), moviesList.size());
-
-        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(paginatedMovies.getContent()));
+        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(moviesList));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
