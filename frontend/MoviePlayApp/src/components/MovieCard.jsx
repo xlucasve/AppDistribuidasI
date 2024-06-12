@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,7 +8,7 @@ import FavoriteMovie_false from '../assets/images/favoriteMovie_false.svg';
 import FavoriteMovie_true from '../assets/images/favoriteMovie_true.svg';
 import RatingStar from '../assets/images/ratingStar.svg';
 
-export default function MovieCard({ movie }) {
+export default function MovieCard({movie}) {
   const [isFavorite, setIsFavorite] = React.useState(false);
 
   const genresList = movie.genres.map(genre => {
@@ -17,7 +17,6 @@ export default function MovieCard({ movie }) {
 
   const ratingStarsList = [];
   const rate = (movie.rating / 2).toFixed(2);
-
 
   for (let i = 1; i <= 5; i++) {
     ratingStarsList.push(
@@ -35,11 +34,10 @@ export default function MovieCard({ movie }) {
     <View style={styles.container}>
       <View style={styles.poster.container}>
         <Image
-          source={{ uri: movie.posterImageLink }}
+          source={{uri: movie.posterImageLink}}
           alt={movie.title}
           style={styles.poster.image}
-          resizeMode='cover'
-
+          resizeMode="cover"
         />
       </View>
 
@@ -49,7 +47,9 @@ export default function MovieCard({ movie }) {
           {ratingStarsList}
           <Text style={styles.body.rating.text}>{rate}</Text>
         </View>
-        <View style={styles.body.genre}>{genresList}</View>
+        <View style={styles.body.genre}>
+          {genresList < 3 ? genresList : genresList.slice(0, 3)}
+        </View>
         <Pressable
           style={styles.body.favorite}
           onPress={() => setIsFavorite(!isFavorite)}>
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 7,
-
     },
     image: {
       width: '100%',
@@ -141,13 +140,11 @@ const styles = StyleSheet.create({
       },
     },
 
-    favorite: {
-
-    },
+    favorite: {},
   },
 });
 
-const GenreCard = ({ genre }) => {
+const GenreCard = ({genre}) => {
   return (
     <View style={styles.body.genre.container}>
       <Text style={styles.body.genre.text}>{genre}</Text>
