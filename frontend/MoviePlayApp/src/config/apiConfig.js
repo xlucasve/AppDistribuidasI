@@ -1,7 +1,7 @@
-import { API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL } from '@env';
+import {API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL} from '@env';
 import axios from 'axios';
-import { setupTokenInterceptors } from './tokenInterceptors';
-import { setupErrorsInterceptors } from './ErrorInterceptors';
+import {setupTokenInterceptors} from './tokenInterceptors';
+import {setupErrorsInterceptors} from './ErrorInterceptors';
 
 const API_BASE_URL = 'https://movieplay-api.onrender.com/';
 // const API_BASE_URL = API_BASE_URL_LOCAL;
@@ -37,7 +37,7 @@ const endpoints = {
     getFavoriteMovies: userId => `${API_VERSION}/users/${userId}/favorites`,
     addMovieToFavorites: (userId, movieId) =>
       `${API_VERSION}/users/${userId}/movies/${movieId}`,
-    changeNickname: userId => `${API_VERSION}/users/${userId}/nicknam`,
+    changeNickname: userId => `${API_VERSION}/users/${userId}/nickname`,
     changeProfilePicture: userId => `${API_VERSION}/users/${userId}/images`,
   },
   movie: {
@@ -58,4 +58,4 @@ const endpoints = {
   },
 };
 
-export { api, apiWithFormData, endpoints };
+export {api, apiWithFormData, endpoints};
