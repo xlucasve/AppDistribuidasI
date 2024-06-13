@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
-import { Keyboard } from 'react-native';
 import ModalAccount from './Modal/ModalAccount';
 import ProfilePicture from './ProfilePicture';
 import ProfileNickName from './ProfileNickName';
 import LoadingPage from '../../components/LoadingPage';
-import ErrorScreen from '../ErrorScreen';
-import { setError, clearError } from '../../redux/slices/errorSlice';
 import userService from '../../services/userService';
 
 export default function Profile() {
@@ -16,18 +13,15 @@ export default function Profile() {
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
     const [user, setUser] = useState(null);
     const dispatch = useDispatch();
-    const error = useSelector((state) => state.error.message);
     const userId = useSelector((state) => state.user.userData.userId);
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
     const fetchUserData = async (userId) => {
         try {
-            dispatch(clearError());
             const userData = await userService.getUserData(userId);
             setUser(userData);
         } catch (error) {
             console.log(error);
-            dispatch(setError('Error al cargar la información del usuario'));
         }
     };
 
@@ -38,9 +32,6 @@ export default function Profile() {
 
     }, [dispatch]);
 
-    if (error) {
-        return <ErrorScreen message={error} onRetry={() => fetchUserData()} />;
-    }
 
     if (!isAuthenticated || user === null || user === undefined) {
         return (
