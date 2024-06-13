@@ -27,7 +27,6 @@ export default function Profile() {
         } catch (error) {
             console.log(error);
             setLoading(false);
-            // Increment the retry count to trigger a retry after a delay
             setRetryCount((prev) => prev + 1);
         }
     }, []);
@@ -129,15 +128,15 @@ const styles = StyleSheet.create({
         marginTop: hp('10%'),
         btnSpace: {
             borderRadius: 10,
-            width: wp('40%'),
-            padding: wp('3.5%'),
+            width: wp('41%'),
+            height: hp('6.5%'),
             alignItems: 'center',
             justifyContent: 'center',
-            marginHorizontal: hp('2%'),
+            marginHorizontal: hp('1.7%'),
         },
         textBtn: {
             color: '#050505',
-            fontSize: hp('2.3%'),
+            fontSize: hp('2.2%'),
             fontWeight: 'medium',
         },
     },
