@@ -1,19 +1,64 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import Pencil from '../../assets/images/editPencil_btn.svg';
 import store from '../../redux/store';
 import userService from '../../services/userService';
-import ModalPicture from './Modal/ModalPicture'; 
+import ModalPicture from './Modal/ModalPicture';
 
-const ProfilePicture = ({ picture_url }) => {
-  const [profileImage, setProfileImage] = React.useState({ uri: picture_url });
+import {PermissionsAndroid} from 'react-native';
+
+const ProfilePicture = ({picture_url}) => {
+  const [profileImage, setProfileImage] = React.useState({uri: picture_url});
   const [oldProfileImage, setOldProfileImage] = React.useState(null);
-  const [hasProfileImageChanged, setHasProfileImageChanged] = React.useState(false);
+  const [hasProfileImageChanged, setHasProfileImageChanged] =
+    React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
   const userId = store.getState().user.userData.userId;
+
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Otorgar permisos de camara para MoviePlay',
+          message:
+            'MoviePlay necesita acceso a tu camara' + 'para tomar fotos.',
+          buttonNeutral: 'Preguntar después',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'OK',
+        },
+      );
+      return granted;
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const requestGalleryPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+        {
+          title: 'Otorgar permisos de galería para MoviePlay',
+          message:
+            'MoviePlay necesita acceso a tu camara' +
+            'para acceder a la galería.',
+          buttonNeutral: 'Preguntar después',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'OK',
+        },
+      );
+      return granted;
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const handleProfileImageEdit = () => {
     setModalVisible(true);
@@ -31,16 +76,22 @@ const ProfilePicture = ({ picture_url }) => {
     }
   };
 
-  const handleLaunchProfile = isGallery => {
+  const handleLaunchProfile = async isGallery => {
     const options = {
       mediaType: 'photo',
       quality: 1,
       includeBase64: false,
     };
     if (isGallery) {
-      launchImageLibrary(options, handleImageResponse);
+      const granted = await requestGalleryPermission();
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        launchImageLibrary(options, handleImageResponse);
+      }
     } else {
-      launchCamera(options, handleImageResponse);
+      const granted = await requestCameraPermission();
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        launchCamera(options, handleImageResponse);
+      }
     }
   };
 
@@ -66,14 +117,14 @@ const ProfilePicture = ({ picture_url }) => {
     <View style={styles.editPictureContainer}>
       <View style={styles.editPictureContainer.pictureContainer}>
         <Image
-          source={{ uri: profileImage.uri }}
-          style={{ width: '100%', height: '100%' }}
+          source={{uri: profileImage.uri}}
+          style={{width: '100%', height: '100%'}}
         />
       </View>
       <TouchableOpacity
         style={[
           styles.editPictureContainer.editPencil,
-          hasProfileImageChanged && { backgroundColor: '#3B5780' },
+          hasProfileImageChanged && {backgroundColor: '#3B5780'},
         ]}
         onPress={
           !hasProfileImageChanged ? handleProfileImageEdit : saveProfileImage
