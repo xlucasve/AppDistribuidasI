@@ -1,6 +1,7 @@
 import { API_BASE_URL_DEV, API_BASE_URL_PROD, API_BASE_URL_LOCAL } from '@env';
 import axios from 'axios';
-import { setupInterceptors } from './tokenInterceptors';
+import { setupTokenInterceptors } from './tokenInterceptors';
+import { setupErrorsInterceptors } from './ErrorInterceptors';
 
 const API_BASE_URL = 'https://movieplay-api.onrender.com/';
 // const API_BASE_URL = API_BASE_URL_LOCAL;
@@ -22,8 +23,11 @@ const apiWithFormData = axios.create({
 });
 
 // Set up interceptors
-setupInterceptors(api);
-setupInterceptors(apiWithFormData);
+setupTokenInterceptors(api);
+setupTokenInterceptors(apiWithFormData);
+
+setupErrorsInterceptors(api);
+setupErrorsInterceptors(apiWithFormData);
 
 const endpoints = {
   user: {
@@ -33,7 +37,7 @@ const endpoints = {
     getFavoriteMovies: userId => `${API_VERSION}/users/${userId}/favorites`,
     addMovieToFavorites: (userId, movieId) =>
       `${API_VERSION}/users/${userId}/movies/${movieId}`,
-    changeNickname: userId => `${API_VERSION}/users/${userId}/nickname`,
+    changeNickname: userId => `${API_VERSION}/users/${userId}/nicknam`,
     changeProfilePicture: userId => `${API_VERSION}/users/${userId}/images`,
   },
   movie: {

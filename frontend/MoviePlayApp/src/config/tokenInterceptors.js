@@ -67,9 +67,9 @@ const responseInterceptor = async (error) => {
   return Promise.reject(error);
 };
 
-const setupInterceptors = (apiInstance) => {
+const setupTokenInterceptors = (apiInstance) => {
   apiInstance.interceptors.request.use(requestInterceptor, error => Promise.reject(error));
   apiInstance.interceptors.response.use(response => response, responseInterceptor);
 };
 
-export { setupInterceptors };
+export { setupTokenInterceptors };

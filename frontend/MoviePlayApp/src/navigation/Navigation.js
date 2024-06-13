@@ -1,20 +1,19 @@
-import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useDispatch, useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View, StyleSheet, Pressable } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 import Home from '../screens/Home';
 import Profile from '../screens/Profile/Profile';
 import Search from '../screens/Search/Search';
 import Login from '../screens/Login';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeOptions, ProfileOptions} from './HeaderOptions';
-import {useDispatch, useSelector} from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Pressable} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-
+import { HomeOptions, ProfileOptions } from './HeaderOptions';
+import ErrorOverlay from '../components/ErrorOverlay'; // Asegúrate de importar el nuevo componente ErrorOverlay
+import { hideError } from '../redux/slices/errorSlice';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,12 +23,12 @@ const MainStack = () => {
       <Stack.Screen
         name="TabGroup"
         component={TabGroup}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Search"
         component={Search}
-        options={({navigation, route}) => ({
+        options={{
           headerTitle: '',
           headerTitleStyle: {
             color: '#FAFAFA',
@@ -41,7 +40,7 @@ const MainStack = () => {
             backgroundColor: '#192941',
           },
           headerTintColor: '#FAFAFA',
-        })}
+        }}
       />
     </Stack.Navigator>
   );
@@ -49,12 +48,12 @@ const MainStack = () => {
 
 const Tab = createBottomTabNavigator();
 
-const TabGroup = ({navigation}) => {
+const TabGroup = () => {
   return (
     <Tab.Navigator
       initialRouteName="Inicio"
-      screenOptions={({route}) => ({
-        tabBarIcon: ({color, focused}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
           let iconName;
           if (route.name === 'Inicio') {
             iconName = 'home';
@@ -71,8 +70,8 @@ const TabGroup = ({navigation}) => {
           backgroundColor: '#192941',
           borderTopWidth: 0,
         },
-
-      })}>
+      })}
+    >
       <Tab.Screen name="Inicio" component={Home} options={HomeOptions} />
       <Tab.Screen
         name="Favoritos"
@@ -93,19 +92,37 @@ const TabGroup = ({navigation}) => {
 const AuthStack = () => {
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
 
 const Navigation = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const error = useSelector(state => state.error.error);
+  const dispatch = useDispatch();
+
+  const handleRetry = () => {
+    if (error?.onRetry) {
+      error.onRetry();
+    }
+    dispatch(hideError());
+  };
 
   return (
-    <NavigationContainer>
-      {isAuthenticated ? <MainStack /> : <AuthStack />}
-    </NavigationContainer>
+    <View style={styles.container}>
+      <NavigationContainer>
+        {isAuthenticated ? <MainStack /> : <AuthStack />}
+      </NavigationContainer>
+      <ErrorOverlay error={error} onRetry={handleRetry} />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default Navigation;
