@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import {
   Text,
   Image,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import SearchIcon from '../../assets/images/search_btn_black.svg';
 import SearchIconWhite from '../../assets/images/search_btn.svg';
 
@@ -22,7 +22,7 @@ import {
 
 import FilterPopup from './FilterPopUp';
 
-export default function Search({ navigation }) {
+export default function Search({navigation}) {
   const [searchInput, setSearchInput] = useState('');
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -68,11 +68,10 @@ export default function Search({ navigation }) {
   });
 
   const filterGenres = (movies, selectedGenres) => {
-    const filteredMovies = { movies: [] };
+    const filteredMovies = {movies: []};
     if (selectedGenres.length === 0 || movies === undefined) {
       movies.map(movie => {
         filteredMovies.movies.push(movie);
-        console.log(filteredMovies.movies);
       });
       return filteredMovies;
     }
@@ -89,29 +88,28 @@ export default function Search({ navigation }) {
       return false;
     });
 
-    // console.log(filteredMovies.movies);
+    //
 
     return filteredMovies;
   };
 
   const handleSearch = async () => {
-
     let textInputValue = inputRef.text;
     if (textInputValue === undefined || textInputValue.trim().length === 0) {
       return;
     }
 
     if (orderByMethod != 'RATING' && orderByMethod != 'DATE') {
-      // console.log('Empty');
+      //
       orderBy = 'DATE';
     } else {
       orderBy = orderByMethod;
     }
 
-    // console.log('Order By' + orderBy);
-    // console.log('Method ' + orderByMethod);
+    //
+    //
 
-    // console.log(
+    //
     //   'Selected genres: ',
     //   selectedGenres,
     //   'Selected order: ',
@@ -142,7 +140,7 @@ export default function Search({ navigation }) {
       <View style={styles.container}>
         <FlatList
           data={movieData.movies}
-          renderItem={({ item }) => <MovieCard movie={item} />}
+          renderItem={({item}) => <MovieCard movie={item} />}
           keyExtractor={item => item.movieId}
         />
       </View>
@@ -242,7 +240,7 @@ const RenderNoSearch = () => {
   );
 };
 
-const RenderNoResults = ({ textSearched }) => {
+const RenderNoResults = ({textSearched}) => {
   return (
     <View style={styles.noResultsContainer}>
       <Text style={styles.noResultsText}>
