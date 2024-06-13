@@ -66,7 +66,9 @@ const ProfilePicture = ({picture_url}) => {
 
   const handleImageResponse = response => {
     if (response.didCancel) {
+      console.log('User cancelled');
     } else if (response.errorCode) {
+      console.log('Error: ', response.errorMessage);
     } else {
       setProfileImage(response.assets[0]);
       setOldProfileImage(profileImage);
@@ -104,6 +106,7 @@ const ProfilePicture = ({picture_url}) => {
     try {
       await userService.updateUserProfilePicture(userId, profileImage);
     } catch (error) {
+      console.log(error);
       setProfileImage(oldProfileImage);
     }
     setHasProfileImageChanged(false);

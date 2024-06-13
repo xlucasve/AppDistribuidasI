@@ -1,43 +1,50 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import Logo from '../assets/images/logo.svg';
 import GoogleLogo from '../assets/images/login_btnGoogle.svg';
-import {useDispatch} from 'react-redux';
-import {login} from '../redux/slices/authSlice';
-import {setUser} from '../redux/slices/userSlice';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/slices/authSlice';
+import { setUser } from '../redux/slices/userSlice';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import authService from '../services/authService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {GOOGLE_CLIENT_ID} from '@env';
+import { GOOGLE_CLIENT_ID } from '@env';
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
+
   const dispatch = useDispatch();
+
 
   const onGoogleButtonPress = async () => {
     try {
       GoogleSignin.configure({
-        webClientId: `${GOOGLE_CLIENT_ID}.apps.googleusercontent.com`,
+        webClientId:
+          `${GOOGLE_CLIENT_ID}.apps.googleusercontent.com`,
       });
       await GoogleSignin.hasPlayServices();
-      const {user} = await GoogleSignin.signIn();
+      const { user } = await GoogleSignin.signIn();
       const response = await authService.signIn(
         user.email,
         user.name,
-        user.photo,
+        user.photo
       );
-      const userToDispatch = {userId: response.userId, ...user};
+      const userToDispatch = { userId: response.userId, ...user }
 
       dispatch(setUser(userToDispatch));
-      dispatch(
-        login({
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
-        }),
-      );
-    } catch (error) {}
+      dispatch(login({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken
+      }));
+
+      console.log("CURRENT ID: ", userToDispatch.userId);
+
+    } catch (error) {
+      console.log(error);
+    }
+
   };
 
   return (
@@ -80,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     elevation: 10, // Añadir sombra para Android
     shadowColor: '#000', // Añadir sombra para iOS
-    shadowOffset: {width: 0, height: 2}, // Añadir sombra para iOS
+    shadowOffset: { width: 0, height: 2 }, // Añadir sombra para iOS
     shadowOpacity: 0.25, // Añadir sombra para iOS
     shadowRadius: 3.84, // Añadir sombra para iOS
   },
