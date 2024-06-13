@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   Image,
@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import movieService from '../services/moviesService';
 import {
   widthPercentageToDP as wp,
@@ -15,11 +15,11 @@ import {
 } from 'react-native-responsive-screen';
 import LoadingPage from '../components/LoadingPage';
 
-export default function Home({navigation}) {
+export default function Home({ }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [movieData, setMovieData] = React.useState({});
 
-  React.useEffect(() => {
+  useEffect(() => {
     const getData = async () => {
       let response = await movieService.getHomeData();
       setMovieData(response);
@@ -33,7 +33,7 @@ export default function Home({navigation}) {
   const CarouselItem = items => (
     <View style={styles.carouselItemContainer}>
       <Image
-        source={{uri: items.image}}
+        source={{ uri: items.image }}
         style={{
           borderRadius: 50,
           resizeMode: 'cover',
@@ -55,14 +55,14 @@ export default function Home({navigation}) {
         <View style={styles.carouselContainer}>
           <FlatList
             data={movieData.bigMovies.moviesData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <CarouselItem title={item.title} image={item.posterImageLink} />
             )}
             keyExtractor={item => item.movieId}
             horizontal
             pagingEnabled
-            ItemSeparatorComponent={() => <View style={{width: 40}} />}
-            contentContainerStyle={{paddingRight: 22, paddingLeft: 22}}
+            ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
+            contentContainerStyle={{ paddingRight: 22, paddingLeft: 22 }}
             bounces={false}
             showsHorizontalScrollIndicator={false}
           />

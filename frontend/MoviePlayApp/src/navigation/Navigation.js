@@ -12,8 +12,7 @@ import Profile from '../screens/Profile/Profile';
 import Search from '../screens/Search/Search';
 import Login from '../screens/Login';
 import { HomeOptions, ProfileOptions } from './HeaderOptions';
-import ErrorOverlay from '../components/ErrorOverlay'; // Asegúrate de importar el nuevo componente ErrorOverlay
-import { hideError } from '../redux/slices/errorSlice';
+import ErrorScreen from '../screens/ErrorScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -100,21 +99,17 @@ const AuthStack = () => {
 const Navigation = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const error = useSelector(state => state.error.error);
-  const dispatch = useDispatch();
-
-  const handleRetry = () => {
-    if (error?.onRetry) {
-      error.onRetry();
-    }
-    dispatch(hideError());
-  };
 
   return (
     <View style={styles.container}>
+      
       <NavigationContainer>
         {isAuthenticated ? <MainStack /> : <AuthStack />}
+        {error  && 
+        <ErrorScreen message={error?.message} iconName={error?.iconName} onRetry={error?.onRetry} />
+        }
       </NavigationContainer>
-      <ErrorOverlay error={error} onRetry={handleRetry} />
+      
     </View>
   );
 };

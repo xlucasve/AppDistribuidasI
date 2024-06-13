@@ -70,8 +70,10 @@ export default function ModalAccount({ modalVisible, setModalVisible, infoModal 
                     ) : (
                         <TouchableOpacity
                             style={[styles.btn, { backgroundColor: "#D51D53" }]}
-                            onPress={() => 
+                            onPress={() => {
                                 handleActionBtn()
+                                setModalVisible(!modalVisible)
+                            }
                             }
                             disabled={isLoading}
                         >

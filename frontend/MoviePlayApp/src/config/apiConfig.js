@@ -5,6 +5,7 @@ import { setupErrorsInterceptors } from './ErrorInterceptors';
 
 const API_BASE_URL = 'https://movieplay-api.onrender.com/';
 // const API_BASE_URL = API_BASE_URL_LOCAL;
+// const API_BASE_URL = API_BASE_URL_PROD;
 
 const API_VERSION = '/api/v1';
 
@@ -37,7 +38,7 @@ const endpoints = {
     getFavoriteMovies: userId => `${API_VERSION}/users/${userId}/favorites`,
     addMovieToFavorites: (userId, movieId) =>
       `${API_VERSION}/users/${userId}/movies/${movieId}`,
-    changeNickname: userId => `${API_VERSION}/users/${userId}/nicknam`,
+    changeNickname: userId => `${API_VERSION}/users/${userId}/nicknamse`,
     changeProfilePicture: userId => `${API_VERSION}/users/${userId}/images`,
   },
   movie: {

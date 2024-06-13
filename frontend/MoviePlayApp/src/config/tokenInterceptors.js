@@ -6,8 +6,6 @@ const requestInterceptor = (config) => {
   const state = store.getState();
   const token = state.auth.accessToken;
 
-//   console.log("INTERCEPTOR - Current Token:", token);
-
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -26,11 +24,6 @@ const responseInterceptor = async (error) => {
       const refreshToken = state.auth.refreshToken;
       const userId = state.user.userData.userId;
       const oldAccessToken = state.auth.accessToken;
-
-    //   console.log("Attempting to refresh token...");
-    //   console.log("userId:", userId);
-    //   console.log("oldAccessToken:", oldAccessToken);
-    //   console.log("refreshToken:", refreshToken);
 
       if (!userId || !oldAccessToken || !refreshToken) {
         throw new Error('Missing userId, oldAccessToken, or refreshToken');
