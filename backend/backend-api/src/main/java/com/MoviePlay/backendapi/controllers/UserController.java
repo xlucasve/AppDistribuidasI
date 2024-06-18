@@ -175,7 +175,7 @@ public class UserController {
     })
     @DeleteMapping("/{userId}/movies/{movieId}")
     public ResponseEntity<UserResponse> deleteMovieFromFavorites(@PathVariable Long userId, @PathVariable Long movieId) {
-        return null;
+        return userService.deleteMovieFromFavorites(userId, movieId);
     }
 
 

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -92,8 +93,6 @@ public class UserService {
         int startingPoint = Math.min(userFavoriteMovies.size(), pageNumber*ammountPerPage);
         int endingPoint = Math.min(userFavoriteMovies.size(), (pageNumber+1)*ammountPerPage);
 
-        System.out.println("Starting point " + startingPoint);
-        System.out.println("Ending point " + endingPoint);
 
         List<Movie> partitionList = userFavoriteMovies.subList(startingPoint, endingPoint);
         ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(partitionList));
@@ -117,6 +116,23 @@ public class UserService {
 
         List<Movie> userFavoriteMovies = user.getFavoriteMovies();
         userFavoriteMovies.add(movie.get());
+        user.setFavoriteMovies(userFavoriteMovies);
+
+        userRepository.save(user);
+        UserResponse response = dtoMapper.userToUserResponse(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<UserResponse> deleteMovieFromFavorites(Long userId, Long movieId) {
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("User with id: " + userId + " was not found");
+        }
+
+        User user = foundUser.get();
+
+        List<Movie> userFavoriteMovies = user.getFavoriteMovies();
+        userFavoriteMovies.removeIf(movie -> Objects.equals(movie.getMovieId(), movieId));
         user.setFavoriteMovies(userFavoriteMovies);
 
         userRepository.save(user);
