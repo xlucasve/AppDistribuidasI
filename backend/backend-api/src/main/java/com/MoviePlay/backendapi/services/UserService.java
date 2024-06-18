@@ -115,7 +115,9 @@ public class UserService {
         }
 
         List<Movie> userFavoriteMovies = user.getFavoriteMovies();
-        userFavoriteMovies.add(movie.get());
+        if (!userFavoriteMovies.contains(movie.get())){
+            userFavoriteMovies.add(movie.get());
+        }
         user.setFavoriteMovies(userFavoriteMovies);
 
         userRepository.save(user);
