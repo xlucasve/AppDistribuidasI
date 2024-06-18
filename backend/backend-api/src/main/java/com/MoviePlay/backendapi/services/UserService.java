@@ -103,6 +103,24 @@ public class UserService {
     }
 
     public ResponseEntity<UserResponse> addMovieToFavorites(Long userId, Long movieId) {
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("User with id: " + userId + " was not found");
+        }
 
+        User user = foundUser.get();
+
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        if (movie.isEmpty()) {
+            throw new EntityNotFoundException("Movie id with id: " + movieId + " does not exist");
+        }
+
+        List<Movie> userFavoriteMovies = user.getFavoriteMovies();
+        userFavoriteMovies.add(movie.get());
+        user.setFavoriteMovies(userFavoriteMovies);
+
+        userRepository.save(user);
+        UserResponse response = dtoMapper.userToUserResponse(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
