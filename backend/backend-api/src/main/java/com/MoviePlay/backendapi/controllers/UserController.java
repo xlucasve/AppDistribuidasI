@@ -199,7 +199,7 @@ public class UserController {
     })
     @GetMapping("/{userId}/favorites")
     public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId) {
-        return null;
+        return userService.getUserFavoriteMovies(userId);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.MoviePlay.backendapi.services;
 
 import com.MoviePlay.backendapi.dtos.requests.RequestUpdateNickname;
+import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
+import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.User;
 import com.MoviePlay.backendapi.repositories.UserRepository;
 import com.MoviePlay.backendapi.utils.DTOMapper;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -69,5 +72,18 @@ public class UserService {
         User storedUser = userRepository.save(user);
 
         return new ResponseEntity<>(dtoMapper.userToUserResponse(storedUser), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(Long userId) {
+        Optional<User> foundUser = userRepository.findById(userId);
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("User with id: " + userId + " was not found");
+        }
+
+        List<Movie> userFavoriteMovies = foundUser.get().getFavoriteMovies();
+        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(userFavoriteMovies));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 }
