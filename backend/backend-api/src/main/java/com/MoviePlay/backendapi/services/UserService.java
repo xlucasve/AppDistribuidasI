@@ -5,6 +5,7 @@ import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.UserResponse;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.User;
+import com.MoviePlay.backendapi.repositories.MovieRepository;
 import com.MoviePlay.backendapi.repositories.UserRepository;
 import com.MoviePlay.backendapi.utils.DTOMapper;
 import jakarta.persistence.EntityExistsException;
@@ -22,11 +23,13 @@ public class UserService {
 
     private final ImageService imageService;
     private final UserRepository userRepository;
+    private final MovieRepository movieRepository;
     private final DTOMapper dtoMapper;
 
-    public UserService(ImageService imageService, UserRepository userRepository, DTOMapper dtoMapper) {
+    public UserService(ImageService imageService, UserRepository userRepository, MovieRepository movieRepository, DTOMapper dtoMapper) {
         this.imageService = imageService;
         this.userRepository = userRepository;
+        this.movieRepository = movieRepository;
         this.dtoMapper = dtoMapper;
     }
 
@@ -74,16 +77,32 @@ public class UserService {
         return new ResponseEntity<>(dtoMapper.userToUserResponse(storedUser), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(Long userId) {
+    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(Long userId, Integer pageNumber, Integer ammountPerPage) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isEmpty()){
             throw new EntityNotFoundException("User with id: " + userId + " was not found");
         }
 
+        if (pageNumber > 0) {
+            pageNumber--;
+        }
+
         List<Movie> userFavoriteMovies = foundUser.get().getFavoriteMovies();
-        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(userFavoriteMovies));
+
+        int startingPoint = Math.min(userFavoriteMovies.size(), pageNumber*ammountPerPage);
+        int endingPoint = Math.min(userFavoriteMovies.size(), (pageNumber+1)*ammountPerPage);
+
+        System.out.println("Starting point " + startingPoint);
+        System.out.println("Ending point " + endingPoint);
+
+        List<Movie> partitionList = userFavoriteMovies.subList(startingPoint, endingPoint);
+        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(partitionList));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<UserResponse> addMovieToFavorites(Long userId, Long movieId) {
 
     }
 }

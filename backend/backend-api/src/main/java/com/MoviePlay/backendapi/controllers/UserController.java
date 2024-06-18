@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -140,7 +142,7 @@ public class UserController {
     })
     @PostMapping("/{userId}/movies/{movieId}")
     public ResponseEntity<UserResponse> addMovieToFavorites(@PathVariable Long userId, @PathVariable Long movieId) {
-        return null;
+        return userService.addMovieToFavorites(userId, movieId);
     }
 
 
@@ -198,8 +200,8 @@ public class UserController {
             )
     })
     @GetMapping("/{userId}/favorites")
-    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId) {
-        return userService.getUserFavoriteMovies(userId);
+    public ResponseEntity<ResponseInfiniteScroll> getUserFavoriteMovies(@PathVariable Long userId, @RequestParam Integer pageNumber, @RequestParam Integer ammountPerPage) {
+        return userService.getUserFavoriteMovies(userId, pageNumber, ammountPerPage);
     }
 
 }
