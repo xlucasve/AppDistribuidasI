@@ -147,6 +147,6 @@ public class MovieController {
     })
     @PostMapping("/{movieId}/rate/{userId}")
     public ResponseEntity<Movie> addRating(@PathVariable Long movieId, @PathVariable Long userId, @RequestBody RequestAddRating rating) {
-        return null;
+        return movieService.addRating(movieId, userId, rating);
     }
 }
