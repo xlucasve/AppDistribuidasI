@@ -88,6 +88,10 @@ public class UserService {
             pageNumber--;
         }
 
+        if (pageNumber < 0){
+            pageNumber = 0;
+        }
+
         List<Movie> userFavoriteMovies = foundUser.get().getFavoriteMovies();
 
         int startingPoint = Math.min(userFavoriteMovies.size(), pageNumber*ammountPerPage);
