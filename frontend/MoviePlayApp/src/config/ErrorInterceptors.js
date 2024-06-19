@@ -1,16 +1,16 @@
 import NetInfo from '@react-native-community/netinfo';
 import store from '../redux/store';
-import { showError } from '../redux/slices/errorSlice';
+import {showError} from '../redux/slices/errorSlice';
 
-const internetRequestInterceptor = async (config) => {
+const internetRequestInterceptor = async config => {
   const state = await NetInfo.fetch();
   if (!state.isConnected) {
-    throw { message: 'No hay conexión a internet' };
+    throw {message: 'No hay conexión a internet'};
   }
   return config;
 };
 
-const internetResponseErrorInterceptor = (error) => {
+const internetResponseErrorInterceptor = error => {
   if (!error.response) {
     store.dispatch(showError({
       message: 'No hay conexión a internet',
@@ -34,10 +34,18 @@ const serverErrorInterceptor = (error) => {
   return Promise.reject(error);
 };
 
-const setupErrorsInterceptors = (apiInstance) => {
-  apiInstance.interceptors.request.use(internetRequestInterceptor, error => Promise.reject(error));
-  apiInstance.interceptors.response.use(response => response, internetResponseErrorInterceptor);
-  apiInstance.interceptors.response.use(response => response, serverErrorInterceptor);
+const setupErrorsInterceptors = apiInstance => {
+  apiInstance.interceptors.request.use(internetRequestInterceptor, error =>
+    Promise.reject(error),
+  );
+  apiInstance.interceptors.response.use(
+    response => response,
+    internetResponseErrorInterceptor,
+  );
+  apiInstance.interceptors.response.use(
+    response => response,
+    serverErrorInterceptor,
+  );
 };
 
 export { setupErrorsInterceptors };

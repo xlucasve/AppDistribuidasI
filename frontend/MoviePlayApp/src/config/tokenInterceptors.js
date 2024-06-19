@@ -1,8 +1,8 @@
 import store from '../redux/store';
 import authService from '../services/authService';
-import { api, apiWithFormData } from './apiConfig';
+import {api, apiWithFormData} from './apiConfig';
 
-const requestInterceptor = (config) => {
+const requestInterceptor = config => {
   const state = store.getState();
   const token = state.auth.accessToken;
 
@@ -13,7 +13,7 @@ const requestInterceptor = (config) => {
   return config;
 };
 
-const responseInterceptor = async (error) => {
+const responseInterceptor = async error => {
   const originalRequest = error.config;
 
   if (error.response.status === 403 && !originalRequest._retry) {
@@ -60,9 +60,14 @@ const responseInterceptor = async (error) => {
   return Promise.reject(error);
 };
 
-const setupTokenInterceptors = (apiInstance) => {
-  apiInstance.interceptors.request.use(requestInterceptor, error => Promise.reject(error));
-  apiInstance.interceptors.response.use(response => response, responseInterceptor);
+const setupTokenInterceptors = apiInstance => {
+  apiInstance.interceptors.request.use(requestInterceptor, error =>
+    Promise.reject(error),
+  );
+  apiInstance.interceptors.response.use(
+    response => response,
+    responseInterceptor,
+  );
 };
 
-export { setupTokenInterceptors };
+export {setupTokenInterceptors};

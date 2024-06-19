@@ -1,12 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import Logo from '../assets/images/logo.svg';
-import GoogleLogo from '../assets/images/login_btnGoogle.svg';
+import Logo from '../../assets/images/logo.svg';
+import GoogleLogo from '../../assets/images/login_btnGoogle.svg';
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/slices/authSlice';
-import { setUser } from '../redux/slices/userSlice';
+import { login } from '../../redux/slices/authSlice';
+import { setUser } from '../../redux/slices/userSlice';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import authService from '../services/authService';
+import authService from '../../services/authService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -85,11 +85,11 @@ const styles = StyleSheet.create({
     height: hp('75%'),
     width: wp('86%'),
     borderRadius: 40,
-    elevation: 10, // Añadir sombra para Android
-    shadowColor: '#000', // Añadir sombra para iOS
-    shadowOffset: { width: 0, height: 2 }, // Añadir sombra para iOS
-    shadowOpacity: 0.25, // Añadir sombra para iOS
-    shadowRadius: 3.84, // Añadir sombra para iOS
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   logoContainer: {
     width: wp('50%'),

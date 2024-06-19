@@ -8,12 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import { View } from 'react-native';
-import movieService from '../services/moviesService';
+import movieService from '../../services/moviesService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import LoadingPage from '../components/LoadingPage';
+import LoadingPage from '../../components/LoadingPage';
 
 export default function Home({ }) {
   const [isLoading, setIsLoading] = React.useState(true);

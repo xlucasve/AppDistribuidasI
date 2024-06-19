@@ -7,10 +7,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-import Home from '../screens/Home';
+import Home from '../screens/Home/Home';
 import Profile from '../screens/Profile/Profile';
 import Search from '../screens/Search/Search';
-import Login from '../screens/Login';
+import Login from '../screens/Login/Login';
 import { HomeOptions, ProfileOptions } from './HeaderOptions';
 import ErrorScreen from '../screens/ErrorScreen';
 

@@ -72,7 +72,7 @@ export default function Search({ navigation }) {
     if (selectedGenres.length === 0 || movies === undefined) {
       movies.map(movie => {
         filteredMovies.movies.push(movie);
-        console.log(filteredMovies.movies);
+
       });
       return filteredMovies;
     }
@@ -89,7 +89,7 @@ export default function Search({ navigation }) {
       return false;
     });
 
-    // console.log(filteredMovies.movies);
+
 
     return filteredMovies;
   };
@@ -102,23 +102,12 @@ export default function Search({ navigation }) {
     }
 
     if (orderByMethod != 'RATING' && orderByMethod != 'DATE') {
-      // console.log('Empty');
+
       orderBy = 'DATE';
     } else {
       orderBy = orderByMethod;
     }
 
-    // console.log('Order By' + orderBy);
-    // console.log('Method ' + orderByMethod);
-
-    // console.log(
-    //   'Selected genres: ',
-    //   selectedGenres,
-    //   'Selected order: ',
-    //   selectedOrderASC,
-    //   'Order by: ',
-    //   orderBy,
-    // );
 
     setIsLoading(true);
     const response = await movieService.searchMovies(
