@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
@@ -14,12 +14,12 @@ import ModalPicture from './Modal/ModalPicture';
 import {PermissionsAndroid} from 'react-native';
 
 const ProfilePicture = ({picture_url}) => {
-  const [profileImage, setProfileImage] = React.useState({uri: picture_url});
-  const [oldProfileImage, setOldProfileImage] = React.useState(null);
-  const [hasProfileImageChanged, setHasProfileImageChanged] =
-    React.useState(false);
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const userId = store.getState().user.userData.userId;
+  const [profileImage, setProfileImage] = useState({uri: picture_url});
+  const [oldProfileImage, setOldProfileImage] = useState(null);
+  const [hasProfileImageChanged, setHasProfileImageChanged] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const userId = store.getState().user.userId;
 
   const requestCameraPermission = async () => {
     try {

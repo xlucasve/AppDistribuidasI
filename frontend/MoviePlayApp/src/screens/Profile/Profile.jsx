@@ -15,8 +15,9 @@ export default function Profile() {
     const [loading, setLoading] = useState(true);
     const [retryCount, setRetryCount] = useState(0);
     const dispatch = useDispatch();
-    const userId = useSelector((state) => state.user.userData.userId);
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const userId = useSelector(state => state.user.userId);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
 
     const fetchUserData = useCallback(async (userId) => {
         setLoading(true);

@@ -4,9 +4,10 @@ import Logo from '../../assets/images/logo.svg';
 import GoogleLogo from '../../assets/images/login_btnGoogle.svg';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/slices/authSlice';
-import { setUser } from '../../redux/slices/userSlice';
+import { setUserId } from '../../redux/slices/userSlice';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import authService from '../../services/authService';
+import { saveTokens, saveUserId } from '../../services/storageService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -26,20 +27,19 @@ export default function Login({ navigation }) {
       });
       await GoogleSignin.hasPlayServices();
       const { user } = await GoogleSignin.signIn();
-      const response = await authService.signIn(
-        user.email,
-        user.name,
-        user.photo
-      );
-      const userToDispatch = { userId: response.userId, ...user }
+      const response = await authService.signIn(user.email, user.name, user.photo);
 
-      dispatch(setUser(userToDispatch));
+      dispatch(setUserId(response.userId));
+
       dispatch(login({
         accessToken: response.accessToken,
         refreshToken: response.refreshToken
       }));
 
-      console.log("CURRENT ID: ", userToDispatch.userId);
+      await saveTokens(response.accessToken, response.refreshToken);
+      await saveUserId(response.userId);
+
+      console.log("CURRENT ID: ", response.userId);
 
     } catch (error) {
       console.log(error);

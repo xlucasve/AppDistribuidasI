@@ -16,7 +16,7 @@ const ProfileNickName = ({ initialNickName }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState({ title: '', message: '' });
 
-    const userId = store.getState().user.userData.userId;
+    const userId = store.getState().user.userId;
     const nicknameInputRef = useRef(null);
 
     const validateNickname = async () => {

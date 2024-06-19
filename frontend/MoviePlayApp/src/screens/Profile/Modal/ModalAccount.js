@@ -18,6 +18,7 @@ import {logout} from '../../../redux/slices/authSlice';
 import authService from '../../../services/authService';
 import store from '../../../redux/store';
 import {clearUser} from '../../../redux/slices/userSlice';
+import {removeTokens} from '../../../services/storageService';
 export default function ModalAccount({
   modalVisible,
   setModalVisible,
@@ -25,7 +26,7 @@ export default function ModalAccount({
 }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useDispatch();
-  const userId = store.getState().user.userData.userId;
+  const userId = store.getState().user.userId;
 
   useEffect(() => {
     if (modalVisible && infoModal === 'DeleteAccount') {
@@ -56,6 +57,8 @@ export default function ModalAccount({
       }
 
       dispatch(logout(userId));
+      // dispatch(clearUser());
+      await removeTokens()
       setModalVisible(false);
     } catch (error) {}
   };
