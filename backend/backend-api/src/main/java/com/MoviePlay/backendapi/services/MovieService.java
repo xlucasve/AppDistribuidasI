@@ -91,7 +91,6 @@ public class MovieService {
     }
 
     public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy, SortSearchBy sortBy) {
-
         Set<Movie> moviesFoundFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
         List<Movie> moviesFoundByTitle = movieRepository.findAllByTitleContainsIgnoreCase(input, pageable).getContent();
 
@@ -101,29 +100,30 @@ public class MovieService {
 
         List<Movie> moviesList = new ArrayList<>(moviesSet);
 
-
-        switch (sortBy){
+        switch (sortBy) {
             case ASC -> {
                 switch (orderBy) {
-                    case RATING -> moviesList.sort((Comparator.comparing(Movie::getRating)));
-                    case DATE -> moviesList.sort((Comparator.comparing(Movie::getReleaseDate)));
-                    default -> {
-                    }
+                    case RATING -> moviesList.sort(Comparator.comparing(Movie::getRating));
+                    case DATE -> moviesList.sort(Comparator.comparing(Movie::getReleaseDate));
                 }
             }
             case DESC -> {
                 switch (orderBy) {
-                    case RATING -> moviesList.sort((Comparator.comparing(Movie::getRating)).reversed());
-                    case DATE -> moviesList.sort((Comparator.comparing(Movie::getReleaseDate)).reversed());
-                    default -> {
-                    }
+                    case RATING -> moviesList.sort(Comparator.comparing(Movie::getRating).reversed());
+                    case DATE -> moviesList.sort(Comparator.comparing(Movie::getReleaseDate).reversed());
                 }
             }
         }
 
-        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(moviesList));
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), moviesList.size());
+        List<Movie> paginatedMoviesList = moviesList.subList(start, end);
+
+        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(paginatedMoviesList));
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     public ResponseEntity<ResponseMovieInScroll> getMovieById(Long movieId) {
         Optional<Movie> movie = movieRepository.findById(movieId);
