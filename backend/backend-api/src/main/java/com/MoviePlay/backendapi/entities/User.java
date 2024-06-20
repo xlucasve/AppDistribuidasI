@@ -4,9 +4,7 @@ import com.MoviePlay.backendapi.security.token.Token;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -30,6 +28,9 @@ public class User{
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "movieId")
     )
     private List<Movie> favoriteMovies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<MovieRating> ratedMovies = new ArrayList<>();
 
 
 
@@ -55,7 +56,7 @@ public class User{
     public User() {
     }
 
-    public User(Long userId, String email, String realName, String nickname, String profilePictureLink, Boolean active, List<Movie> favoriteMovies) {
+    public User(Long userId, String email, String realName, String nickname, String profilePictureLink, Boolean active, List<Movie> favoriteMovies, List<MovieRating> ratedMovies) {
         this.userId = userId;
         this.email = email;
         this.realName = realName;
@@ -63,6 +64,7 @@ public class User{
         this.profilePictureLink = profilePictureLink;
         this.active = active;
         this.favoriteMovies = favoriteMovies;
+        this.ratedMovies = ratedMovies;
     }
 
     public Long getUserId() {
@@ -122,4 +124,11 @@ public class User{
     }
 
 
+    public List<MovieRating> getRatedMovies() {
+        return ratedMovies;
+    }
+
+    public void setRatedMovies(List<MovieRating> ratedMovies) {
+        this.ratedMovies = ratedMovies;
+    }
 }
