@@ -4,6 +4,8 @@ Aplicación mobile para buscar tus películas favoritas. Desarrollada en React N
 
 ## Frontend
 
+- **Repositorio Backend**: [movieplay-frontend](https://github.com/ignacind/movieplay-frontend)
+
 ![ReactNative](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
@@ -24,8 +26,6 @@ npm run android
 ```
 
 ## Backend
-
-- **Repositorio Backend**: [movieplay-backend](https://github.com/xlucasve/AppDistribuidasI)
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
@@ -56,9 +56,9 @@ Para ver la documentación de la API, puede utilizar el [Swagger](https://moviep
 
 ## Nuestro Equipo
 
-| Integrante             | :octocat:         | Redes            |
-| ---------------------- | ---------------------------------------- | ----------------------------------------------------------- |
-| Ignacio Indurain Moneo | <img src="https://i.imgur.com/lSGOyvY.jpeg" alt="Image" width="56vw">| [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ignacio-indurain-moneo/)[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Nacho-93)               |
+| Integrante             | :octocat:                                                                                                                                                                                                        | Redes                                                                                                                                                                                                                                                                                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ignacio Indurain Moneo | <img src="https://i.imgur.com/lSGOyvY.jpeg" alt="Image" width="56vw">                                                                                                                                            | [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ignacio-indurain-moneo/)[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Nacho-93)               |
 | Juan Ignacio Mendieta  | <img src="https://media.licdn.com/dms/image/D4D03AQHSnpjv8xZRzw/profile-displayphoto-shrink_800_800/0/1673963580446?e=1722470400&v=beta&t=VF0BPGFVAaYBDr7HT-M6vO0GdoTm-_t6SsqTLdPFCp8" alt="Image" width="56vw"> | [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juan-ignacio-mendieta/)[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/JuanxIG)                 |
 | Santiago Rapetti       | <img src="https://media.licdn.com/dms/image/D4D03AQFaPnxMjtrmqg/profile-displayphoto-shrink_400_400/0/1693871652713?e=1722470400&v=beta&t=veSc4n-rVlmLSOMQuvS315KIjUs2xngnFBdNFGu_T1s" alt="Image" width="56vw"> | [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/santiago-rapetti-728b5222a/)[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SantiRapetti)       |
 | Tomás Santiago Sanjiao | <img src="https://media.licdn.com/dms/image/D4D03AQE_INKAFFuZXw/profile-displayphoto-shrink_400_400/0/1678295403019?e=1722470400&v=beta&t=nFAbi5xupJRO9bwF4WmQOgMMco51ORFA13fxjL8Ykp0" alt="Image" width="56vw"> | [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tom%C3%A1s-santiago-sanjiao-ab060b231/)[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tosa149) |
