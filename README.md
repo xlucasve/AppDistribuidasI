@@ -4,7 +4,7 @@ Aplicación mobile para buscar tus películas favoritas. Desarrollada en React N
 
 ## Frontend
 
-- **Repositorio Backend**: [movieplay-frontend](https://github.com/ignacind/movieplay-frontend)
+- **Repositorio**: [movieplay-frontend](https://github.com/ignacind/movieplay-frontend)
 
 ![ReactNative](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
