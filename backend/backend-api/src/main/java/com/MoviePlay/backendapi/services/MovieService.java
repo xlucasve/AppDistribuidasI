@@ -84,7 +84,17 @@ public class MovieService {
     }
 
 
-    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(Pageable pageable) {
+    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(Integer page, Integer size) {
+
+        if (page > 0){
+            page--;
+        }
+        if (page < 0){
+            page = 0;
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
         List<ResponseMovieInScroll> movies = dtoMapper.listMovieToListMovieInScroll(movieRepository.findAllByOrderByReleaseDateDesc(pageable).getContent());
         ResponseInfiniteScroll response = new ResponseInfiniteScroll(movies);
         return new ResponseEntity<>(response, HttpStatus.OK);

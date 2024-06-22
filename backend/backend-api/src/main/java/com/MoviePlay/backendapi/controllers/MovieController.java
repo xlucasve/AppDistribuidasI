@@ -65,8 +65,8 @@ public class MovieController {
             )
     })
     @GetMapping("/new")
-    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(@ParameterObject Pageable pageable) {
-        return movieService.getJustReleased(pageable);
+    public ResponseEntity<ResponseInfiniteScroll> getJustReleased(@RequestParam Integer page, @RequestParam Integer size) {
+        return movieService.getJustReleased(page, size);
     }
 
 
