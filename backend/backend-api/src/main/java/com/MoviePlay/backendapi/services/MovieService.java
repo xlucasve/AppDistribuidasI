@@ -91,37 +91,43 @@ public class MovieService {
     }
 
     public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy, SortSearchBy sortBy) {
-        Set<Movie> moviesFoundFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
-        List<Movie> moviesFoundByTitle = movieRepository.findAllByTitleContainsIgnoreCase(input, pageable).getContent();
+
+        Set<Movie> moviesFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
+        Set<Movie> moviesFromTitles = getMoviesByTitlePaginated(input, pageable);
 
         Set<Movie> moviesSet = new HashSet<>();
-        moviesSet.addAll(moviesFoundFromActors);
-        moviesSet.addAll(moviesFoundByTitle);
+        moviesSet.addAll(moviesFromActors);
+        moviesSet.addAll(moviesFromTitles);
 
         List<Movie> moviesList = new ArrayList<>(moviesSet);
-
-        switch (sortBy) {
-            case ASC -> {
-                switch (orderBy) {
-                    case RATING -> moviesList.sort(Comparator.comparing(Movie::getRating));
-                    case DATE -> moviesList.sort(Comparator.comparing(Movie::getReleaseDate));
-                }
-            }
-            case DESC -> {
-                switch (orderBy) {
-                    case RATING -> moviesList.sort(Comparator.comparing(Movie::getRating).reversed());
-                    case DATE -> moviesList.sort(Comparator.comparing(Movie::getReleaseDate).reversed());
-                }
-            }
-        }
+        sortMovies(moviesList, orderBy, sortBy);
 
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), moviesList.size());
+        int end = Math.min(start + pageable.getPageSize(), moviesList.size());
+        if (start >= moviesList.size()) {
+            return new ResponseEntity<>(new ResponseInfiniteScroll(Collections.emptyList()), HttpStatus.OK);
+        }
+
         List<Movie> paginatedMoviesList = moviesList.subList(start, end);
-
         ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(paginatedMoviesList));
-
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private Set<Movie> getMoviesByTitlePaginated(String input, Pageable pageable) {
+        Page<Movie> moviesPage = movieRepository.findAllByTitleContainsIgnoreCase(input, pageable);
+        return new HashSet<>(moviesPage.getContent());
+    }
+
+    private void sortMovies(List<Movie> moviesList, OrderSearchBy orderBy, SortSearchBy sortBy) {
+        Comparator<Movie> comparator = switch (orderBy) {
+            case RATING -> Comparator.comparing(Movie::getRating);
+            case DATE -> Comparator.comparing(Movie::getReleaseDate);
+            default -> throw new IllegalStateException("Unexpected value: " + orderBy);
+        };
+        if (sortBy == SortSearchBy.DESC) {
+            comparator = comparator.reversed();
+        }
+        moviesList.sort(comparator);
     }
 
 

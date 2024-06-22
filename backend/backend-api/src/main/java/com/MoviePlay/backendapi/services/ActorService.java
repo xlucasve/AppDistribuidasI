@@ -4,6 +4,7 @@ package com.MoviePlay.backendapi.services;
 import com.MoviePlay.backendapi.entities.Actor;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.repositories.ActorRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,11 @@ public class ActorService {
     }
 
     public Set<Movie> getMoviesFromActorBySearchParam(String input, Pageable pageable) {
-        List<Actor> actorsFound = actorRepository.findAllByNameContainsIgnoreCase(input, pageable).getContent();
+        Page<Actor> actorsPage = actorRepository.findAllByNameContainsIgnoreCase(input, pageable);
         Set<Movie> moviesFromActors = new HashSet<>();
-        for (Actor actor : actorsFound){
+        for (Actor actor : actorsPage) {
             moviesFromActors.addAll(actor.getMoviesAppeared());
         }
-
         return moviesFromActors;
     }
 }
