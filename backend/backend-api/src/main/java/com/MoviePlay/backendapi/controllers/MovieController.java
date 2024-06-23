@@ -5,6 +5,7 @@ import com.MoviePlay.backendapi.dtos.requests.RequestCreateMovie;
 import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
+import com.MoviePlay.backendapi.dtos.responses.ResponseMoviePage;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.enums.OrderSearchBy;
 import com.MoviePlay.backendapi.entities.enums.SortSearchBy;
@@ -92,7 +93,7 @@ public class MovieController {
             )
     })
     @GetMapping("/{movieId}")
-    public ResponseEntity<ResponseMovieInScroll> getMovieById(@PathVariable Long movieId) {
+    public ResponseEntity<ResponseMoviePage> getMovieById(@PathVariable Long movieId) {
         return movieService.getMovieById(movieId);
     }
 

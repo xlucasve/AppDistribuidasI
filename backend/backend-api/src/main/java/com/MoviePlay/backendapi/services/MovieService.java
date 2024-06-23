@@ -4,6 +4,7 @@ import com.MoviePlay.backendapi.dtos.requests.RequestAddRating;
 import com.MoviePlay.backendapi.dtos.responses.ResponseHomeData;
 import com.MoviePlay.backendapi.dtos.responses.ResponseInfiniteScroll;
 import com.MoviePlay.backendapi.dtos.responses.ResponseMovieInScroll;
+import com.MoviePlay.backendapi.dtos.responses.ResponseMoviePage;
 import com.MoviePlay.backendapi.entities.Movie;
 import com.MoviePlay.backendapi.entities.MovieRating;
 import com.MoviePlay.backendapi.entities.User;
@@ -141,12 +142,12 @@ public class MovieService {
     }
 
 
-    public ResponseEntity<ResponseMovieInScroll> getMovieById(Long movieId) {
+    public ResponseEntity<ResponseMoviePage> getMovieById(Long movieId) {
         Optional<Movie> movie = movieRepository.findById(movieId);
         if (movie.isEmpty()) {
             throw new EntityNotFoundException("Movie id with id: " + movieId + " does not exist");
         }
-        ResponseMovieInScroll response = dtoMapper.movieToResponseInScroll(movie.get());
+        ResponseMoviePage response = dtoMapper.movieToResponseMoviePage(movie.get());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

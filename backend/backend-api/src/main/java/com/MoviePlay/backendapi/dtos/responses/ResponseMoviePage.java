@@ -20,6 +20,8 @@ public record ResponseMoviePage(
         Integer hourLength,
         Integer minuteLength,
         LocalDate releaseDate,
-        List<Actor> cast
+        List<Actor> cast,
+        List<Actor> directors,
+        Integer voteCount
 ) {
 }
