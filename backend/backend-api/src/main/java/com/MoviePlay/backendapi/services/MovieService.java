@@ -101,7 +101,13 @@ public class MovieService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy, SortSearchBy sortBy) {
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy, SortSearchBy sortBy, Long userId) {
+
+        Optional<User> foundUser = userRepository.findById(userId);
+        List<Movie> userFavoriteMovies = new ArrayList<>();
+        if (foundUser.isPresent()){
+            userFavoriteMovies = foundUser.get().getFavoriteMovies();
+        }
 
         Set<Movie> moviesFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
         Set<Movie> moviesFromTitles = getMoviesByTitlePaginated(input, pageable);
@@ -120,7 +126,11 @@ public class MovieService {
         }
 
         List<Movie> paginatedMoviesList = moviesList.subList(start, end);
-        ResponseInfiniteScroll response = new ResponseInfiniteScroll(dtoMapper.listMovieToListMovieInScroll(paginatedMoviesList));
+        List<ResponseMovieInScroll> responseList = new ArrayList<>();
+        for (Movie movie: paginatedMoviesList){
+            responseList.add(mapMovieToResponseInScroll(movie, userFavoriteMovies.contains(movie)));
+        }
+        ResponseInfiniteScroll response = new ResponseInfiniteScroll(responseList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -142,12 +152,21 @@ public class MovieService {
     }
 
 
-    public ResponseEntity<ResponseMoviePage> getMovieById(Long movieId) {
+    public ResponseEntity<ResponseMoviePage> getMovieById(Long movieId, Long userId) {
+        Optional<User> foundUser = userRepository.findById(userId);
+        List<Movie> userFavoriteMovies = new ArrayList<>();
+        if (foundUser.isPresent()){
+            userFavoriteMovies = foundUser.get().getFavoriteMovies();
+        }
         Optional<Movie> movie = movieRepository.findById(movieId);
         if (movie.isEmpty()) {
             throw new EntityNotFoundException("Movie id with id: " + movieId + " does not exist");
         }
-        ResponseMoviePage response = dtoMapper.movieToResponseMoviePage(movie.get());
+
+
+
+        ResponseMoviePage response = mapMovieToDTO(movie.get(), userFavoriteMovies.contains(movie.get()));
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -183,14 +202,10 @@ public class MovieService {
             movieRatingObj.setRating(rating.rating());
             MovieRating storedRating = movieRatingRepository.save(movieRatingObj);
 
-            System.out.println(storedRating.getUser().getEmail());
-            System.out.println(storedRating.getRatedMovie().getTitle());
-
             user.getRatedMovies().add(storedRating);
             userRepository.save(user);
         } else{
 
-            System.out.println("Movie Rating already found");
             MovieRating movieRatingObj = foundRating.get();
             Double movieRating = movie.getRating();
             Integer movieRateCount = movie.getVoteCount();
@@ -204,5 +219,32 @@ public class MovieService {
 
 
         return new ResponseEntity<>(movie, HttpStatus.OK);
+    }
+
+    private ResponseMoviePage mapMovieToDTO(Movie movie, Boolean isFavorite){
+        return new ResponseMoviePage(movie.getMovieId(),
+                movie.getTitle(),
+                movie.getSynopsis(),
+                movie.getGenres(),
+                movie.getTrailerLink(),
+                movie.getPosterImageLink(),
+                movie.getRating(),
+                movie.getGalleryImagesLink(),
+                movie.getHourLength(),
+                movie.getMinuteLength(),
+                movie.getReleaseDate(),
+                movie.getActors(),
+                movie.getDirectors(),
+                movie.getVoteCount(),
+                isFavorite);
+    }
+
+    private ResponseMovieInScroll mapMovieToResponseInScroll(Movie movie, Boolean isFavorite){
+        return new ResponseMovieInScroll(movie.getMovieId(),
+                movie.getTitle(),
+                movie.getPosterImageLink(),
+                movie.getRating(),
+                movie.getGenres(),
+                isFavorite);
     }
 }

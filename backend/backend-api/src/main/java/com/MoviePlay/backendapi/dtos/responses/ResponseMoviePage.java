@@ -10,7 +10,6 @@ import java.util.List;
 public record ResponseMoviePage(
         Long movieId,
         String title,
-        String subtitle,
         String synopsis,
         List<Genre> genres,
         String trailerLink,
@@ -22,6 +21,7 @@ public record ResponseMoviePage(
         LocalDate releaseDate,
         List<Actor> actors,
         List<Actor> directors,
-        Integer voteCount
+        Integer voteCount,
+        Boolean isFavorite
 ) {
 }

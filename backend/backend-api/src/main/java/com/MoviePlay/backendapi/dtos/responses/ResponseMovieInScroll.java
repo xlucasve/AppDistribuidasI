@@ -10,6 +10,7 @@ public record ResponseMovieInScroll(
         String title,
         String posterImageLink,
         Double rating,
-        List<Genre> genres
+        List<Genre> genres,
+        Boolean isFavorite
 ) {
 }

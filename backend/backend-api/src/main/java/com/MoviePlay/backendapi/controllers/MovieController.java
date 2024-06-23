@@ -93,8 +93,8 @@ public class MovieController {
             )
     })
     @GetMapping("/{movieId}")
-    public ResponseEntity<ResponseMoviePage> getMovieById(@PathVariable Long movieId) {
-        return movieService.getMovieById(movieId);
+    public ResponseEntity<ResponseMoviePage> getMovieById(@PathVariable Long movieId, @RequestParam Long userId) {
+        return movieService.getMovieById(movieId, userId);
     }
 
 
@@ -113,8 +113,8 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy, @RequestParam SortSearchBy sort) {
-        return movieService.getMoviesBySearchParam(input, pageable, orderBy, sort);
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy, @RequestParam SortSearchBy sort, @RequestParam Long userId) {
+        return movieService.getMoviesBySearchParam(input, pageable, orderBy, sort, userId);
     }
 
     @Operation(summary = "Rate Movie", description = "Adds a new rating to the movie.")
