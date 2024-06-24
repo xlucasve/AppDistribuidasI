@@ -146,7 +146,7 @@ public class UserController {
     }
 
 
-    /*@Operation(summary = "Remove movie from favorites", description = "Remove a movie from a user favorites list")
+    @Operation(summary = "Remove movie from favorites", description = "Remove a movie from a user favorites list")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully removed movie from user favorites"),
             @ApiResponse(responseCode = "401", description = "Unauthorized request/Invalid token"),
@@ -176,8 +176,8 @@ public class UserController {
     @DeleteMapping("/{userId}/movies/{movieId}")
     public ResponseEntity<UserResponse> deleteMovieFromFavorites(@PathVariable Long userId, @PathVariable Long movieId) {
         return userService.deleteMovieFromFavorites(userId, movieId);
-    }*/
-
+    }
+    
 
     @Operation(summary = "Get favorite movies from user", description = "Retrieve the list of favorite movies from the user")
     @ApiResponses({

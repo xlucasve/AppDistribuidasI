@@ -131,7 +131,7 @@ public class UserService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*public ResponseEntity<UserResponse> deleteMovieFromFavorites(Long userId, Long movieId) {
+    public ResponseEntity<UserResponse> deleteMovieFromFavorites(Long userId, Long movieId) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isEmpty()) {
             throw new EntityNotFoundException("User with id: " + userId + " was not found");
@@ -146,5 +146,5 @@ public class UserService {
         userRepository.save(user);
         UserResponse response = dtoMapper.userToUserResponse(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }*/
+    }
 }
