@@ -22,6 +22,6 @@ public record ResponseMoviePage(
         List<Actor> actors,
         List<Actor> directors,
         Integer voteCount,
-        Boolean isFavorite
-) {
+        Boolean isFavorite,
+        Double userRating) {
 }

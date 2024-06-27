@@ -12,4 +12,5 @@ public interface MovieRatingRepository extends JpaRepository<MovieRating, Long> 
 
     @Query("SELECT mr FROM MovieRating mr where mr.user=?1 and mr.ratedMovie=?2")
     Optional<MovieRating> findExistingRating(User user, Movie movie);
+
 }

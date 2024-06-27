@@ -154,6 +154,11 @@ public class MovieService {
 
     public ResponseEntity<ResponseMoviePage> getMovieById(Long movieId, Long userId) {
         Optional<User> foundUser = userRepository.findById(userId);
+
+        if (foundUser.isEmpty()){
+            throw new EntityNotFoundException("User with id: " + userId + " was not found");
+        }
+
         List<Movie> userFavoriteMovies = new ArrayList<>();
         if (foundUser.isPresent()){
             userFavoriteMovies = foundUser.get().getFavoriteMovies();
@@ -163,9 +168,12 @@ public class MovieService {
             throw new EntityNotFoundException("Movie id with id: " + movieId + " does not exist");
         }
 
+        Optional<MovieRating> foundRating = movieRatingRepository.findExistingRating(foundUser.get(), movie.get());
 
-
-        ResponseMoviePage response = mapMovieToDTO(movie.get(), userFavoriteMovies.contains(movie.get()));
+        ResponseMoviePage response = mapMovieToDTO(
+                movie.get(),
+                userFavoriteMovies.contains(movie.get()),
+                foundRating.map(movieRating -> movieRating.getRating().doubleValue()).orElse(0.0));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -221,7 +229,7 @@ public class MovieService {
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
-    private ResponseMoviePage mapMovieToDTO(Movie movie, Boolean isFavorite){
+    private ResponseMoviePage mapMovieToDTO(Movie movie, Boolean isFavorite, Double userRating){
         return new ResponseMoviePage(movie.getMovieId(),
                 movie.getTitle(),
                 movie.getSynopsis(),
@@ -236,7 +244,8 @@ public class MovieService {
                 movie.getActors(),
                 movie.getDirectors(),
                 movie.getVoteCount(),
-                isFavorite);
+                isFavorite,
+                userRating);
     }
 
     private ResponseMovieInScroll mapMovieToResponseInScroll(Movie movie, Boolean isFavorite){

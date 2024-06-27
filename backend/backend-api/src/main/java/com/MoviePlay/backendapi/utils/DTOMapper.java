@@ -16,6 +16,6 @@ public interface DTOMapper{
     List<ResponseMovieInScroll> listMovieToListMovieInScroll(List<Movie> movieList);
     ResponseMovieInScroll movieToResponseInScroll(Movie movie);
 
-    ResponseMoviePage movieToResponseMoviePage(Movie movie, @Context Boolean isFavorite);
+    ResponseMoviePage movieToResponseMoviePage(Movie movie, @Context Boolean isFavorite, @Context Double userRating);
     UserResponse userToUserResponse(User user);
 }
