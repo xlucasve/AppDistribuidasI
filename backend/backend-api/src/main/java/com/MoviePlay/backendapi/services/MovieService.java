@@ -78,7 +78,7 @@ public class MovieService {
         }
 
         //Quick patch to ease work on frontend
-        ResponseHomeData responseHomeData = new ResponseHomeData(bigMovies, genreScrolls.get(0),genreScrolls.get(1),genreScrolls.get(1));
+        ResponseHomeData responseHomeData = new ResponseHomeData(bigMovies, genreScrolls.get(0),genreScrolls.get(1),genreScrolls.get(2));
 
 
         return new ResponseEntity<>(responseHomeData, HttpStatus.OK);
