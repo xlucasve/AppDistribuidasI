@@ -29,7 +29,7 @@ public class PopulationService {
     public String populateDB(List<Movie> data) {
 
         for (Movie movie : data) {
-            if (movieRepository.findByTitle(movie.getTitle()).isEmpty()) {
+            if (movieRepository.findByTitle(movie.getTitle()).isEmpty() && movie.getVoteCount() > 100) {
                 movie = avoidMovieRepeatedData(movie);
                 Movie savedMovie = movieRepository.save(movie);
                 addActorMovieRelationship(savedMovie, savedMovie.getActors());
