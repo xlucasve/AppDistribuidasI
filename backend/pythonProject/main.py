@@ -46,7 +46,7 @@ load_dotenv()
 
 #Datos configurables
 moviesPerFile = 25
-fileAmmount = 1
+fileAmmount = 2
 
 #Inicializacion de variables
 movieCount = 0

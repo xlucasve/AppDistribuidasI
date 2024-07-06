@@ -116,10 +116,12 @@ def cleanData(data, keys_to_remove, keys_backdrops, file_count_response):
         favorites = []
         movie["favorites"] = favorites
 
+    trailerKey = "trailerLink"
     newData = []
     for movie in data:
-        if movie["posterImageLink"] is not "None":
-            newData.append(movie)
+        if movie["posterImageLink"] != "None":
+            if trailerKey in movie.keys():
+                newData.append(movie)
 
     print(len(newData))
     print(len(data))
