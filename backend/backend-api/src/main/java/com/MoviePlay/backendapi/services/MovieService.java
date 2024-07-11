@@ -114,7 +114,7 @@ public class MovieService {
             userFavoriteMovies = foundUser.get().getFavoriteMovies();
         }
 
-        Set<Movie> moviesFromActors = actorService.getMoviesFromActorBySearchParam(input, pageable);
+        Set<Movie> moviesFromActors = actorService.getMoviesFromActorBySearchParam(input);
         Set<Movie> moviesFromTitles = getMoviesByTitlePaginated(input, pageable);
 
         Set<Movie> moviesSet = new HashSet<>();
@@ -126,6 +126,7 @@ public class MovieService {
 
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), moviesList.size());
+
         if (start >= moviesList.size()) {
             return new ResponseEntity<>(new ResponseInfiniteScroll(Collections.emptyList()), HttpStatus.OK);
         }
