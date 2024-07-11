@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,22 +48,16 @@ public class MovieService {
 
 
     public ResponseEntity<ResponseHomeData> getHomeData() {
-        Pageable bigMoviesPageable = PageRequest.of(0, 9);
-        Page<Movie> mostRatedMoviesPage = movieRepository.findAllByRatingGreaterThanEqual(bigMoviesPageable, 7.5);
-        List<ResponseMovieInScroll> mostRatedMovies = dtoMapper.listMovieToListMovieInScroll(mostRatedMoviesPage.getContent());
 
-        Collections.shuffle(mostRatedMovies);
+        int localHour = LocalTime.now().getHour();
 
-        int AMOUNT_MOVIES_BIG_SCROLL = 3;
-
-        List<ResponseMovieInScroll> randomMoviesForBigScroll = mostRatedMovies
-                .stream()
-                .limit(AMOUNT_MOVIES_BIG_SCROLL)
-                .toList();
+        Pageable bigMoviesPageable = PageRequest.of(localHour, 3);
+        Page<Movie> mostRatedMoviesPage = movieRepository.findAllByOrderByRatingDesc(bigMoviesPageable);
+        List<ResponseMovieInScroll> randomMoviesForBigScroll = dtoMapper.listMovieToListMovieInScroll(mostRatedMoviesPage.getContent());
 
         MovieScroll bigMovies = new MovieScroll();
         bigMovies.setMoviesData(randomMoviesForBigScroll);
-        bigMovies.setCount(AMOUNT_MOVIES_BIG_SCROLL);
+        bigMovies.setCount(3);
         bigMovies.setGenreName("Big Movie Carousel");
 
 
@@ -70,11 +65,10 @@ public class MovieService {
         Set<Long> excludedIds = new HashSet<>();
         List<String> genresForSidescrolls = new ArrayList<>(List.of("Crime", "Drama", "Action"));
 
-        int AMOUNT_MOVIES_SIDESSCROLLS = 20;
+        int AMOUNT_MOVIES_SIDESSCROLLS = 15;
+        Pageable pageable = PageRequest.of(localHour / 6, AMOUNT_MOVIES_SIDESSCROLLS);
 
         for (String genre: genresForSidescrolls){
-            Pageable pageable = PageRequest.of(0, AMOUNT_MOVIES_SIDESSCROLLS);
-
             Page<Movie> moviesByGenre = movieRepository.findAllByGenreExcludingIds(genre, excludedIds, pageable);
             moviesByGenre.forEach(movie -> excludedIds.add(movie.getMovieId()));
             List<ResponseMovieInScroll> movies = dtoMapper.listMovieToListMovieInScroll(moviesByGenre.getContent());
