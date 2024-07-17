@@ -116,8 +116,11 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam Long userId, @RequestParam(required = false) Set<Long> genreId) {
-        return movieService.getMoviesBySearchParam(input, pageable, userId, genreId);
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input,
+                                                                         @ParameterObject Pageable pageable,
+                                                                         @RequestParam Long userId,
+                                                                         @RequestParam(required = false) Set<String> genreName) {
+        return movieService.getMoviesBySearchParam(input, pageable, userId, genreName);
     }
 
     @Operation(summary = "Rate Movie", description = "Adds a new rating to the movie.")

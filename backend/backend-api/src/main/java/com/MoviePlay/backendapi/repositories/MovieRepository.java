@@ -26,6 +26,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             JOIN m.genres g \
             WHERE (LOWER(m.title) LIKE LOWER(CONCAT('%', :input, '%')) \
             OR LOWER(a.name) LIKE LOWER(CONCAT('%', :input, '%'))) \
-            AND (:genresIds IS NULL OR g.genreId IN :genresIds)""")
-    Page<Movie> findAllByTitleOrActorNameContainsIgnoreCase(String input, Pageable pageable, Set<Long> genresIds);
+            AND (:genreNames IS NULL OR g.name IN :genreNames)""")
+    Page<Movie> findAllByTitleOrActorNameContainsIgnoreCase(String input, Pageable pageable, Set<String> genreNames);
 }

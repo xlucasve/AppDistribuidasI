@@ -99,13 +99,13 @@ public class MovieService {
     }
 
 
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, Long userId, Set<Long> genresIds) {
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, Long userId, Set<String> genresNames) {
         Optional<User> foundUser = userRepository.findById(userId);
         List<Movie> userFavoriteMovies = foundUser.map(User::getFavoriteMovies).orElse(Collections.emptyList());
 
 
         // Fetch movies by title or actor name
-        Page<Movie> moviesPage = movieRepository.findAllByTitleOrActorNameContainsIgnoreCase(input, pageable, genresIds);
+        Page<Movie> moviesPage = movieRepository.findAllByTitleOrActorNameContainsIgnoreCase(input, pageable, genresNames);
         List<Movie> moviesList = moviesPage.getContent();
 
 
