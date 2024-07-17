@@ -30,16 +30,14 @@ import java.util.stream.Collectors;
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
-    private final ActorService actorService;
     private final UserRepository userRepository;
     private final MovieRatingRepository movieRatingRepository;
     private final DTOMapper dtoMapper;
 
 
 
-    public MovieService(MovieRepository movieRepository, ActorService actorService, UserRepository userRepository, MovieRatingRepository movieRatingRepository, DTOMapper dtoMapper) {
+    public MovieService(MovieRepository movieRepository, UserRepository userRepository, MovieRatingRepository movieRatingRepository, DTOMapper dtoMapper) {
         this.movieRepository = movieRepository;
-        this.actorService = actorService;
         this.userRepository = userRepository;
         this.movieRatingRepository = movieRatingRepository;
         this.dtoMapper = dtoMapper;
@@ -100,56 +98,24 @@ public class MovieService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, OrderSearchBy orderBy, SortSearchBy sortBy, Long userId) {
 
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(String input, Pageable pageable, Long userId, Set<Long> genresIds) {
         Optional<User> foundUser = userRepository.findById(userId);
-        List<Movie> userFavoriteMovies = new ArrayList<>();
-        if (foundUser.isPresent()){
-            userFavoriteMovies = foundUser.get().getFavoriteMovies();
-        }
+        List<Movie> userFavoriteMovies = foundUser.map(User::getFavoriteMovies).orElse(Collections.emptyList());
 
-        Set<Movie> moviesFromActors = actorService.getMoviesFromActorBySearchParam(input);
-        Set<Movie> moviesFromTitles = getMoviesByTitlePaginated(input, pageable);
 
-        Set<Movie> moviesSet = new HashSet<>();
-        moviesSet.addAll(moviesFromActors);
-        moviesSet.addAll(moviesFromTitles);
+        // Fetch movies by title or actor name
+        Page<Movie> moviesPage = movieRepository.findAllByTitleOrActorNameContainsIgnoreCase(input, pageable, genresIds);
+        List<Movie> moviesList = moviesPage.getContent();
 
-        List<Movie> moviesList = new ArrayList<>(moviesSet);
-        sortMovies(moviesList, orderBy, sortBy);
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), moviesList.size());
+        List<ResponseMovieInScroll> responseList = moviesList.stream()
+                .map(movie -> mapMovieToResponseInScroll(movie, userFavoriteMovies.contains(movie)))
+                .collect(Collectors.toList());
 
-        if (start >= moviesList.size()) {
-            return new ResponseEntity<>(new ResponseInfiniteScroll(Collections.emptyList()), HttpStatus.OK);
-        }
-
-        List<Movie> paginatedMoviesList = moviesList.subList(start, end);
-        List<ResponseMovieInScroll> responseList = new ArrayList<>();
-        for (Movie movie: paginatedMoviesList){
-            responseList.add(mapMovieToResponseInScroll(movie, userFavoriteMovies.contains(movie)));
-        }
-        ResponseInfiniteScroll response = new ResponseInfiniteScroll(responseList);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseInfiniteScroll(responseList), HttpStatus.OK);
     }
 
-    private Set<Movie> getMoviesByTitlePaginated(String input, Pageable pageable) {
-        Page<Movie> moviesPage = movieRepository.findAllByTitleContainsIgnoreCase(input, pageable);
-        return new HashSet<>(moviesPage.getContent());
-    }
-
-    private void sortMovies(List<Movie> moviesList, OrderSearchBy orderBy, SortSearchBy sortBy) {
-        Comparator<Movie> comparator = switch (orderBy) {
-            case RATING -> Comparator.comparing(Movie::getRating);
-            case DATE -> Comparator.comparing(Movie::getReleaseDate);
-            default -> throw new IllegalStateException("Unexpected value: " + orderBy);
-        };
-        if (sortBy == SortSearchBy.DESC) {
-            comparator = comparator.reversed();
-        }
-        moviesList.sort(comparator);
-    }
 
 
     public ResponseEntity<ResponseMoviePage> getMovieById(Long movieId, Long userId) {
@@ -159,10 +125,8 @@ public class MovieService {
             throw new EntityNotFoundException("User with id: " + userId + " was not found");
         }
 
-        List<Movie> userFavoriteMovies = new ArrayList<>();
-        if (foundUser.isPresent()){
-            userFavoriteMovies = foundUser.get().getFavoriteMovies();
-        }
+        List<Movie> userFavoriteMovies = foundUser.get().getFavoriteMovies();
+
         Optional<Movie> movie = movieRepository.findById(movieId);
         if (movie.isEmpty()) {
             throw new EntityNotFoundException("Movie id with id: " + movieId + " does not exist");
@@ -254,6 +218,7 @@ public class MovieService {
                 movie.getPosterImageLink(),
                 movie.getRating(),
                 movie.getGenres(),
-                isFavorite);
+                isFavorite,
+                movie.getReleaseDate());
     }
 }

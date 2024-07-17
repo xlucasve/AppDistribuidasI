@@ -20,5 +20,12 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Page<Movie> findAllByGenreExcludingIds(@Param("genre") String genre, @Param("excludedIds") Set<Long> excludedIds, Pageable pageable);
     Optional<Movie> findByTitle(String title);
 
-    Page<Movie> findAllByTitleContainsIgnoreCase(String input, Pageable pageable);
+    @Query("""
+            SELECT DISTINCT m FROM Movie m \
+            JOIN m.actors a \
+            JOIN m.genres g \
+            WHERE (LOWER(m.title) LIKE LOWER(CONCAT('%', :input, '%')) \
+            OR LOWER(a.name) LIKE LOWER(CONCAT('%', :input, '%'))) \
+            AND (:genresIds IS NULL OR g.genreId IN :genresIds)""")
+    Page<Movie> findAllByTitleOrActorNameContainsIgnoreCase(String input, Pageable pageable, Set<Long> genresIds);
 }

@@ -21,6 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/v1/movies")
 public class MovieController {
@@ -113,8 +116,8 @@ public class MovieController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam OrderSearchBy orderBy, @RequestParam SortSearchBy sort, @RequestParam Long userId) {
-        return movieService.getMoviesBySearchParam(input, pageable, orderBy, sort, userId);
+    public ResponseEntity<ResponseInfiniteScroll> getMoviesBySearchParam(@RequestParam String input, @ParameterObject Pageable pageable, @RequestParam Long userId, @RequestParam(required = false) Set<Long> genreId) {
+        return movieService.getMoviesBySearchParam(input, pageable, userId, genreId);
     }
 
     @Operation(summary = "Rate Movie", description = "Adds a new rating to the movie.")
