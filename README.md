@@ -11,7 +11,7 @@ Aplicación mobile para buscar tus películas favoritas. Desarrollada en React N
 
 Contar con [npm](https://nodejs.org/en) para instalar las dependencias.
 
-1. Abrir la carpeta `frontend/MovieplayApp` desde la terminal e instalar dependencias:
+1. Abrir la carpeta `frontend/` desde la terminal e instalar dependencias:
 
 ```bash
 npm install
